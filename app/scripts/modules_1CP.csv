@@ -1,0 +1,17 @@
+Code,Titre,Coef,Level
+ALG1,Algèbre 1,3,1CP
+ALG2,Algèbre 2,3,1CP
+ALSDD,Algorithmique et Structure de données dynamique,5,1CP
+ALSDS,Algorithmique et Structures de Données Statiques,5,1CP
+ANAL1,Analyse mathématique 1,5,1CP
+ANAL2,Analyse 2,5,1CP
+ANG1,Anglais 1,2,1CP
+ARCH1,Architectures des ordinateurs 1,4,1CP
+BW,Bureautique et Web,1,1CP
+ELECT,Eléctricité,3,1CP
+ELEF1,Electronique fondamentale 1,4,1CP
+MECA,Mécanique du point,3,1CP
+SYST1,Instroduction au Système d'exploitation 1,3,1CP
+SYST2,Introduction aux systèmes d'exploitation 2,3,1CP
+TEE,Technique d'expression écrite,2,1CP
+TEO,Techniques d'expression orale,2,1CP

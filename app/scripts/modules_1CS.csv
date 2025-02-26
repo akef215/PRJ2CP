@@ -1,0 +1,18 @@
+Code,Titre,Coef,Level
+ANUM,Analyse Numérique,4,1CS
+ARCH,Architecture,4,1CS
+BDD,Bases de données,5,1CS
+CPROJ,Conduite de projets,3,1CS
+IGL,Introduction au génie logiciel,5,1CS
+LANG1,Langue anglaise 1,2,1CS
+LANG2,Langue anglaise 2,2,1CS
+MCSI,Méthodologies d'analyse et conception de systèmes d'information,5,1CS
+ORG,Analyse des organisations,3,1CS
+PROJ,Projet,3,1CS
+RES1,Réseaux 1,4,1CS
+RES2,Réseaux 2,3,1CS
+RO,Recherche Opérationnelle: graphes et algorithmes,3,1CS
+SEC,Introduction à la sécurité informatique,1,1CS
+SYS1,Systèmes d'exploitation 1,5,1CS
+SYS2,Système d'exploitation 2,4,1CS
+THP,Théorie des langages de programmation et applications,4,1CS
