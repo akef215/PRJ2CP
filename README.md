@@ -10,9 +10,11 @@ Le SGBD : MySQL
 python -m venv .venv
 .venv\Scripts\activate
 
-# Le fichier .env contient les variables qui doivent rester cacher (La configuration de la base de donnée, le profile de l'enseignant en question ainsi que la configuration du token)
+# Le fichier .env :
+Il contient les variables qui doivent rester cacher (La configuration de la base de donnée, le profile de l'enseignant en question ainsi que la configuration du token)
 
-# Le fichier requirements.txt contient les dependences utilisées dans le projet, on peut les installer direcetement avec la commande : pip install -r requirements.txt
+# Le fichier requirements.txt :
+ Il contient les dependences utilisées dans le projet, on peut les installer direcetement avec la commande : pip install -r requirements.txt
 
 # La configuration d'alembic  :
 Il faut lancer la commande : alembic init .
