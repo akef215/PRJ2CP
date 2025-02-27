@@ -8,6 +8,11 @@ from database import get_db
 from app.utils.hash import hash_password
 from app.dependencies.auth import get_current_student
 
+
+from app.schemas.student import StudentUpdate
+
+
+
 async def create_student_service(student: StudentCreate, db: AsyncSession = Depends(get_db)):
     # Vérifier si l'email est déjà utilisé
     stmt = select(Student).where(Student.email == student.email)
@@ -20,7 +25,7 @@ async def create_student_service(student: StudentCreate, db: AsyncSession = Depe
     hashed_password = hash_password(student.password)
 
     # Créer l’objet Student
-    db_student = Student(id=student.id, fname=student.fname, lname=student.lname, level=student.level, groupe_id=student.groupe_id, email=student.email, password=hashed_password)
+    db_student = Student(id=student.id,  name=student.name, level=student.level, groupe_id=student.groupe_id, email=student.email, password=hashed_password)
     db.add(db_student)
     await db.commit()  
     await db.refresh(db_student)  
@@ -79,10 +84,46 @@ async def get_student_group(current_student: dict = Depends(get_current_student)
         raise HTTPException(status_code=404, detail="Student not found")
 
     # Récupération du groupe de l'étudiant
-    result = await db.execute(select(groupe).filter(groupe.id == student.groupe_id))
+    result = await db.execute(select(groupe).filter(groupe.id == student.groupe))
     groupe = result.scalars().first()
 
     if not groupe:
         raise HTTPException(status_code=404, detail="Student has no assigned group")
 
     return groupe
+
+
+async def update_student_profile(updated_data: StudentUpdate, db: AsyncSession = Depends(get_db), current_student: dict = Depends(get_current_student)):
+    student_id = current_student["sub"]
+
+    # Fetch the student record
+    result = await db.execute(select(Student).where(Student.id == student_id))
+    student = result.scalars().first()
+
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    # Check if email is already taken by another student
+    if updated_data.email and updated_data.email != student.email:
+        result = await db.execute(select(Student).where(Student.email == updated_data.email))
+        existing_student = result.scalars().first()
+        if existing_student:
+            raise HTTPException(status_code=400, detail="Email already registered")
+
+    # Update fields
+    if updated_data.name:
+        student.name = updated_data.name
+
+    if updated_data.email:
+        student.email = updated_data.email
+    if updated_data.level:
+        student.level = updated_data.level
+    if updated_data.groupe:
+        student.groupe = updated_data.groupe
+    if updated_data.password:
+        student.password = hash_password(updated_data.password)
+
+    await db.commit()
+    await db.refresh(student)
+
+    return {"message": "Profile updated successfully", "student": student}

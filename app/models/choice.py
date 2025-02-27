@@ -14,3 +14,5 @@ class Choice(Base):
     __table_args__ = (
         UniqueConstraint('id', 'question_id', name='uq_answ_id_qstn'),
     )
+
+    
