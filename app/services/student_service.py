@@ -1,19 +1,13 @@
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.models.student import Student
 from app.models.module import Module
 from app.schemas.student import StudentCreate
-from database import get_db
 from app.utils.hash import hash_password
-from app.dependencies.auth import get_current_student
-
-
 from app.schemas.student import StudentUpdate
 
-
-
-async def create_student_service(student: StudentCreate, db: AsyncSession = Depends(get_db)):
+async def create_student_service(student: StudentCreate, db: AsyncSession):
     # Vérifier si l'email est déjà utilisé
     stmt = select(Student).where(Student.email == student.email)
     result = await db.execute(stmt)  
@@ -32,7 +26,7 @@ async def create_student_service(student: StudentCreate, db: AsyncSession = Depe
 
     return db_student
 
-async def delete_student_service(student_id: str, db: AsyncSession = Depends(get_db)):
+async def delete_student_service(student_id: str, db: AsyncSession):
 
     # Exécuter la requête avec select() pour AsyncSession
     result = await db.execute(select(Student).filter(Student.id == student_id))
@@ -46,7 +40,7 @@ async def delete_student_service(student_id: str, db: AsyncSession = Depends(get
 
     return {"message": f"Student with ID {student_id} deleted successfully"}
 
-async def delete_current_student(current_student: dict = Depends(get_current_student), db:AsyncSession = Depends(get_db)):
+async def delete_current_student(current_student: dict, db:AsyncSession):
     id = current_student["sub"]
     result = await db.execute(select(Student).filter(Student.id == id))
     student = result.scalars().first()
@@ -57,7 +51,7 @@ async def delete_current_student(current_student: dict = Depends(get_current_stu
     return {"message": "Student deleted successfully"}
 
 
-async def get_student_modules(current_student:dict = Depends(get_current_student),db:AsyncSession = Depends(get_db)):
+async def get_student_modules(current_student:dict, db:AsyncSession):
     student_id = current_student["sub"]
     result = await db.execute(select(Student).filter(Student.id == student_id))
     student = result.scalars().first()
@@ -73,7 +67,7 @@ async def get_student_modules(current_student:dict = Depends(get_current_student
     return modules
 
 
-async def get_student_group(current_student: dict = Depends(get_current_student), db: AsyncSession = Depends(get_db)):
+async def get_student_group(db: AsyncSession, current_student: dict):
     student_id = current_student["sub"]
 
     # Recherche de l'étudiant
@@ -93,7 +87,7 @@ async def get_student_group(current_student: dict = Depends(get_current_student)
     return groupe
 
 
-async def update_student_profile(updated_data: StudentUpdate, db: AsyncSession = Depends(get_db), current_student: dict = Depends(get_current_student)):
+async def update_student_profile(updated_data: StudentUpdate, db: AsyncSession, current_student: dict):
     student_id = current_student["sub"]
 
     # Fetch the student record

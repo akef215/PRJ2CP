@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.student import StudentCreate, StudentBase
-from database import get_db
-from app.services.student_service import create_student_service, delete_student_service, delete_current_student, get_student_modules, get_student_group, update_student_profile
+from app.dependencies.auth import get_db
+from app.services.student_service import create_student_service, delete_current_student, get_student_modules, get_student_group, update_student_profile
 from app.dependencies.auth import get_current_student
 
 router = APIRouter()

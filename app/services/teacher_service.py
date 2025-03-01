@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import defer
@@ -7,9 +7,8 @@ from app.models.groupe import Groupe
 from app.models.module import Module
 from app.schemas.module import ModuleBase
 from app.schemas.groupe import GroupeBase
-from database import get_db
 
-async def get_groupe_students(n_groupe : int, db : AsyncSession = Depends(get_db)):
+async def get_groupe_students(n_groupe : int, db : AsyncSession):
     stmt = select(Student).where(Student.groupe == n_groupe)
     result = await db.execute(stmt)
     students = result.scalars().all()

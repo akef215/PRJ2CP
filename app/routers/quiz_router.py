@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from database import get_db
+from app.dependencies.auth import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.quiz_service import get_available_quizzes_service
 from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service

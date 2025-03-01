@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from database import get_db
+from app.dependencies.auth import get_db
 from app.schemas.auth import AuthRequest, AuthResponse
 from app.services.auth_service import authenticate_teacher, authenticate_student
 
