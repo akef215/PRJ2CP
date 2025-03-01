@@ -6,3 +6,5 @@ alembic/
 
 # Ignorer les fichiers de configuration sensibles
 .env
+
+README.md
