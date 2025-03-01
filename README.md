@@ -22,4 +22,5 @@ puis aller se rendre au fichier alembic.ini, changer la ligne : sqlalchemy.url =
 
 # Le lancement du serveur uvicorn :
 dans un terminal cmd : uvicorn main:app --reload 
+
 main c'est le nom du fichier principal et app c'est l'instance FastAPI, si vous utilisez d'autres noms veuillez changer la commande!
