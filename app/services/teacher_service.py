@@ -2,18 +2,12 @@ from fastapi import Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import defer
-from fastapi.params import Body
 from app.models.student import Student
 from app.models.groupe import Groupe
 from app.models.module import Module
-from app.models.quiz import Quiz
 from app.schemas.module import ModuleBase
 from app.schemas.groupe import GroupeBase
-from app.schemas.quiz import QuizCreate
-from pydantic import BaseModel
 from database import get_db
-from typing import List
-from datetime import date
 
 async def get_groupe_students(n_groupe : int, db : AsyncSession = Depends(get_db)):
     stmt = select(Student).where(Student.groupe == n_groupe)
@@ -77,36 +71,3 @@ async def get_modules(db: AsyncSession):
     result = await db.execute(select(Module))
     modules_codes = result.scalars().all()
     return modules_codes
-
-class GroupAssignment(BaseModel):
-    group_ids: List[str] 
-
-async def add_quiz(quizz: QuizCreate, db: AsyncSession):
-    
-    # Instanciation d'un quiz
-    quiz = Quiz(title = quizz.title, date = quizz.date, description = quizz.description, module_code = quizz.module, duree = quizz.duree)
-
-    # La recherche du module
-    result = await db.execute(select(Module).where(Module.code == quizz.module))
-    code = result.scalars().first()
-
-    if not code:
-        raise HTTPException(status_code=404, detail="Le module n'existe pas")
-
-    # La recherche des groupes
-    result = await db.execute(select(Groupe).where(Groupe.id.in_(tuple(quizz.groupes.group_ids))))
-    groups = result.scalars().all()
-
-    if not groups:
-        raise HTTPException(status_code=404, detail="No group found")
-
-    # L'ajout du quiz dans la base de donnée
-    db.add(quiz)
-    await db.commit()
-
-    # Associer les groupes au quiz
-    await db.refresh(quiz, ["groupes"])
-    quiz.groupes.extend(groups)
-    await db.refresh(quiz)
-
-    return quiz

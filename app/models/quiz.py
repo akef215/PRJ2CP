@@ -15,3 +15,4 @@ class Quiz(Base):
     duree: Mapped[int] = mapped_column(Integer, nullable=False)
 
     groupes = relationship("Groupe", secondary=quiz_groupe, back_populates="quizzes")
+    questions = relationship("Question", back_populates="quizzes", cascade="all, delete-orphan")
