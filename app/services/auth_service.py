@@ -14,7 +14,7 @@ async def authenticate_teacher(email: str, password: str):
         raise HTTPException(status_code=401, detail="Unauthorised operation")
     # Générer un token JWT
     token = create_access_token({"sub": os.getenv("TEACHER_EMAIL")})
-    return {"access_token": token, "token_type": "bearer"}
+    return {"access_token": token, "token_type": "bearer", "detail" : "Succes!"}
 
 async def authenticate_student(email: str, password: str, db: AsyncSession):
     stmt = select(Student).where(Student.email == email)

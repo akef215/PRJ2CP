@@ -5,9 +5,11 @@ from sqlalchemy.orm import defer
 from app.models.student import Student
 from app.models.groupe import Groupe
 from app.models.module import Module
+from app.models.quiz import Quiz
 from app.schemas.module import ModuleBase
 from app.schemas.groupe import GroupeBase
 from database import get_db
+from typing import List
 
 async def get_groupe_students(n_groupe : int, db : AsyncSession = Depends(get_db)):
     stmt = select(Student).where(Student.groupe == n_groupe)
@@ -71,3 +73,11 @@ async def get_modules(db: AsyncSession):
     result = await db.execute(select(Module))
     modules_codes = result.scalars().all()
     return modules_codes
+
+async def add_quiz(title: str, date: str, module: str, duree: int, groupes: List, db: AsyncSession, description: str | None):
+    quiz = Quiz(title = title, description = description, module_code = module, duree = duree)
+    quiz.groupes = groupes;
+    db.add(quiz)
+    await db.commit()
+    await db.refresh(quiz)
+    return quiz
