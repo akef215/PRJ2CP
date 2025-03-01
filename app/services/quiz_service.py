@@ -13,6 +13,8 @@ from app.models.quiz_groupe import quiz_groupe
 from app.schemas.quiz import QuizCreate
 from app.schemas.question import QuestionModel
 from app.schemas.choice import ChoiceModel
+from app.schemas.quiz import AnswerSubmission
+from typing import List
 
 async def get_available_quizzes_service(db: AsyncSession) -> List[Quiz]:
     """Fetch quizzes that are available (i.e., their date is today or in the future)."""
@@ -135,3 +137,27 @@ async def delete_choice_service(choice_id: int, quiz_id: int, question_id: int, 
     await db.commit()
 
     return {"message": f"Choice deleted successfully"}
+
+async def answer_quiz(quiz_id: int, answers: List[AnswerSubmission], db: AsyncSession):
+    total_score = 0
+    for answer in answers:
+        # Vérifier que la question appartient bien à ce quiz
+        question_result = await db.execute(select(Question).where(
+            Question.id == answer.question_id, Question.quiz_id == quiz_id
+        ))
+        question = question_result.scalars().first()
+        if not question:
+            raise HTTPException(status_code=404, detail=f"Question {answer.question_id} not found in quiz {quiz_id}")
+
+        # Vérifier que le choix est valide pour cette question
+        choice_result = await db.execute(select(Choice).where(
+            Choice.id == answer.choice_id, Choice.question_id == question.id
+        ))
+        choice = choice_result.scalars().first()
+        if not choice:
+            raise HTTPException(status_code=404, detail=f"Choice {answer.choice_id} not found for question {answer.question_id}")
+
+        # Ajouter le score de la réponse
+        total_score += choice.score
+
+    return {"message": "Quiz answered successfully", "total_score": total_score}

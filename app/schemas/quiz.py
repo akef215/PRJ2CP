@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import date
 from .groupe import GroupAssignment
-from typing import Optional
+from typing import Optional, List
 
 class QuizOut(BaseModel):
     id: int
@@ -18,7 +18,18 @@ class QuizOut(BaseModel):
 class QuizCreate(BaseModel):
     title: str
     date: date
-    module: str
+    module: str  # Ensure this field matches the database schema
     duree: int
     description: Optional[str] = None
-    groupes: GroupAssignment 
+    groupes: List[GroupAssignment]  # Make it a list of groups
+
+class Answer(BaseModel):
+    question_id: int
+    choice_id: int
+
+class AnswerSubmission(BaseModel):
+    question_id: int
+    choice_id: int
+
+class QuizSubmission(BaseModel):
+    answers: List[AnswerSubmission]
