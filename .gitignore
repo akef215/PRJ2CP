@@ -1,0 +1,8 @@
+# Ignorer le fichier de configuration Alembic
+alembic.ini
+
+# Ignorer tout le dossier Alembic
+alembic/
+
+# Ignorer les fichiers de configuration sensibles
+.env

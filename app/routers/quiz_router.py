@@ -9,4 +9,4 @@ from typing import List
 router = APIRouter()
 @router.get("/available", response_model=List[QuizOut])
 async def get_available_quizzes(db: AsyncSession = Depends(get_db)):
-    return await get_available_quizzes_service(db)  # ✅ Ajout de await ici
+    return await get_available_quizzes_service(db)

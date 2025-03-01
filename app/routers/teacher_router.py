@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from typing import List
+from datetime import date
 from app.services.teacher_service import get_groups, get_all_students, get_students_by_groupe, create_group, create_module, get_modules, add_quiz
+from app.schemas.quiz import QuizCreate
 
 router = APIRouter()
 
@@ -31,5 +33,5 @@ async def show_groupes(db: AsyncSession = Depends(get_db)):
     return await get_modules(db)
 
 @router.post("/quizzes")
-async def add_quizzes(title: str, date: str, module: str, duree: int, groupes: List, description: str|None = None, db: AsyncSession = Depends(get_db), ):
-    return await add_quiz(title, date, module, duree, groupes, db, description)
+async def add_quizzes(quiz: QuizCreate, db: AsyncSession = Depends(get_db)):
+    return await add_quiz(quiz, db)
