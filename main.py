@@ -3,7 +3,6 @@ from app.routers import student_router, teacher_router, auth_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import student_router, teacher_router, auth_router,quiz_router
 
-
 app = FastAPI()
 
 app.add_middleware(
