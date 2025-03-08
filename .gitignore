@@ -6,3 +6,6 @@ alembic/
 
 # Ignorer les fichiers de configuration sensibles
 .env
+
+.venv/
+work.txt
