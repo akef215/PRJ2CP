@@ -204,3 +204,48 @@ async def answer_quiz(quiz_id: int, answers: List[AnswerSubmission], db: AsyncSe
         total_score += choice.score
 
     return {"message": "Quiz answered successfully", "total_score": total_score}
+
+
+
+# Function to get students who did the quiz
+async def get_students_who_did_quiz(quiz_id: int, db: AsyncSession):
+    # Execute the query to get the quiz results for the given quiz_id
+    results = await db.execute(select(Result).where(Result.quizz_id == quiz_id))
+    quiz_results = results.scalars().all()
+
+    if not quiz_results:
+        return {"students_who_did_quiz": []}  # Return an empty list if no students participated
+
+    # Extract student_ids from the results
+    student_ids = [result.student_id for result in quiz_results]
+
+    return {"students_who_did_quiz": student_ids}
+
+# Function to get students who passed the quiz (score > 10)
+async def get_students_within_score_range(quiz_id: int, min_score: int, max_score: int, db: AsyncSession):
+    # Get all quiz results for the given quiz_id
+    results = await db.execute(select(Result).where(Result.quizz_id == quiz_id))
+    quiz_results = results.scalars().all()
+
+    passed_students = []
+
+    for result in quiz_results:
+        total_score = 0
+        
+        # Get all choices corresponding to the student's answers
+        choice_results = await db.execute(select(Choice).where(Choice.id == result.choice_id))
+        choices = choice_results.scalars().all()
+
+        for choice in choices:
+            total_score += choice.score
+
+        # Check if the total score is within the specified range
+        if min_score <= total_score <= max_score:
+            passed_students.append(result.student_id)
+
+    # If no students match the score range, raise a 404 error
+    if not passed_students:
+        raise HTTPException(status_code=404, detail="No students found within the score range.")
+    
+    return {"students_in_score_range": passed_students}
+

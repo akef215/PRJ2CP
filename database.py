@@ -2,11 +2,9 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-<<<<<<< HEAD
+
 from sqlalchemy import text
 from typing import List
-=======
->>>>>>> b6b0f2db79da46210768b5963d46f799b2077254
 
 # Charger les variables d'environnement depuis .env
 load_dotenv()
