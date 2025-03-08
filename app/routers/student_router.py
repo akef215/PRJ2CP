@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.student import StudentCreate, StudentBase
-from app.dependencies.auth import get_db
-from app.services.student_service import create_student_service, delete_current_student, get_student_modules, get_student_group, update_student_profile
+from database import get_db
+from app.services.student_service import create_student_service, add_result, delete_current_student, get_student_modules, get_student_group, update_student_profile
 from app.dependencies.auth import get_current_student
 
 router = APIRouter()
@@ -32,3 +32,7 @@ async def get_my_group(current_student: dict = Depends(get_current_student), db:
 @router.put("/profile", response_model=dict)
 async def update_profile(updated_data, db: AsyncSession = Depends(get_db), current_student: dict = Depends(get_current_student)):
     return await update_student_profile(updated_data, db, current_student)
+
+@router.post("/answer_quiz/{quiz_id}/question/{question_id}")
+async def submit_result(question_id: int, quiz_id: int, choice_id: int, db: AsyncSession = Depends(get_db), current_student: dict = Depends(get_current_student)):
+    return await add_result(question_id, quiz_id, choice_id, db, current_student)

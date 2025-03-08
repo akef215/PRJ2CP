@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends
-from app.dependencies.auth import get_db
+from sqlalchemy.orm import Session
+from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.quiz_service import get_available_quizzes_service
-from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service
+from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice
 from app.schemas.quiz import QuizOut
 from app.schemas.quiz import QuizCreate
 from app.schemas.question import QuestionModel
@@ -37,3 +38,15 @@ async def delete_question(quiz_id: int, question_id: int, db: AsyncSession = Dep
 @router.delete("/{quiz_id}/delete_questions/{question_id}/delete_choices/{choice_id}")
 async def delete_choice(choice_id: int, quiz_id: int, question_id: int, db: AsyncSession = Depends(get_db)):
     return await delete_choice_service(choice_id, quiz_id, question_id, db)
+
+@router.put("/modify/{quiz_id}")
+async def update_quizzes(quiz_id: int, quiz_data: QuizOut, db: AsyncSession = Depends(get_db)):
+    return await update_quiz(quiz_id, quiz_data, db)
+
+@router.put("/{quiz_id}/modify_questions/{question_id}")
+async def update_questions(quiz_id: int, question_id: int, question_data: QuestionModel, db: AsyncSession = Depends(get_db)):
+    return await update_question(quiz_id, question_id ,question_data, db)
+
+@router.put("/{quiz_id}/modify_questions/{question_id}/modify_choices/{choice_id}")
+async def update_questions(quiz_id: int, question_id: int, choice_id: int, choice_data: ChoiceModel, db: AsyncSession = Depends(get_db)):
+    return await update_question(quiz_id, question_id , choice_id, choice_data, db)

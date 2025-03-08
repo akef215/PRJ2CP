@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -13,6 +13,7 @@ from app.models.quiz_groupe import quiz_groupe
 from app.schemas.quiz import QuizCreate
 from app.schemas.question import QuestionModel
 from app.schemas.choice import ChoiceModel
+from app.schemas.quiz import QuizOut
 
 async def get_available_quizzes_service(db: AsyncSession) -> List[Quiz]:
     """Fetch quizzes that are available (i.e., their date is today or in the future)."""
@@ -135,3 +136,56 @@ async def delete_choice_service(choice_id: int, quiz_id: int, question_id: int, 
     await db.commit()
 
     return {"message": f"Choice deleted successfully"}
+
+async def update_quiz(quiz_id: int, quiz_data: QuizOut, db: AsyncSession):
+    # Vérifier si le quiz existe
+    result = await db.execute(select(Quiz).where(Quiz.id == quiz_id))
+    quiz = result.scalars().first()
+
+    if not quiz:
+        raise HTTPException(status_code=404, detail="Quiz non trouvé")
+
+    # Mise à jour des champs fournis
+    quiz.title = quiz_data.title if quiz_data.title else quiz.title
+    quiz.description = quiz_data.description if quiz_data.description else quiz.description
+    quiz.duree = quiz_data.duree if quiz_data.duree else quiz.duree
+    quiz.date = quiz_data.date if quiz_data.date else quiz.date
+
+    await db.commit()
+    await db.refresh(quiz)
+
+    return quiz
+
+async def update_question(quiz_id: int, question_id: int, question_data: QuestionModel, db: AsyncSession):
+    # Vérifier si la question existe
+    result = await db.execute(select(Question).where(Question.quiz_id == quiz_id, Question.question_id == question_id))
+    question = result.scalars().first()
+
+    if not question:
+        raise HTTPException(status_code=404, detail="Question non trouvée")
+
+    # Mise à jour des champs fournis
+    question.statement = question_data.statement if question_data.statement else question.statement
+    question.duree = question_data.duree if question_data.duree else question.duree
+
+    await db.commit()
+    await db.refresh(question)
+
+    return question
+
+async def update_choice(quiz_id: int, question_id: int, choice_id: int, choice_data: ChoiceModel, db: AsyncSession):
+    # Vérifier si le choix existe
+    result = await db.execute(select(Choice).where(Choice.quiz_id == quiz_id, Choice.question_id == question_id, Choice.choice_id == choice_id))
+    choice = result.scalars().first()
+
+    if not choice:
+        raise HTTPException(status_code=404, detail="Choix non trouvé")
+
+    # Mise à jour des champs fournis
+    choice.answer = choice_data.answer if choice_data.answer else choice.answer
+    choice.score = choice_data.score if choice_data.score else choice.score
+
+    await db.commit()
+    await db.refresh(choice)
+
+    return choice
