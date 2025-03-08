@@ -30,9 +30,8 @@ async def add_quiz_to_groups(db: AsyncSession, quiz_id: int, group_ids: list[str
     await db.commit()
 
 async def add_quiz(quizz: QuizCreate, db: AsyncSession):
-    
     # Instanciation d'un quiz
-    quiz = Quiz(title = quizz.title, date = quizz.date, description = quizz.description, module_code = quizz.module, duree = quizz.duree)
+    quiz = Quiz(title=quizz.title, date=quizz.date, description=quizz.description, module_code=quizz.module, duree=quizz.duree)
 
     # La recherche du module
     result = await db.execute(select(Module).where(Module.code == quizz.module))
@@ -59,16 +58,16 @@ async def add_quiz(quizz: QuizCreate, db: AsyncSession):
     quiz.groupes.extend(groups)
     await db.commit()
     await db.refresh(quiz, ["groupes"])
-   
+
     return quiz
 
 async def add_question(quiz_id: int, question: QuestionModel, db: AsyncSession):
     # Instanciation de la question
-    qstn = Question(question_id = question.id, quiz_id = quiz_id, statement = question.statement, duree = question.duree)
+    qstn = Question(question_id=question.id, quiz_id=quiz_id, statement=question.statement, duree=question.duree)
 
     # Verifier que le quiz existe deja
     results = await db.execute(select(Quiz).where(Quiz.id == quiz_id))
-    quiz = results.scalars().first();
+    quiz = results.scalars().first()
     if not quiz:
         raise HTTPException(status_code=404, detail="No quiz found")
     
@@ -79,11 +78,11 @@ async def add_question(quiz_id: int, question: QuestionModel, db: AsyncSession):
 
 async def add_choice(quiz_id: int, question_id: int, choix: ChoiceModel, db: AsyncSession):
     # Instanciation de la question
-    choice = Choice(choice_id = choix.id, quiz_id = quiz_id, score = choix.score, answer = choix.answer)
+    choice = Choice(choice_id=choix.id, quiz_id=quiz_id, score=choix.score, answer=choix.answer)
 
     # Verifier que le quiz existe deja
     results = await db.execute(select(Quiz).where(Quiz.id == quiz_id))
-    quiz = results.scalars().first();
+    quiz = results.scalars().first()
     if not quiz:
         raise HTTPException(status_code=404, detail="No quiz found")
     
@@ -100,7 +99,6 @@ async def add_choice(quiz_id: int, question_id: int, choix: ChoiceModel, db: Asy
     return choice
 
 async def delete_quiz_service(quiz_id: int, db: AsyncSession):
-
     result = await db.execute(select(Quiz).filter(Quiz.id == quiz_id))
     quiz = result.scalars().first()
 
@@ -142,7 +140,6 @@ async def update_quiz(quiz_id: int, quiz_data: QuizOut, db: AsyncSession):
     # Vérifier si le quiz existe
     result = await db.execute(select(Quiz).where(Quiz.id == quiz_id))
     quiz = result.scalars().first()
-
     if not quiz:
         raise HTTPException(status_code=404, detail="Quiz non trouvé")
 
@@ -190,6 +187,7 @@ async def update_choice(quiz_id: int, question_id: int, choice_id: int, choice_d
     await db.refresh(choice)
 
     return choice
+
 async def answer_quiz(quiz_id: int, answers: List[AnswerSubmission], db: AsyncSession):
     total_score = 0
     for answer in answers:
@@ -206,46 +204,3 @@ async def answer_quiz(quiz_id: int, answers: List[AnswerSubmission], db: AsyncSe
         total_score += choice.score
 
     return {"message": "Quiz answered successfully", "total_score": total_score}
-
-# Function to get students who did the quiz
-async def get_students_who_did_quiz(quiz_id: int, db: AsyncSession):
-    # Execute the query to get the quiz results for the given quiz_id
-    results = await db.execute(select(Result).where(Result.quizz_id == quiz_id))
-    quiz_results = results.scalars().all()
-
-    if not quiz_results:
-        return {"students_who_did_quiz": []}  # Return an empty list if no students participated
-
-    # Extract student_ids from the results
-    student_ids = [result.student_id for result in quiz_results]
-
-    return {"students_who_did_quiz": student_ids}
-
-# Function to get students who passed the quiz (score > 10)
-async def get_students_within_score_range(quiz_id: int, min_score: int, max_score: int, db: AsyncSession):
-    # Get all quiz results for the given quiz_id
-    results = await db.execute(select(Result).where(Result.quizz_id == quiz_id))
-    quiz_results = results.scalars().all()
-
-    passed_students = []
-
-    for result in quiz_results:
-        total_score = 0
-        
-        # Get all choices corresponding to the student's answers
-        choice_results = await db.execute(select(Choice).where(Choice.id == result.choice_id))
-        choices = choice_results.scalars().all()
-
-        for choice in choices:
-            total_score += choice.score
-
-        # Check if the total score is within the specified range
-        if min_score <= total_score <= max_score:
-            passed_students.append(result.student_id)
-
-    # If no students match the score range, raise a 404 error
-    if not passed_students:
-        raise HTTPException(status_code=404, detail="No students found within the score range.")
-    
-    return {"students_in_score_range": passed_students}
-

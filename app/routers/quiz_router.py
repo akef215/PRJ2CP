@@ -1,14 +1,15 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.quiz_service import get_available_quizzes_service
-from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice
+from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice, get_students_within_score_range, get_students_who_did_quiz
 from app.schemas.quiz import QuizOut
 from app.schemas.quiz import QuizCreate
 from app.schemas.question import QuestionModel
 from app.schemas.choice import ChoiceModel
 from typing import List
+
 from app.schemas.quiz import AnswerSubmission  # Adjust the import path as necessary
 
 router = APIRouter()
@@ -44,6 +45,7 @@ async def delete_choice(choice_id: int, quiz_id: int, question_id: int, db: Asyn
 async def update_quizzes(quiz_id: int, quiz_data: QuizOut, db: AsyncSession = Depends(get_db)):
     return await update_quiz(quiz_id, quiz_data, db)
 
+
 @router.put("/{quiz_id}/modify_questions/{question_id}")
 async def update_questions(quiz_id: int, question_id: int, question_data: QuestionModel, db: AsyncSession = Depends(get_db)):
     return await update_question(quiz_id, question_id ,question_data, db)
@@ -76,3 +78,13 @@ async def get_students_within_score_range_route(
 ):
     # Call the service function
     return await get_students_within_score_range(quiz_id, min_score, max_score, db)
+
+
+@router.put("/{quiz_id}/modify_questions/{question_id}")
+async def update_questions(quiz_id: int, question_id: int, question_data: QuestionModel, db: AsyncSession = Depends(get_db)):
+    return await update_question(quiz_id, question_id ,question_data, db)
+
+@router.put("/{quiz_id}/modify_questions/{question_id}/modify_choices/{choice_id}")
+async def update_questions(quiz_id: int, question_id: int, choice_id: int, choice_data: ChoiceModel, db: AsyncSession = Depends(get_db)):
+    return await update_question(quiz_id, question_id , choice_id, choice_data, db)
+

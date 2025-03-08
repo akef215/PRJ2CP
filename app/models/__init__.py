@@ -12,5 +12,5 @@ from .question import Question
 from .choice import Choice
 from .results import Result
 from .quiz_groupe import quiz_groupe
-from .complaint import Complaint
+from .feedback import Feedback
 from .statistics import Statistic

@@ -5,6 +5,7 @@ alembic.ini
 alembic/
 
 # Ignorer les fichiers de configuration sensibles
+<<<<<<< HEAD
 .env
 
 # Ignorer le dossier virtuel
@@ -12,3 +13,6 @@ alembic/
 
 # Ignorer le fichier de travail (work.txt)
 work.txt
+=======
+.env
+>>>>>>> b6b0f2db79da46210768b5963d46f799b2077254
