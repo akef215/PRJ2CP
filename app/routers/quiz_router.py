@@ -1,18 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.services.quiz_service import get_available_quizzes_service, answer_quiz
-from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service
-from app.schemas.quiz import QuizOut, QuizSubmission
+from app.services.quiz_service import get_available_quizzes_service
+from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice
+from app.schemas.quiz import QuizOut
 from app.schemas.quiz import QuizCreate
 from app.schemas.question import QuestionModel
 from app.schemas.choice import ChoiceModel
-from app.models import Choice, Question
 from typing import List
-from sqlalchemy.future import select
-from app.schemas.quiz import AnswerSubmission
-
+from app.schemas.quiz import AnswerSubmission  # Adjust the import path as necessary
 
 router = APIRouter()
 @router.get("/available", response_model=List[QuizOut])
@@ -43,29 +40,39 @@ async def delete_question(quiz_id: int, question_id: int, db: AsyncSession = Dep
 async def delete_choice(choice_id: int, quiz_id: int, question_id: int, db: AsyncSession = Depends(get_db)):
     return await delete_choice_service(choice_id, quiz_id, question_id, db)
 
+@router.put("/modify/{quiz_id}")
+async def update_quizzes(quiz_id: int, quiz_data: QuizOut, db: AsyncSession = Depends(get_db)):
+    return await update_quiz(quiz_id, quiz_data, db)
+
+@router.put("/{quiz_id}/modify_questions/{question_id}")
+async def update_questions(quiz_id: int, question_id: int, question_data: QuestionModel, db: AsyncSession = Depends(get_db)):
+    return await update_question(quiz_id, question_id ,question_data, db)
+
+@router.put("/{quiz_id}/modify_questions/{question_id}/modify_choices/{choice_id}")
+async def update_questions(quiz_id: int, question_id: int, choice_id: int, choice_data: ChoiceModel, db: AsyncSession = Depends(get_db)):
+    return await update_question(quiz_id, question_id , choice_id, choice_data, db)
+# Answer a quiz
 @router.post("/quizzes/{quiz_id}/answer")
-async def answer_quiz(quiz_id: int, submission: QuizSubmission, db: AsyncSession = Depends(get_db)):
-    answers = submission.answers  # Récupérer la liste des réponses
-    total_score = 0
+async def answer_quiz(quiz_id: int, submission: AnswerSubmission, db: AsyncSession = Depends(get_db)):
+    return await answer_quiz(quiz_id, submission.answers, db)
 
-    for answer in answers:
-        # Vérifier si la question appartient bien au quiz
-        question_result = await db.execute(select(Question).where(
-            Question.id == answer.question_id, Question.quiz_id == quiz_id
-        ))
-        question = question_result.scalars().first()
-        if not question:
-            raise HTTPException(status_code=404, detail=f"Question {answer.question_id} not found in quiz {quiz_id}")
+# Get the list of students who participated in the quiz
 
-        # Vérifier si le choix est valide
-        choice_result = await db.execute(select(Choice).where(
-            Choice.id == answer.choice_id, Choice.question_id == question.id
-        ))
-        choice = choice_result.scalars().first()
-        if not choice:
-            raise HTTPException(status_code=404, detail=f"Choice {answer.choice_id} not found for question {answer.question_id}")
+@router.get("/quizzes/{quiz_id}/students", response_model=List[str])
+async def get_students_who_did_quiz_route(quiz_id: int, db: AsyncSession = Depends(get_db)):
+    # Call the service function to get students who participated in the quiz
+    result = await get_students_who_did_quiz(quiz_id, db)
+    
+    if not result or "students_who_did_quiz" not in result:
+        raise HTTPException(status_code=404, detail="No students have participated in this quiz.")
+    
+    return result["students_who_did_quiz"]
 
-        # Ajouter le score
-        total_score += choice.score
+# Get the list of students who passed the quiz (score > 10)
 
-    return {"message": "Quiz answered successfully", "total_score": total_score}
+@router.get("/quizzes/{quiz_id}/students/score_range", response_model=dict)
+async def get_students_within_score_range_route(
+    quiz_id: int, min_score: int, max_score: int, db: AsyncSession = Depends(get_db)
+):
+    # Call the service function
+    return await get_students_within_score_range(quiz_id, min_score, max_score, db)

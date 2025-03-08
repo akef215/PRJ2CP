@@ -7,5 +7,8 @@ alembic/
 # Ignorer les fichiers de configuration sensibles
 .env
 
+# Ignorer le dossier virtuel
 .venv/
+
+# Ignorer le fichier de travail (work.txt)
 work.txt
