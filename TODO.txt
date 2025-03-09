@@ -1,0 +1,9 @@
+// TODO :
+
+- [ ] Add Media query for homepage
+- [✓] adjust profile page
+- [✓] Change boxes colors
+- [ ] keyboard disappear when clicking on screen
+- [ ] Change projects grid images on homepage to clear ones
+- [ ] add elevation shadows to homepage grids
+- [ ] dropdownList in reate account page

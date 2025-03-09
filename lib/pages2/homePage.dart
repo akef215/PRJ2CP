@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import '../pages3/feedbacks.dart';
+import '../pages3/quizzes.dart';
+import '../pages3/results.dart';
+import '../pages3/stats.dart';
+import '../widgets/project_card.dart';
 import 'profile.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xffFFFDFD),
 
       /*-----------------APPBAR------------------*/
       appBar: AppBar(
@@ -47,7 +52,8 @@ class _HomePageState extends State<HomePage> {
                 onSelected: (value) {
                   if (value == 'profile') {
                     // Navigator.pushNamed(context, '/profile');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Profile()));
                   } else if (value == 'modules') {
                     Navigator.pushNamed(context, '/modules');
                   } else if (value == 'agenda') {
@@ -57,7 +63,8 @@ class _HomePageState extends State<HomePage> {
                   }
                 },
 
-                itemBuilder: (context) => [
+                itemBuilder: (context) =>
+                [
                   PopupMenuItem(
                     value: 'profile',
                     height: 60,
@@ -73,7 +80,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(width: 15),
                         Text("Profile",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)
+                            style: TextStyle(fontSize: 18,
+                                fontWeight: FontWeight.w500)
                         ),
                       ],
                     ),
@@ -93,7 +101,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(width: 15),
                         Text("Modules",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                            style: TextStyle(fontSize: 18,
+                                fontWeight: FontWeight.w500)),
                       ],
                     ),
                   ),
@@ -112,7 +121,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(width: 15),
                         Text("Agenda",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                            style: TextStyle(fontSize: 18,
+                                fontWeight: FontWeight.w500)),
                       ],
                     ),
                   ),
@@ -131,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(width: 15),
                         Text("Settings",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+                            style: TextStyle(fontSize: 18,
+                                fontWeight: FontWeight.w500)),
                       ],
                     ),
                   ),
@@ -167,7 +178,7 @@ class _HomePageState extends State<HomePage> {
 
       /*----------------------MAIN-----------------------*/
       body: Padding(
-        padding:  const EdgeInsets.only(top: 35.0, left: 25, right : 25),
+        padding: const EdgeInsets.only(top: 35.0, left: 25, right: 25),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +212,8 @@ class _HomePageState extends State<HomePage> {
                         shape: BoxShape.circle, // Circle around search icon
                         border: Border.all(color: Color(0xff87bcfe), width: 2),
                       ),
-                      child: Icon(Icons.search, color: Color(0xff87bcfe), size: 22),
+                      child: Icon(
+                          Icons.search, color: Color(0xff87bcfe), size: 22),
                     ),
                   ),
                   hintText: "Search",
@@ -221,7 +233,8 @@ class _HomePageState extends State<HomePage> {
             /*-----------------WELCOME CARD----------------*/
             Container(
 
-              padding: const EdgeInsets.only(top: 8, bottom: 8,left: 30, right: 15),
+              padding: const EdgeInsets.only(
+                  top: 8, bottom: 8, left: 30, right: 15),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
@@ -240,9 +253,9 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           "Welcome!",
                           style: TextStyle(
-                            fontFamily: "RammettoOne" ,
+                            fontFamily: "RammettoOne",
                             fontSize: 22,
-                            fontWeight: FontWeight.w400 ,
+                            fontWeight: FontWeight.w400,
                             color: Color(0xff21334E),
                           ),
                         ),
@@ -250,10 +263,10 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           "Let’s get started on something amazing",
                           style: TextStyle(
-                            fontFamily: "MontserratSemi" ,
+                            fontFamily: "MontserratSemi",
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xff2E63B3) ,
+                            color: Color(0xff2E63B3),
                           ),
                         ),
                       ],
@@ -263,8 +276,9 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                       height: 100,
                       width: 100,
-                      child: Image.asset("images/girl.png" , fit: BoxFit.contain,)
-                  ) ,
+                      child: Image.asset(
+                        "images/girl.png", fit: BoxFit.contain,)
+                  ),
                 ],
               ),
             ),
@@ -298,62 +312,70 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
 
             /*-----------------PROJECTS GRID------------------*/
             Expanded(
-              child: GridView.count( // Scrollable grid format
-                //  scrollDirection: Axis.horizontal,
-                crossAxisCount: 2, // Columns
+              child: GridView.count(
+                physics: NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 25,
+                childAspectRatio: 1.1,
                 children: [
-                  _buildProjectCard("images/illustration1.png","Quizzes and surveys", Color(0xffFFFFFF) ,Color(0xff21334e)),
-                  _buildProjectCard("images/illustration2.png","Results and scores", Color(0xff21334E) ,Color(0xffdff0ff)),
-                  _buildProjectCard("images/illustration3.png","Statistics", Color(0xff21334E) ,Color(0xffdff0ff)),
-                  _buildProjectCard("images/illustration4.png","Complains",Color(0xff21334E)  ,Color(0xffdff0ff)),
+                  ProjectCard(
+                    imagePath: "images/illustration1.png",
+                    text: "Quizzes and surveys",
+                    defaultTextColor: Color(0xff21334E),
+                    defaultColor: Color(0xffdff0ff),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Quizzes()),
+                      );
+                    },
+                  ),
+                  ProjectCard(
+                    imagePath: "images/illustration2.png",
+                    text: "Results and scores",
+                    defaultTextColor: Color(0xff21334E),
+                    defaultColor: Color(0xffdff0ff),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Results()),
+                      );
+                    },
+                  ),
+                  ProjectCard(
+                    imagePath: "images/illustration3.png",
+                    text: "Statistics",
+                    defaultTextColor: Color(0xff21334E),
+                    defaultColor: Color(0xffdff0ff),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Statistics()),
+                      );
+                    },
+                  ),
+                  ProjectCard(
+                    imagePath: "images/illustration4.png",
+                    text: "Feedback",
+                    defaultTextColor: Color(0xff21334E),
+                    defaultColor: Color(0xffdff0ff),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FeedbackPage()),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-
-  Widget _buildProjectCard(String imagePath ,String text, Color textColor ,Color color) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 100,
-            width: 100,
-            child: Image.asset(
-              imagePath ,
-              fit: BoxFit.contain,
-            ),
-          ),
-
-          SizedBox(height: 10,),
-          Center(
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: "Montserrat",
-                fontSize: 10 ,
-                fontWeight: FontWeight.w600,
-                color: textColor ,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

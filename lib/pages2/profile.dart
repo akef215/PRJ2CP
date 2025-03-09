@@ -54,7 +54,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xffFFFDFD),
 
       /*-----------------APPBAR------------------*/
       appBar: AppBar(
@@ -275,7 +275,7 @@ class _ProfileState extends State<Profile> {
           ),
 
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 40),
 
           /*------------------PROFILE MENU-----------------*/
           _buildMenuButton("images/pen.png", "Edit profile", () {}),
@@ -283,7 +283,7 @@ class _ProfileState extends State<Profile> {
           _buildMenuButton("images/question.png", "Help", () {}),
 
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 50),
 
           /*-----------------BACK ARROW----------------------*/
           Align(
@@ -328,11 +328,11 @@ class _ProfileState extends State<Profile> {
         onTap: onTap,
         borderRadius: BorderRadius.circular(30),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 18,),
+          padding: const EdgeInsets.symmetric(vertical: 14,),
           decoration: BoxDecoration(
             color: const Color(0x8FDBEEFF),
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: const Color(0xFF0F3D64), width: 7),
+            border: Border.all(color: const Color(0xFF0F3D64), width: 5),
           ),
           child: Row(
             //  mainAxisAlignment: MainAxisAlignment.start,
