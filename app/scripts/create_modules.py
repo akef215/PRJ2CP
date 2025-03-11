@@ -18,8 +18,8 @@ def upload_modules_from_csv(file_path):
             response = requests.post(API_URL, params={
                 "code": row["Code"],
                 "titre": row["Titre"],
-                "level": row["Level"],
                 "coef": int(row["Coef"]),
+                "level": row["Level"],
             })
 
             if response.status_code == 200:
