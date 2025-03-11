@@ -64,21 +64,28 @@ async def delete_current_student(current_student: dict = Depends(get_current_stu
     await db.commit()
 
     return {"message": "Student deleted successfully"}
-
 async def get_student_modules(current_student: dict = Depends(get_current_student), db: AsyncSession = Depends(get_db)):
     student_id = current_student["sub"]
+    print(f"Student ID from token: {student_id}")  # Debugging
+
     result = await db.execute(select(Student).filter(Student.id == student_id))
     student = result.scalars().first()
     
     if not student:
+        print(f"Student with ID {student_id} not found in DB")
         raise HTTPException(status_code=404, detail="Student not found")
+
+    print(f"Student found: {student.id}, Level: {student.level}")
 
     level = student.level
     stmt = select(Module).where(Module.level == level)
     result = await db.execute(stmt)
     modules = result.scalars().all()
 
+    print(f"Modules found: {modules}")  # Voir si des modules sont trouvés
+
     return modules
+
 
 async def get_student_group(current_student: dict = Depends(get_current_student), db: AsyncSession = Depends(get_db)):
     student_id = current_student["sub"]
@@ -123,8 +130,8 @@ async def update_student_profile(
         student.email = updated_data.email
     if updated_data.level:
         student.level = updated_data.level
-    if updated_data.groupe:
-        student.groupe = updated_data.groupe
+    if updated_data.groupe_id:
+        student.groupe = updated_data.groupe_id
     if updated_data.password:
         student.password = hash_password(updated_data.password)
 
@@ -171,7 +178,7 @@ async def add_result(
         student_id=student.id,
         question_id=question_id,
         quizz_id=quizz_id,
-        choice_id=choice.id
+        choice_id=choice.choice_id
     )
 
     db.add(new_result)

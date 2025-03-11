@@ -18,7 +18,7 @@ def upload_students_from_csv(file_path):
             response = requests.post(API_URL, json={
                 "name": row["name"],
                 "level": row["level"],
-                "groupe_id": row["groupe"]+row["level"],
+                "groupe_id": row["level"]+row["groupe"],
                 "id": row["id"],
                 "email": row["email"],
                 "password": row["password"]

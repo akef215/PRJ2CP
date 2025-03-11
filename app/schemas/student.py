@@ -13,25 +13,22 @@ class StudentBase(BaseModel):
 class StudentCreate(StudentBase):
     password: str
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 # Model for updating student info
 class StudentUpdate(BaseModel):
     name: Optional[str] = None
     level: Optional[str] = None
-    groupe: Optional[str] = None
+    groupe_id: Optional[str] = None  # Correction ici
     email: Optional[EmailStr] = None
     password: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 # Define the response model for when sending student data back
 class StudentResponse(BaseModel):
-    id: int  # This can stay as int if 'id' is an integer
-    code: str  # Change to 'str' to handle values like '23/0276'
+    id: str  # S'assurer que l'id est bien une str
+    code: str  # Correction de type
     name: str
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
