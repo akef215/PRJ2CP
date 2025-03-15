@@ -15,30 +15,36 @@ from app.dependencies.auth import get_current_student
 
 async def create_student_service(student: StudentCreate, db: AsyncSession = Depends(get_db)):
     # Vérifier si l'email est déjà utilisé
-    stmt = select(Student).where(Student.email == student.email)
-    result = await db.execute(stmt)  
-    existing_student = result.scalars().first()  # Correction du nom de variable
+    existing_student = await db.scalar(select(Student).where(Student.email == student.email))
 
     if existing_student:
         raise HTTPException(status_code=400, detail="Email already registered")
+
+    # Vérifier si le groupe existe
+    groupe = None
+    if student.groupe_id:
+        groupe = await db.get(Groupe, student.groupe_id)
+        if not groupe:
+            raise HTTPException(status_code=404, detail="Groupe not found")
 
     # Hasher le mot de passe
     hashed_password = hash_password(student.password)
 
     # Créer l’objet Student
     db_student = Student(
-        id=student.id,
         name=student.name,
         email=student.email,
         password=hashed_password,
         level=student.level,
-        groupe=student.groupe_id
+        groupe_id=student.groupe_id  # Assigner groupe_id et non groupe directement
     )
+    
     db.add(db_student)
     await db.commit()  
     await db.refresh(db_student)  
 
     return db_student
+
 
 async def delete_student_service(student_id: str, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(Student).filter(Student.id == student_id))
@@ -96,44 +102,51 @@ async def get_student_group(current_student: dict = Depends(get_current_student)
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
 
-    result = await db.execute(select(Groupe).filter(Groupe.id == student.groupe))
+    result = await db.execute(select(Groupe).filter(Groupe.id == student.groupe_id))
     groupe = result.scalars().first()
 
     if not groupe:
         raise HTTPException(status_code=404, detail="Student has no assigned group")
 
     return groupe
-
 async def update_student_profile(
     updated_data: StudentUpdate,
     db: AsyncSession = Depends(get_db),
     current_student: dict = Depends(get_current_student)
 ):
+    if not current_student or "sub" not in current_student:
+        raise HTTPException(status_code=401, detail="Unauthorized - No student ID found")
+    
     student_id = current_student["sub"]
+    
     result = await db.execute(select(Student).where(Student.id == student_id))
     student = result.scalars().first()
 
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
 
-    # Vérifier si l'email est déjà utilisé par un autre étudiant
+    if not updated_data or all(field is None for field in [updated_data.name, updated_data.email, updated_data.level, updated_data.groupe_id, updated_data.password]):
+        raise HTTPException(status_code=400, detail="No fields to update")
+
     if updated_data.email and updated_data.email != student.email:
         result = await db.execute(select(Student).where(Student.email == updated_data.email))
         existing_student = result.scalars().first()
         if existing_student:
             raise HTTPException(status_code=400, detail="Email already registered")
 
-    # Mise à jour des champs
-    if updated_data.name:
-        student.name = updated_data.name
-    if updated_data.email:
-        student.email = updated_data.email
-    if updated_data.level:
-        student.level = updated_data.level
     if updated_data.groupe_id:
-        student.groupe = updated_data.groupe_id
-    if updated_data.password:
-        student.password = hash_password(updated_data.password)
+        result = await db.execute(select(Groupe).where(Groupe.id == updated_data.groupe_id))
+        existing_group = result.scalars().first()
+        print(f"Checking group ID: {updated_data.groupe_id} -> {existing_group}")  # Debugging
+        if not existing_group:
+            raise HTTPException(status_code=400, detail="Invalid groupe_id")
+
+    update_fields = ["name", "email", "level", "groupe_id", "password"]
+    for field in update_fields:
+        value = getattr(updated_data, field)
+        if value:
+            print(f"Updating {field} -> {value}")  # Debugging
+            setattr(student, field, hash_password(value) if field == "password" else value)
 
     await db.commit()
     await db.refresh(student)
@@ -178,7 +191,7 @@ async def add_result(
         student_id=student.id,
         question_id=question_id,
         quizz_id=quizz_id,
-        choice_id=choice.choice_id
+        choice_id=choice.id
     )
 
     db.add(new_result)

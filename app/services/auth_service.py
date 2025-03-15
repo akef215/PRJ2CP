@@ -9,6 +9,10 @@ import os
 
 load_dotenv()
 
+print("EMAIL:", os.getenv("TEACHER_EMAIL"))
+print("PASSWORD:", os.getenv("TEACHER_PASSWORD"))
+
+
 async def authenticate_teacher(email: str, password: str):
     if (email != os.getenv("TEACHER_EMAIL") or password != os.getenv("TEACHER_PASSWORD")):
         raise HTTPException(status_code=401, detail="Unauthorised operation")

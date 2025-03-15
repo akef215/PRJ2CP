@@ -30,7 +30,7 @@ async def get_my_profile(current_student: dict = Depends(get_current_student)):
 
 # Route to delete the current student
 @router.delete("/me/Delete")
-async def delete_teacher(current_student: dict = Depends(get_current_student), db: AsyncSession = Depends(get_db)):
+async def delete_student(current_student: dict = Depends(get_current_student), db: AsyncSession = Depends(get_db)):
     return await delete_current_student(current_student, db)
 
 # Route to get the current student's modules

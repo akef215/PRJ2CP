@@ -10,4 +10,4 @@ class Student(Base):
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False, index=True)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     level: Mapped[str] = mapped_column(String(6), nullable=False)
-    groupe: Mapped[str] = mapped_column(String(8), ForeignKey("groupes.id"), nullable=False)
+    groupe_id: Mapped[str] = mapped_column(String(8), ForeignKey("groupes.id"), nullable=False)  # ✅ Correction ici

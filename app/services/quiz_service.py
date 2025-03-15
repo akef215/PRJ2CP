@@ -222,30 +222,32 @@ async def get_students_who_did_quiz(quiz_id: int, db: AsyncSession):
     return {"students_who_did_quiz": student_ids}
 
 # Function to get students who passed the quiz (score > 10)
-async def get_students_within_score_range(quiz_id: int, min_score: int, max_score: int, db: AsyncSession):
-    # Get all quiz results for the given quiz_id
-    results = await db.execute(select(Result).where(Result.quizz_id == quiz_id))
-    quiz_results = results.scalars().all()
+async def get_students_within_score_range(
+    quiz_id: int, min_score: int, max_score: int, db: AsyncSession
+):
+    # Récupérer tous les résultats des étudiants pour ce quiz avec les scores
+    stmt = (
+        select(Result.student_id, Choice.score)
+        .join(Choice, Choice.id == Result.choice_id)
+        .where(Result.quizz_id== quiz_id)
+    )
+    
+    results = await db.execute(stmt)
+    results = results.fetchall()
 
-    passed_students = []
+    # Calculer les scores totaux des étudiants
+    student_scores = {}
+    for student_id, score in results:
+        student_scores[student_id] = student_scores.get(student_id, 0) + score
 
-    for result in quiz_results:
-        total_score = 0
-        
-        # Get all choices corresponding to the student's answers
-        choice_results = await db.execute(select(Choice).where(Choice.id == result.choice_id))
-        choices = choice_results.scalars().all()
+    # Filtrer les étudiants dont le score est dans la plage donnée
+    passed_students = [
+        student_id for student_id, total_score in student_scores.items()
+        if min_score <= total_score <= max_score
+    ]
 
-        for choice in choices:
-            total_score += choice.score
-
-        # Check if the total score is within the specified range
-        if min_score <= total_score <= max_score:
-            passed_students.append(result.student_id)
-
-    # If no students match the score range, raise a 404 error
+    # Si aucun étudiant ne correspond, renvoyer une erreur 404
     if not passed_students:
         raise HTTPException(status_code=404, detail="No students found within the score range.")
-    
-    return {"students_in_score_range": passed_students}
 
+    return {"students_in_score_range": passed_students}

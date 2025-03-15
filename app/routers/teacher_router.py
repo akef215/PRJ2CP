@@ -26,5 +26,5 @@ async def show_groupe_students(groupe: str, db : AsyncSession = Depends(get_db))
     return await get_students_by_groupe(db, groupe)
 
 @router.get("/modules")
-async def show_groupes(db: AsyncSession = Depends(get_db)):
+async def show_modules(db: AsyncSession = Depends(get_db)):
     return await get_modules(db)

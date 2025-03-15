@@ -27,8 +27,9 @@ class StudentUpdate(BaseModel):
 
 # Define the response model for when sending student data back
 class StudentResponse(BaseModel):
-    id: str  # S'assurer que l'id est bien une str
-    code: str  # Correction de type
+    id: str  
+    code: str  
     name: str
+    groupe_id: str  # Ajout de groupe_id
 
     model_config = {"from_attributes": True}
