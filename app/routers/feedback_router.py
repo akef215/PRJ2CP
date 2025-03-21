@@ -2,21 +2,33 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from app.models.feedback import Feedback
+from pydantic import BaseModel
 from app.services.feedback_service import (
     create_feedback, get_all_feedbacks, get_feedbacks_by_group, get_feedbacks_by_module
 )
 
-router = APIRouter(prefix="/feedback", tags=["Feedback"])
-
+router = APIRouter(tags=["Feedback"])
+class FeedbackRequest(BaseModel):
+    description: str
+    groupe: str
+    module: str
 # Create a new anonymous feedback
-@router.post("/")
-async def submit_feedback(description: str, groupe: str, module: str, db: AsyncSession = Depends(get_db)):
-    if not description.strip():
-        raise HTTPException(status_code=400, detail="Description cannot be empty")
-    
-    feedback = await create_feedback(description=description, groupe=groupe, module=module, db=db)
-    return {"message": "Feedback submitted successfully", "feedback": feedback}
 
+@router.post("/")
+async def submit_feedback(feedback: FeedbackRequest, db: AsyncSession = Depends(get_db)):
+    print(f"Received feedback: {feedback.description}, Group: {feedback.groupe}, Module: {feedback.module}")
+
+    if not feedback.description.strip():
+        raise HTTPException(status_code=400, detail="Description cannot be empty")
+
+    feedback_entry = await create_feedback(
+        description=feedback.description,
+        groupe=feedback.groupe,
+        module=feedback.module,
+        db=db
+    )
+
+    return {"message": "Feedback submitted successfully", "feedback": feedback_entry}
 # Get all feedbacks
 @router.get("/")
 async def fetch_all_feedbacks(db: AsyncSession = Depends(get_db)):

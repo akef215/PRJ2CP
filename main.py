@@ -5,14 +5,14 @@ from app.routers import student_router, teacher_router, auth_router,quiz_router,
 
 
 app = FastAPI()
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=["http://192.168.100.20:8000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 app.include_router(statistics_router.router, prefix="/statistics", tags=["Statistics"]) 
 app.include_router(quiz_router.router, prefix="/quizzes", tags=["Quizzes"]) 

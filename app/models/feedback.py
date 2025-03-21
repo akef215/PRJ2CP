@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Integer, ForeignKey, DateTime, Text, String
+from sqlalchemy import String, Integer, ForeignKey, DateTime, Text
 from datetime import datetime
 from app.models import Base
 
@@ -11,3 +11,4 @@ class Feedback(Base):
     module: Mapped[str] = mapped_column(String(10), ForeignKey("modules.code"), nullable=False)
     description: Mapped[str] = mapped_column(Text, nullable=False)
     date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
