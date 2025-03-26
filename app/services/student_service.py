@@ -32,6 +32,7 @@ async def create_student_service(student: StudentCreate, db: AsyncSession = Depe
 
     # Créer l’objet Student
     db_student = Student(
+        id=student.id,
         name=student.name,
         email=student.email,
         password=hashed_password,

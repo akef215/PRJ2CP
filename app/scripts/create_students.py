@@ -15,11 +15,12 @@ def upload_students_from_csv(file_path):
             return
         
         for row in reader:
+            print(f"Envoi de : {row}")  # Vérifier l'entrée
             response = requests.post(API_URL, json={
+                "id": row["id"],
                 "name": row["name"],
                 "level": row["level"],
                 "groupe_id": row["level"]+row["groupe"],
-                "id": row["id"],
                 "email": row["email"],
                 "password": row["password"]
             })
