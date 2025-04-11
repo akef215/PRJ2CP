@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../pages2/agenda.dart';
 import '../pages2/profile.dart';
 
 class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
@@ -39,13 +40,13 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
 
               onSelected: (value) {
                 if (value == 'profile') {
-                  // Navigator.pushNamed(context, '/profile');
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Profile()));
                 } else if (value == 'modules') {
                   Navigator.pushNamed(context, '/modules');
                 } else if (value == 'agenda') {
-                  Navigator.pushNamed(context, '/agenda');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Agenda()));
                 } else if (value == 'settings') {
                   Navigator.pushNamed(context, '/settings');
                 }
@@ -150,18 +151,60 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
           ),
 
           /*---------NOTIFICATIONS BELL---------*/
-          //TODO: MAKE IT A CLICKABLE BUTTON
           Padding(
             padding: EdgeInsets.only(right: 16),
-            child: Image.asset(
-              'images/bell1.png',
-              width: 37,
-              height: 37,
-              fit: BoxFit.contain,
+            child: PopupMenuButton<int>(
+              icon: SizedBox(
+                width: 37,
+                height: 37,
+                child: Image.asset(
+                  'images/bell1.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              color: Colors.white,
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+                side: BorderSide(color: Color(0xffdff0ff), width: 6),
+              ),
+              constraints: BoxConstraints.tightFor(width: 250),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  enabled: false, // Disable selection
+                  child: SizedBox(
+                    height: 200, // Limit height to make it scrollable
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: List.generate(
+                          6, // Simulating 10 notifications
+                              (index) => _buildNotificationItem("Notification ${index + 1}", "${(index + 1) * 5}m ago"),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+
+
         ],
       ),
     );
   }
+}
+
+PopupMenuItem<int> _buildNotificationItem(String title, String time) {
+  return PopupMenuItem(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: TextStyle(fontFamily: "MontserratSemi", color : Color(0xff21334E),fontWeight: FontWeight.bold, fontSize: 14)),
+        SizedBox(height: 4),
+        Text(time, style: TextStyle(color: Colors.grey, fontSize: 12)),
+        Divider(), // Adds a line between notifications
+      ],
+    ),
+  );
 }

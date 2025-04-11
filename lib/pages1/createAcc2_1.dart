@@ -10,6 +10,13 @@ class CreateAcc2 extends StatefulWidget {
 
 class _CreateAccState extends State<CreateAcc2> {
 
+  // List of levels
+  final List<String> levels = ["CP1", "CP2", "CS1", "CS2", "CS3"];
+  String? selectedLevel;
+
+  // List of groups (1 to 15)
+  final List<String> groups = List.generate(15, (index) => "Group ${index + 1}");
+  String? selectedGroup;
 
   @override
   Widget build(BuildContext context) {
@@ -153,24 +160,45 @@ class _CreateAccState extends State<CreateAcc2> {
                         ),
 
                         child: Container(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.only(top: 4,bottom: 10.0, left: 8, right: 8),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20.0),
                           ),
 
-                          child: TextField(
-                            //TODO : MAKE IT A SELECT OPTION - LIST OF OPTIONS + DROPDOWN BUTTON
-                            style: TextStyle(color: Colors.black), // User input text black
-                            decoration: InputDecoration(
-                              hintText: "Select your level" ,
-                              hintStyle: TextStyle(
-                                color: Colors.grey[500] ,
-                                fontSize: 15 ,
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              canvasColor: Color(0xffc8e5ff), // Change dropdown background color
+                            ),
+                            child: DropdownButtonFormField<String>(
+                              menuMaxHeight: 200,
+                              value: selectedLevel,
+                              hint: Text(
+                                "Choose Level",
+                                style:  TextStyle(
+                                  color: Colors.grey[500] ,
+                                  fontSize: 15 ,
+                                ),
                               ),
-                              border: InputBorder.none, // Removes the default black line of TextField
-
-                              contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0) ,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0) ,
+                              ),
+                              items: levels.map((level) {
+                                return DropdownMenuItem(
+                                  value: level,
+                                  child: Text(level),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedLevel = value;
+                                });
+                              },
+                              icon: Icon(Icons.arrow_drop_down, color: Colors.grey[400]), // Dropdown icon
+                              style: TextStyle(
+                                color: Colors.black ,
+                                fontSize: 15 ,), // Text style
                             ),
                           ),
                         ),
@@ -202,24 +230,45 @@ class _CreateAccState extends State<CreateAcc2> {
                         ),
 
                         child: Container(
-                          padding: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.only(top: 4,bottom: 10.0, left: 8, right: 8),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20.0),
                           ),
 
-                          child: TextField(
-                            // TODO: MAKE IT A SELECT OPTION - BASING ON LEVEL
-                            style: TextStyle(color: Colors.black), // User input text black
-                            decoration: InputDecoration(
-                              hintText: "Select your group number" ,
-                              hintStyle: TextStyle(
-                                color: Colors.grey[500] ,
-                                fontSize: 15 ,
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              canvasColor: Color(0xffc8e5ff), // Change dropdown background color
+                            ),
+                            child: DropdownButtonFormField<String>(
+                              menuMaxHeight: 200,
+                              value: selectedGroup,
+                              hint: Text(
+                                "Select your group number",
+                                style:  TextStyle(
+                                  color: Colors.grey[500] ,
+                                  fontSize: 15 ,
+                                ),
                               ),
-                              border: InputBorder.none, // Removes the default black line of TextField
-                              //    suffixIcon: Icon(Icons.group , color: Colors.grey[400],),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0) ,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0) ,
+                              ),
+                              items: groups.map((group) {
+                                return DropdownMenuItem(
+                                  value: group,
+                                  child: Text(group),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedGroup = value;
+                                });
+                              },
+                              icon: Icon(Icons.arrow_drop_down, color: Colors.grey[400]), // Dropdown icon
+                              style: TextStyle(
+                                color: Colors.black ,
+                                fontSize: 15 ,), // Text style
                             ),
                           ),
                         ),

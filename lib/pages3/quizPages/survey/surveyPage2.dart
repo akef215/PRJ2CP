@@ -1,23 +1,24 @@
+import 'package:esi_quiz/pages3/quizPages/survey/surveyPage3.dart';
 import 'package:flutter/material.dart';
 
-import '../../pages2/agenda.dart';
-import '../../pages2/profile.dart';
-import 'Q2.dart';
+import '../../../widgets/appbar.dart';
 
-class Quiz1 extends StatefulWidget {
-  const Quiz1({super.key});
+
+class SurveyPage2 extends StatefulWidget {
+  const SurveyPage2({super.key});
 
   @override
-  State<Quiz1> createState() => _Quiz1State();
+  State<SurveyPage2> createState() => _SurveyPage2State();
 }
 
-class _Quiz1State extends State<Quiz1> {
+class _SurveyPage2State extends State<SurveyPage2> {
 
   // Dynamic data (will be fetched from the API)
   String quizTimeText = "Loading...";  // Placeholder for "Quiz Time"
   String questionMarkText = "Loading...";  // Placeholder for "Question Mark"
   String question = "Loading question...";
-  List<String> answers = ["A propositional variable is a formula", "Answer2", "Answer3", "Answer4", "Answer5", "Answer6"]; // TODO : ANSWERS ARE FETCHED FROM WEBSITE
+  String questionImageUrl = "images/quizgirl.png"; // Example to test
+  List<String> answers = ["Answer1", "Answer2", "Answer3", "Answer4", "Answer5"]; // TODO : ANSWERS ARE FETCHED FROM WEBSITE
 
   // Store the selected answers by user
   Set<String> selectedAnswers = {};
@@ -26,7 +27,7 @@ class _Quiz1State extends State<Quiz1> {
   void initState() {
     super.initState();
     // TODO: Fetch quiz data from API here when the backend is ready
-  //  fetchQuizData();
+    //  fetchQuizData();
   }
 
   // Function to fetch quiz data from API
@@ -44,6 +45,7 @@ class _Quiz1State extends State<Quiz1> {
   //         questionMarkText = data["questionMark"] ?? "Question Mark"; // Fetched question mark text
   //         question = data["question"] ?? "No question available"; // Fetched question
   //         answers = List<String>.from(data["answers"] ?? []); // Fetched answers
+  //         questionImageUrl = data["questionImage"] ?? ""; // Fetched image url
   //       });
   //     } else {
   //       print("Failed to load data: ${response.statusCode}");
@@ -62,162 +64,7 @@ class _Quiz1State extends State<Quiz1> {
     return Scaffold(
       backgroundColor: Color(0xffFFFDFD),
 
-      /*-----------------APPBAR------------------*/
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            /*-------------GRID-----------------*/
-            Container(
-              padding: EdgeInsets.only(left: 12.0),
-              child: PopupMenuButton(
-                icon: SizedBox(
-                  width: 37,
-                  height: 37,
-                  child: Image.asset(
-                    'images/grid (1) - Copy (1).png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-
-                color: Colors.white,
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(color: Color(0xffdff0ff), width: 6),
-                ),
-
-                constraints: BoxConstraints.tightFor(width: 230),
-
-                onSelected: (value) {
-                  if (value == 'profile') {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Profile()));
-                  } else if (value == 'modules') {
-                    Navigator.pushNamed(context, '/modules');
-                  } else if (value == 'agenda') {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Agenda()));
-                  } else if (value == 'settings') {
-                    Navigator.pushNamed(context, '/settings');
-                  }
-                },
-
-                itemBuilder: (context) =>
-                [
-                  PopupMenuItem(
-                    value: 'profile',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/people.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Profile",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)
-                        ),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'modules',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/check.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Modules",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'agenda',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/time.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Agenda",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'settings',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/setting (1).png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Settings",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            /*----------HOME TEXT---------------*/
-            const Text(
-              "Home",
-              style: TextStyle(
-                fontFamily: "MontserratSemi",
-                color: Color(0xff21334E),
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-
-            /*---------NOTIFICATIONS BELL---------*/
-            //TODO: MAKE IT A CLICKABLE BUTTON
-            Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: Image.asset(
-                'images/bell1.png',
-                width: 37,
-                height: 37,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: Custom_appBar(),
 
       /*------------------------------MAIN---------------------------------------*/
 
@@ -250,7 +97,7 @@ class _Quiz1State extends State<Quiz1> {
           Container(
             height: screenHeight * 0.26,
             width: screenWidth * 0.7,
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical : 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30) ,
               border: Border.all(color: Color(0xff0F3D64), width : 10),
@@ -258,9 +105,8 @@ class _Quiz1State extends State<Quiz1> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20,),
                 Text(
-                  "Question 1",
+                  "Question 2",
                   style: TextStyle(
                     fontFamily: "RammettoOne",
                     fontSize: 16,
@@ -269,7 +115,7 @@ class _Quiz1State extends State<Quiz1> {
                   ),
                 ),
 
-                SizedBox(height: 15,),
+                SizedBox(height: 5,),
                 Text(
                   question,
                   style: TextStyle(
@@ -277,6 +123,22 @@ class _Quiz1State extends State<Quiz1> {
                     fontSize: 13 ,
                   ),
                 ),
+
+                SizedBox(height: 5,),
+                // Add image if available
+                if (questionImageUrl.isNotEmpty)
+                  Image.asset( // Use Image.network
+                    questionImageUrl,
+                    height: 100,
+                    width: double.infinity,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) { //if the image fails to load
+                      return Text(
+                        "Image not available",
+                        style: TextStyle(color: Colors.red[900]),
+                      );
+                    },
+                  ),
               ],
             ),
           ),
@@ -295,7 +157,7 @@ class _Quiz1State extends State<Quiz1> {
               border: Border.all(color: Color(0xff0F3D64), width : 1),
             ),
             child : Text(
-              questionMarkText ,
+              quizTimeText ,
               style: TextStyle(
                 color: Color(0xff21334E) ,
                 fontFamily: "MontserratSemi" ,
@@ -372,59 +234,6 @@ class _Quiz1State extends State<Quiz1> {
           ),
 
 
-          // Expanded(
-          //   child: Container(
-          //     margin:  EdgeInsets.symmetric(horizontal: 40, vertical: 5),
-          //     padding: EdgeInsets.all(5),
-          //     decoration: BoxDecoration(
-          //       color: Color(0xff21334E) ,
-          //       borderRadius: BorderRadius.circular(20),
-          //     ),
-          //     child: ListView.builder(
-          //       itemCount: answers.length,
-          //       itemBuilder: (context, index){
-          //       children: answers.isEmpty
-          //           ? [Text("Loading answers...", style: TextStyle(color: Colors.white))] // Placeholder before API loads
-          //           : answers.map((answer) {
-          //         return Theme(
-          //           data: Theme.of(context).copyWith(
-          //             checkboxTheme: CheckboxThemeData(
-          //               side: BorderSide(color: Colors.white, width: 2), // White border when unchecked
-          //             ),
-          //           ),
-          //           child: CheckboxListTile(
-          //             title: Text(
-          //               answer,
-          //               style: TextStyle(
-          //                 color: Colors.white,
-          //                 fontFamily: "MontserratSemi",
-          //               ),
-          //             ),
-          //             value: selectedAnswers.contains(answer),
-          //             onChanged: (bool? value) {
-          //               setState(() {
-          //                 if (value == true) {
-          //                   selectedAnswers.add(answer);
-          //                 } else {
-          //                   selectedAnswers.remove(answer);
-          //                 }
-          //               });
-          //             },
-          //             controlAffinity: ListTileControlAffinity.leading,
-          //             checkColor: Color(0xff21334E),
-          //             activeColor: Colors.white,
-          //             shape: RoundedRectangleBorder(
-          //               borderRadius: BorderRadius.circular(11),
-          //               side: BorderSide(color: Colors.white, width: 2),
-          //             ),
-          //           ),
-          //         );
-          //       }).toList(),
-          //       )
-          //     ),
-          //   ),
-          // ),
-
           /*-----------------NAVIGATION ARROW----------------------*/
           Expanded(
             child: Align(
@@ -462,7 +271,7 @@ class _Quiz1State extends State<Quiz1> {
                     // NEXT BUTTON
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Quiz2())) ;
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyPage3())) ;
                       },
                       child: Row(
                         children: [

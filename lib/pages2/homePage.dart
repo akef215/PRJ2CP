@@ -1,9 +1,12 @@
+import 'package:esi_quiz/pages3/quizPages/quizChoice.dart';
+import 'package:esi_quiz/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import '../pages3/feedbacks.dart';
 import '../pages3/quizzes.dart';
 import '../pages3/results.dart';
 import '../pages3/stats.dart';
 import '../widgets/project_card.dart';
+import 'agenda.dart';
 import 'profile.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,169 +19,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Color(0xffFFFDFD),
 
       /*-----------------APPBAR------------------*/
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            /*-------------GRID-----------------*/
-            Container(
-              padding: EdgeInsets.only(left: 12.0),
-              child: PopupMenuButton(
-                icon: SizedBox(
-                  width: 37,
-                  height: 37,
-                  child: Image.asset(
-                    'images/grid (1) - Copy (1).png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-
-                color: Colors.white,
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(color: Color(0xffdff0ff), width: 6),
-                ),
-
-                constraints: BoxConstraints.tightFor(width: 230),
-
-                onSelected: (value) {
-                  if (value == 'profile') {
-                    // Navigator.pushNamed(context, '/profile');
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Profile()));
-                  } else if (value == 'modules') {
-                    Navigator.pushNamed(context, '/modules');
-                  } else if (value == 'agenda') {
-                    Navigator.pushNamed(context, '/agenda');
-                  } else if (value == 'settings') {
-                    Navigator.pushNamed(context, '/settings');
-                  }
-                },
-
-                itemBuilder: (context) =>
-                [
-                  PopupMenuItem(
-                    value: 'profile',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/people.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Profile",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)
-                        ),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'modules',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/check.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Modules",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'agenda',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/time.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Agenda",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'settings',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/setting (1).png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Settings",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            /*----------HOME TEXT---------------*/
-            const Text(
-              "Home",
-              style: TextStyle(
-                fontFamily: "MontserratSemi",
-                color: Color(0xff21334E),
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-
-            /*---------NOTIFICATIONS BELL---------*/
-            //TODO: MAKE IT A CLICKABLE BUTTON
-            Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: Image.asset(
-                'images/bell1.png',
-                width: 37,
-                height: 37,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ],
-        ),
-      ),
+      appBar: Custom_appBar(),
 
       /*----------------------MAIN-----------------------*/
       body: Padding(
-        padding: const EdgeInsets.only(top: 35.0, left: 25, right: 25),
+        padding:  EdgeInsets.only(top: screenHeight * 0.04, left: screenWidth * 0.05, right: screenWidth * 0.05),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +49,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            const SizedBox(height: 15),
+            SizedBox(height: screenHeight * 0.018),
 
             /*---------------SEARCH BAR---------------*/
             Padding(
@@ -206,8 +59,8 @@ class _HomePageState extends State<HomePage> {
                   prefixIcon: Padding(
                     padding: EdgeInsets.all(16),
                     child: Container(
-                      width: 30,
-                      height: 30,
+                      width: screenWidth * 0.07,
+                      height: screenHeight * 0.035,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle, // Circle around search icon
                         border: Border.all(color: Color(0xff87bcfe), width: 2),
@@ -228,7 +81,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            const SizedBox(height: 30),
+            SizedBox(height: screenHeight * 0.03),
 
             /*-----------------WELCOME CARD----------------*/
             Container(
@@ -283,36 +136,22 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            SizedBox(height: 25,),
+            SizedBox(height: screenHeight * 0.03,),
 
             /*--------------ONGOING PROJECTS-----------------*/
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    "Ongoing projects",
-                    style: TextStyle(
-                      fontFamily: "Moul",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xff2E63B3),
-                    ),
-                  ),
-                  Text(
-                    "view all",
-                    style: TextStyle(
-                        fontFamily: "MontserratSemi",
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey
-                    ),
-                  ),
-                ],
+              child: Text(
+                "What do you need",
+                style: TextStyle(
+                  fontFamily: "Moul",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff0F3D64),
+                ),
               ),
             ),
-            const SizedBox(height: 20),
+             SizedBox(height: screenHeight * 0.025),
 
             /*-----------------PROJECTS GRID------------------*/
             Expanded(
@@ -331,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Quizzes()),
+                        MaterialPageRoute(builder: (context) => QuizChoice()),
                       );
                     },
                   ),
@@ -343,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Results()),
+                        MaterialPageRoute(builder: (context) => ResultsPage()),
                       );
                     },
                   ),

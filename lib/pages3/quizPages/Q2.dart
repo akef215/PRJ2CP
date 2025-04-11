@@ -17,7 +17,7 @@ class _Quiz2State extends State<Quiz2> {
   String questionMarkText = "Loading...";  // Placeholder for "Question Mark"
   String question = "Loading question...";
   String questionImageUrl = "images/quizgirl.png"; // Example to test
-  List<String> answers = ["Answer1", "Answer2", "Answer3", "Answer4"]; // TODO : ANSWERS ARE FETCHED FROM WEBSITE
+  List<String> answers = ["Answer1", "Answer2", "Answer3", "Answer4", "Answer5"]; // TODO : ANSWERS ARE FETCHED FROM WEBSITE
 
   // Store the selected answers by user
   Set<String> selectedAnswers = {};
@@ -168,53 +168,70 @@ class _Quiz2State extends State<Quiz2> {
           SizedBox(height: 2,),
 
           /*--------------------ANSWERS BOX-------------------*/
-          Container(
-            margin:  EdgeInsets.symmetric(horizontal: 40, vertical: 5),
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Color(0xff21334E) ,
-              borderRadius: BorderRadius.circular(20),
+          Theme(
+            data: Theme.of(context).copyWith(
+              checkboxTheme: CheckboxThemeData(
+                side: BorderSide(color: Colors.white, width: 1.5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                checkColor: MaterialStateProperty.all(Color(0xff21334E)),
+              ),
             ),
-            child: Column(
-              children: answers.isEmpty
-                  ? [Text("Loading answers...", style: TextStyle(color: Colors.white))] // Placeholder before API loads
-                  : answers.map((answer) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    checkboxTheme: CheckboxThemeData(
-                      side: BorderSide(color: Colors.white, width: 2), // White border when unchecked
-                    ),
-                  ),
-                  child: CheckboxListTile(
-                    title: Text(
-                      answer,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "MontserratSemi",
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Color(0xff21334E),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: SizedBox(
+                height: screenHeight * 0.3,
+                child: ListView.builder(
+                  itemCount: answers.length,
+                  itemBuilder: (context, index) {
+                    String answer = answers[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Row(
+                        children: [
+                          Transform.scale( // Resize the checkbox
+                            scale: 1.3,
+                            child: Checkbox(
+                              value: selectedAnswers.contains(answer),
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  if (value == true) {
+                                    selectedAnswers.add(answer);
+                                  } else {
+                                    selectedAnswers.remove(answer);
+                                  }
+                                });
+                              },
+                              activeColor: Colors.white,
+                              checkColor: Color(0xff21334E),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              answer,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "MontserratSemi",
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    value: selectedAnswers.contains(answer), // TODO: Update with actual user selection logic
-                    onChanged: (bool? value) {
-                      setState(() {
-                        if (value == true) {
-                          selectedAnswers.add(answer);
-                        } else {
-                          selectedAnswers.remove(answer);
-                        }
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity.leading,
-                    checkColor: Color(0xff21334E),
-                    activeColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(11),
-                      side: BorderSide(color: Colors.white, width: 2),
-                    ),
-                  ),
-                );
-              }).toList(),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
+
 
           /*-----------------NAVIGATION ARROW----------------------*/
           Expanded(

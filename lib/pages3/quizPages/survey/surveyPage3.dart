@@ -1,16 +1,17 @@
+import 'package:esi_quiz/pages3/quizPages/survey/surveyPage4.dart';
 import 'package:flutter/material.dart';
 
-import '../../widgets/appbar.dart';
-import 'Q4.dart';
+import '../../../widgets/appbar.dart';
 
-class Quiz3 extends StatefulWidget {
-  const Quiz3({super.key});
+
+class SurveyPage3 extends StatefulWidget {
+  const SurveyPage3({super.key});
 
   @override
-  State<Quiz3> createState() => _Quiz3State();
+  State<SurveyPage3> createState() => _SurveyPage3State();
 }
 
-class _Quiz3State extends State<Quiz3> {
+class _SurveyPage3State extends State<SurveyPage3> {
 
   // Dynamic data (will be fetched from the API)
   String quizTimeText = "Loading...";  // Placeholder for "Quiz Time"
@@ -171,13 +172,13 @@ class _Quiz3State extends State<Quiz3> {
             child: Stack(
               children: [
                 GridView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // 2 columns
-                      crossAxisSpacing: 15,
-                      mainAxisSpacing: 15,
-                      childAspectRatio: 1, // Square images
-                    ),
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // 2 columns
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                    childAspectRatio: 1, // Square images
+                  ),
 
                   itemCount: 4,
                   itemBuilder: (context, index){
@@ -233,49 +234,49 @@ class _Quiz3State extends State<Quiz3> {
                             // -------------CHECKBOX-------------
                             Transform.translate(
                               offset: Offset(checkDx, checkDy),
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  alignment: Alignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: 60, // Increase tap area
-                                      height: 60,
-                                      child: Transform.scale(
-                                        scale: 1.6,
-                                        child: Checkbox(
-                                          value: selectedAnswer == index, // Replace with user logic
-                                          activeColor: Color(0xff21334E), // Fill color when clicked
-                                          checkColor: Colors.white, // Tick color
-                                          side: BorderSide(color: Color(0xff21334E), width: 2),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8),
-                                          ),
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              selectedAnswer = index; // Update selected answer
-                                            });
-                                          },
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 60, // Increase tap area
+                                    height: 60,
+                                    child: Transform.scale(
+                                      scale: 1.6,
+                                      child: Checkbox(
+                                        value: selectedAnswer == index, // Replace with user logic
+                                        activeColor: Color(0xff21334E), // Fill color when clicked
+                                        checkColor: Colors.white, // Tick color
+                                        side: BorderSide(color: Color(0xff21334E), width: 2),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
                                         ),
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            selectedAnswer = index; // Update selected answer
+                                          });
+                                        },
                                       ),
                                     ),
+                                  ),
 
-                                    /*-----------------------A B C D LETTERS-------------------*/
-                                    Positioned(
-                                      top: (index == 0 || index == 1) ? -12 : null, // Above for first row
-                                      bottom: (index == 2 || index == 3) ? -12 : null, // Below for second row
-                                      child: Text(
-                                        String.fromCharCode(65 + index), // 'A' for index 0, 'B' for index 1, etc.
-                                        style: TextStyle(
-                                          fontFamily: "MontserratSemi",
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xff21334E),
-                                        ),
+                                  /*-----------------------A B C D LETTERS-------------------*/
+                                  Positioned(
+                                    top: (index == 0 || index == 1) ? -12 : null, // Above for first row
+                                    bottom: (index == 2 || index == 3) ? -12 : null, // Below for second row
+                                    child: Text(
+                                      String.fromCharCode(65 + index), // 'A' for index 0, 'B' for index 1, etc.
+                                      style: TextStyle(
+                                        fontFamily: "MontserratSemi",
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff21334E),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
+                            ),
                           ],
                         ),
                       ),
@@ -346,7 +347,7 @@ class _Quiz3State extends State<Quiz3> {
                     // NEXT BUTTON
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Quiz4())) ;
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyPage4())) ;
                       },
                       child: Row(
                         children: [

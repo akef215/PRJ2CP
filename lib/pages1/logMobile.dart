@@ -37,32 +37,104 @@ class _LogMobileState extends State<LogMobile> {
   String? _passwordError;
 
   String loginMessage = "";
+  bool _isLoading = false;
 
   // Future<void> login() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //
   //   String email = emailController.text.trim();
   //   String password = passwordController.text.trim();
   //
-  //   final url = Uri.parse('https://reqres.in/api/login'); // Dummy API
+  //   final url = Uri.parse('https://your-api-url.com/auth/students/login');
   //   final headers = {'Content-Type': 'application/json'};
   //   final body = jsonEncode({'email': email, 'password': password});
   //
   //   try {
   //     final response = await http.post(url, headers: headers, body: body);
   //
-  //     setState(() {
-  //       if (response.statusCode == 200) {
-  //         final data = jsonDecode(response.body);
-  //         loginMessage = "Login successful! Token: ${data['token']}";
-  //       } else {
-  //         loginMessage = "Login failed: ${jsonDecode(response.body)['error']}";
-  //       }
-  //     });
+  //     print('API Response: ${response.statusCode} - ${response.body}');
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       setState(() {
+  //         loginMessage = "Login successful!";
+  //         _isLoading = false;
+  //       });
+  //       Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+  //     } else {
+  //       setState(() {
+  //         loginMessage = "Login failed: ${jsonDecode(response.body)['detail'] ?? 'Unknown error'}";
+  //         _isLoading = false;
+  //       });
+  //     }
   //   } catch (e) {
   //     setState(() {
   //       loginMessage = "Network error: $e";
+  //       _isLoading = false;
   //     });
   //   }
   // }
+
+
+  Future<void> login() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+
+    final url = Uri.parse('http://192.168.1.3:8000/auth/students/login'); // For Android emulator: use 'http://10.0.2.2:8000/auth/students/login'
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({'email': email, 'password': password});
+
+    print("🔧 Attempting to log in with email: $email");
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      print('API Response: ${response.statusCode} - ${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        print("✅ Login successful! User data: $data");
+
+        setState(() {
+          loginMessage = "Login successful!";
+          _isLoading = false;
+        });
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+
+      } else if (response.statusCode == 401) {
+        print("❌ Invalid email or password.");
+        setState(() {
+          loginMessage = "Invalid email or password.";
+          _isLoading = false;
+        });
+
+      } else {
+        print("⚠️ Unexpected error: ${response.statusCode} - ${response.body}");
+        setState(() {
+          loginMessage = "Error: ${response.statusCode} - ${response.body}";
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print("🚨 Network error: $e");
+      setState(() {
+        loginMessage = e.toString().contains('Connection failed')
+            ? "Server unreachable. Is the backend running?"
+            : "Network error: $e";
+        _isLoading = false;
+      });
+    }
+    print("🛑 Login process complete.");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -322,10 +394,7 @@ class _LogMobileState extends State<LogMobile> {
                         _passwordError = isValidPassword(password) ? null : "Password must be at least 8 characters";
 
                         if (_emailError == null && _passwordError == null) { // VALIDATION
-                          //TODO : API REQUEST
-                          print("Logging in...");
-                          //   login();
-                          //   print(loginMessage);
+                         // login();
                           Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                         }
                       });

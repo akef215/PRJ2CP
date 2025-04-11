@@ -1,9 +1,29 @@
 // TODO :
 
-- [ ] Add Media query for homepage
+- [✓] Add Media query for homepage + profile page
+- [ ] Ensure responsiveness in all pages !!!!
+- [✓] Add the first page
+- [✓] Remove back from Qtype1
+- [✓] Remove view all
 - [✓] adjust profile page
 - [✓] Change boxes colors
 - [ ] keyboard disappear when clicking on screen
-- [ ] Change projects grid images on homepage to clear ones
-- [ ] add elevation shadows to homepage grids
-- [ ] dropdownList in reate account page
+- [✓] Change projects grid images on homepage to clear ones
+- [✓] add elevation shadows to homepage grids
+- [✓] dropdownList in create account page
+- [✓] Grouping survey, quiz1, quiz2
+- [✓] Survey/Quiz with presentation pages handling
+- [ ] Survey/Quiz pages handling
+- [ ] Login Pages integration
+- [✓] Statistics pages
+- [✓] Results pages
+- [ ] Correction pages
+- [✓] Update Profile Page
+- [✓] Notification
+- [ ] Search Bar
+- [ ] Stats page "Quizzes" click handling
+- [ ] Stats page "Modules" click handling
+- [ ] Results page "Quiz/Survey" click handling
+- [ ] Update see more
+- [✓] Update Agenda Page
+

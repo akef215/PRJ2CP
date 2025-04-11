@@ -3,6 +3,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'agenda.dart';
+
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -52,6 +54,10 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Color(0xffFFFDFD),
@@ -88,11 +94,13 @@ class _ProfileState extends State<Profile> {
 
                 onSelected: (value) {
                   if (value == 'profile') {
-                    Navigator.pushNamed(context, '/profile');
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Profile()));
                   } else if (value == 'modules') {
                     Navigator.pushNamed(context, '/modules');
                   } else if (value == 'agenda') {
-                    Navigator.pushNamed(context, '/agenda');
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Agenda()));
                   } else if (value == 'settings') {
                     Navigator.pushNamed(context, '/settings');
                   }
@@ -191,14 +199,40 @@ class _ProfileState extends State<Profile> {
             ),
 
             /*---------NOTIFICATIONS BELL---------*/
-            //TODO: MAKE IT A CLICKABLE BUTTON
             Padding(
               padding: EdgeInsets.only(right: 16),
-              child: Image.asset(
-                'images/bell1.png',
-                width: 37,
-                height: 37,
-                fit: BoxFit.contain,
+              child: PopupMenuButton<int>(
+                icon: SizedBox(
+                  width: 37,
+                  height: 37,
+                  child: Image.asset(
+                    'images/bell1.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                color: Colors.white,
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  side: BorderSide(color: Color(0xffdff0ff), width: 6),
+                ),
+                constraints: BoxConstraints.tightFor(width: 250),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    enabled: false, // Disable selection
+                    child: SizedBox(
+                      height: 200, // Limit height to make it scrollable
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: List.generate(
+                            6, // Simulating 10 notifications
+                                (index) => _buildNotificationItem("Notification ${index + 1}", "${(index + 1) * 5}m ago"),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -207,10 +241,10 @@ class _ProfileState extends State<Profile> {
 
       body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 30),
+          Container(/*-----------------BLUE CONTAINER--------------------*/
+            padding: EdgeInsets.symmetric(vertical: screenHeight * 0.03),
             width: double.infinity,
-            height: 360,
+            height: screenHeight * 0.45,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(30),
@@ -222,11 +256,11 @@ class _ProfileState extends State<Profile> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Positioned(
-                  top: 99 ,
-                  left: 130,
+                Positioned(//CIRCLE AVATAR
+                  top: screenHeight * 0.14 ,
+                  left: screenWidth * 0.32,
                   child: CircleAvatar(
-                    radius: 75,
+                    radius: 70,
                     backgroundColor: Colors.white,
                     backgroundImage: _image != null
                         ? FileImage(_image!) // Show the selected image by the user
@@ -248,8 +282,8 @@ class _ProfileState extends State<Profile> {
 
                 /*------------IMAGE PICKER----------------*/
                 Positioned(
-                  bottom: 50,
-                  right: 125,
+                  bottom: screenHeight * 0.075,
+                  right: screenWidth * 0.33,
                   child: GestureDetector(
                     onTap: _pickImage,
                     child: Container(
@@ -275,15 +309,15 @@ class _ProfileState extends State<Profile> {
           ),
 
 
-          const SizedBox(height: 40),
+           SizedBox(height: screenHeight * 0.05),
 
           /*------------------PROFILE MENU-----------------*/
           _buildMenuButton("images/pen.png", "Edit profile", () {}),
           _buildMenuButton("images/setting (1).png", "Settings", () {}),
-          _buildMenuButton("images/question.png", "Help", () {}),
+          _buildMenuButton("images/question.png", "Log out", () {}),
 
 
-          const SizedBox(height: 50),
+          SizedBox(height: screenHeight * 0.073),
 
           /*-----------------BACK ARROW----------------------*/
           Align(
@@ -322,20 +356,28 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget _buildMenuButton(String imagePath, String text, VoidCallback onTap) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+      padding:  EdgeInsets.symmetric(horizontal: screenWidth * 0.09, vertical: screenHeight * 0.015),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(30),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14,),
           decoration: BoxDecoration(
-            color: const Color(0x8FDBEEFF),
+            color: Color(0xFFDBEEFF),
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: const Color(0xFF0F3D64), width: 5),
+            border: Border.all(color: Color(0xFF0F3D64), width: 5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                blurRadius: 6,
+                offset: Offset(0, 4),
+              ),
+            ],
           ),
           child: Row(
-            //  mainAxisAlignment: MainAxisAlignment.start,
             children: [
               /*------------IMAGE ASSET AS THE ICON------------*/
               Padding(
@@ -364,4 +406,18 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+}
+
+PopupMenuItem<int> _buildNotificationItem(String title, String time) {
+  return PopupMenuItem(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: TextStyle(fontFamily: "MontserratSemi", color : Color(0xff21334E),fontWeight: FontWeight.bold, fontSize: 14)),
+        SizedBox(height: 4),
+        Text(time, style: TextStyle(color: Colors.grey, fontSize: 12)),
+        Divider(), // Adds a line between notifications
+      ],
+    ),
+  );
 }

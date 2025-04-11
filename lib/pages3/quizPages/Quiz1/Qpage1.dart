@@ -1,17 +1,17 @@
+import 'package:esi_quiz/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 
-import '../../pages2/agenda.dart';
-import '../../pages2/profile.dart';
-import 'Q2.dart';
+import '../../../pages2/agenda.dart';
+import '../../../pages2/profile.dart';
 
-class Quiz1 extends StatefulWidget {
-  const Quiz1({super.key});
+class QuizPage1 extends StatefulWidget {
+  const QuizPage1({super.key});
 
   @override
-  State<Quiz1> createState() => _Quiz1State();
+  State<QuizPage1> createState() => _QuizPage1State();
 }
 
-class _Quiz1State extends State<Quiz1> {
+class _QuizPage1State extends State<QuizPage1> {
 
   // Dynamic data (will be fetched from the API)
   String quizTimeText = "Loading...";  // Placeholder for "Quiz Time"
@@ -26,7 +26,7 @@ class _Quiz1State extends State<Quiz1> {
   void initState() {
     super.initState();
     // TODO: Fetch quiz data from API here when the backend is ready
-  //  fetchQuizData();
+    //  fetchQuizData();
   }
 
   // Function to fetch quiz data from API
@@ -63,162 +63,7 @@ class _Quiz1State extends State<Quiz1> {
       backgroundColor: Color(0xffFFFDFD),
 
       /*-----------------APPBAR------------------*/
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            /*-------------GRID-----------------*/
-            Container(
-              padding: EdgeInsets.only(left: 12.0),
-              child: PopupMenuButton(
-                icon: SizedBox(
-                  width: 37,
-                  height: 37,
-                  child: Image.asset(
-                    'images/grid (1) - Copy (1).png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-
-                color: Colors.white,
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  side: BorderSide(color: Color(0xffdff0ff), width: 6),
-                ),
-
-                constraints: BoxConstraints.tightFor(width: 230),
-
-                onSelected: (value) {
-                  if (value == 'profile') {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Profile()));
-                  } else if (value == 'modules') {
-                    Navigator.pushNamed(context, '/modules');
-                  } else if (value == 'agenda') {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Agenda()));
-                  } else if (value == 'settings') {
-                    Navigator.pushNamed(context, '/settings');
-                  }
-                },
-
-                itemBuilder: (context) =>
-                [
-                  PopupMenuItem(
-                    value: 'profile',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/people.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Profile",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)
-                        ),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'modules',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/check.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Modules",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'agenda',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/time.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Agenda",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'settings',
-                    height: 60,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            'images/setting (1).png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text("Settings",
-                            style: TextStyle(fontSize: 18,
-                                fontWeight: FontWeight.w500)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            /*----------HOME TEXT---------------*/
-            const Text(
-              "Home",
-              style: TextStyle(
-                fontFamily: "MontserratSemi",
-                color: Color(0xff21334E),
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-
-            /*---------NOTIFICATIONS BELL---------*/
-            //TODO: MAKE IT A CLICKABLE BUTTON
-            Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: Image.asset(
-                'images/bell1.png',
-                width: 37,
-                height: 37,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ],
-        ),
-      ),
-
+      appBar: Custom_appBar(),
       /*------------------------------MAIN---------------------------------------*/
 
       body: Column(
@@ -432,37 +277,12 @@ class _Quiz1State extends State<Quiz1> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 20, bottom: 15, right:20),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Pushes them to left & right
+                  mainAxisAlignment: MainAxisAlignment.end, // Pushes them to left & right
                   children: [
-                    // BACK BUTTON
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context); // Go back to previous page
-                      },
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            height: 37,
-                            width: 37,
-                            child: Image.asset("images/left-arrow (1).png", fit: BoxFit.contain),
-                          ),
-                          SizedBox(width: 7),
-                          Text(
-                            'Back',
-                            style: TextStyle(
-                              fontFamily: "MontserratSemi",
-                              color: Colors.grey[400],
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
                     // NEXT BUTTON
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Quiz2())) ;
+                      //  Navigator.push(context, MaterialPageRoute(builder: (context) => Quiz2())) ;
                       },
                       child: Row(
                         children: [

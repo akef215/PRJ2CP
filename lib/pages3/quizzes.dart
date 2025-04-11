@@ -1,6 +1,7 @@
 import 'package:esi_quiz/pages3/quizPages/Q1.dart';
 import 'package:flutter/material.dart';
 
+import '../pages2/agenda.dart';
 import '../pages2/profile.dart';
 
 class Quizzes extends StatefulWidget {
@@ -52,13 +53,13 @@ class _QuizzesState extends State<Quizzes> {
 
                 onSelected: (value) {
                   if (value == 'profile') {
-                    // Navigator.pushNamed(context, '/profile');
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Profile()));
                   } else if (value == 'modules') {
                     Navigator.pushNamed(context, '/modules');
                   } else if (value == 'agenda') {
-                    Navigator.pushNamed(context, '/agenda');
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Agenda()));
                   } else if (value == 'settings') {
                     Navigator.pushNamed(context, '/settings');
                   }
@@ -186,7 +187,7 @@ class _QuizzesState extends State<Quizzes> {
                   width: screenWidth * 0.65 ,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(30) ,
+                    borderRadius: BorderRadius.circular(22) ,
                     image: DecorationImage(
                       image : AssetImage("images/quizimg.png"),
                       fit: BoxFit.cover ,
