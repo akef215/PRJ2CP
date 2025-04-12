@@ -8,6 +8,13 @@ from app.models.module import Module
 from app.schemas.module import ModuleBase
 from app.schemas.groupe import GroupeBase
 from database import get_db
+import os
+
+
+from pathlib import Path
+
+ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
+
 
 async def get_groupe_students(n_groupe : int, db : AsyncSession = Depends(get_db)):
     stmt = select(Student).where(Student.groupe == n_groupe)
@@ -71,3 +78,31 @@ async def get_modules(db: AsyncSession):
     result = await db.execute(select(Module))
     modules_codes = result.scalars().all()
     return modules_codes
+
+
+
+
+def update_env_variable(file_path: str, key: str, new_value: str):
+    lines = []
+    with open(file_path, "r") as f:
+        lines = f.readlines()
+
+    key_found = False
+    for i, line in enumerate(lines):
+        if line.strip().startswith(f"{key}="):
+            lines[i] = f"{key}={new_value}\n"
+            key_found = True
+            break
+
+    if not key_found:
+        lines.append(f"{key}={new_value}\n")
+
+    with open(file_path, "w") as f:
+        f.writelines(lines)
+
+async def update_teacher_profile(email: str = None, password: str = None):
+    if email:
+        update_env_variable(ENV_PATH, "TEACHER_EMAIL", email)
+    if password:
+        update_env_variable(ENV_PATH, "TEACHER_PASSWORD", password)
+    return {"message": "Teacher profile updated"}
