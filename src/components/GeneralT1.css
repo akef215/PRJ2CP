@@ -1,0 +1,841 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  background-image: none;
+  background-color: rgb(227, 242, 239);
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo styles */
+.logo {
+  height: 50px; /* Ajustez la taille selon vos besoins */
+  width: auto; /* Garde les proportions */
+  position: relative;
+  right: -999px;
+  left: 700px;
+}
+.logo img {
+  display: block;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.btn-edit {
+  width: 150px;
+  margin-left: -850px;
+  margin-top: 5px;
+  padding: 0.5rem 1rem;
+  background-color: rgba(136, 183, 175, 1);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Rammetto One;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.btn-edit:hover {
+  background-color: rgba(136, 183, 175, 1);
+}
+
+.nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.navbar-icon {
+  height: 34px;
+  width: 34px;
+  cursor: pointer;
+}
+
+.navbar-icon:hover {
+  filter: brightness(0.8);
+}
+
+.Sidebar {
+  position: absolute;
+  left: 0;
+  top: 79px; /* Sous la Navbar */
+  width: 250px;
+  height: calc(100vh - 79px); /* Toute la hauteur de la fenêtre moins la Navbar */
+  background-color: rgba(255, 255, 255, 1);
+  border-right: 2px solid rgba(0, 0, 0, 0.8);
+  box-shadow: 4px 0px 7.1px 0px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
+  overflow: hidden; /* Empêche le scroll interne */
+}
+
+
+
+
+.SidebarList {
+  width: 100%; /* Remplir la largeur du Sidebar */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.SidebarList .btn-add {
+  border-radius: 26px;
+  background-color: rgba(78, 134, 129, 1);
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 50px;
+}
+
+.btn-add img {
+  position: relative;
+  width: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.btn-add p {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Rammetto One;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(255, 255, 255, 1);
+}
+
+.SidebarItem {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 15px;
+  list-style-type: none; /* Supprime les puces de la liste */
+  white-space: nowrap; /* Empêche le texte de passer à la ligne suivante */
+}
+
+.SidebarItem p {
+  padding: 10px; /* Ajoute un peu de padding pour améliorer l'apparence */
+}
+
+.SidebarItem p:hover {
+  background-color: rgba(205, 249, 245, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+  border-radius: 20px;
+  transition: background-color 0.3s ease; /* Ajoute une transition fluide */
+}
+
+/* les boutons */
+.up-btns {
+  width: 190px;
+  position: relative;
+  top: 10px;
+  left: 85%;
+}
+
+.up-btns p {
+  color: rgba(0, 0, 0, 0.7);
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  display: inline;
+  text-align: center;
+  justify-content: center;
+}
+#type2 {
+  background-color: rgba(78, 134, 129, 1);
+}
+#type2 p {
+  color: rgba(255, 255, 255, 1);
+  font-family: Rammetto One;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+.btn-ind {
+  height: 50px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 1);
+  background-color: rgba(136, 183, 175, 0.2);
+}
+
+.btn-options {
+  width: 160px;
+  position: relative;
+  top: 250px;
+  left: 85%;
+}
+
+.btn-options p {
+  font-family: Rammetto One;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(255, 255, 255, 1);
+  display: inline;
+}
+
+.btn-sec {
+  height: 50px;
+  border-radius: 20px;
+  background-color: rgba(78, 134, 129, 1);
+}
+
+/* Le rectangle blanc */
+.rectangleExtr {
+  background-color: rgba(255, 255, 255, 1);
+  width: 600px;
+  min-height: 650px; /* Hauteur minimale */
+  padding: 20px; /* Ajout de padding */
+  position: relative;
+  left: 30%;
+  top: -270px;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Organisation verticale */
+  gap: 15px; /* Espacement entre éléments */
+}
+
+.btn-image {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 80%;
+  height: 60px;
+  padding: 0;
+  position: relative;
+  top: 0;
+  left: 8%;
+  border-radius: 34px;
+  border: 1px solid rgba(0, 0, 0, 1);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.btn-image p {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  display: inline;
+  margin-left: 80px;
+  text-align: center;
+  color: rgba(0, 0, 0, 1);
+}
+
+.btn-image img {
+  position: relative;
+  display: flex;
+  width: 60%;
+}
+
+.btn-Tmarks {
+  display: inline;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  border-radius: 13px;
+  width: 50%;
+  height: 40px;
+  padding: 0;
+  background-color: rgba(255, 255, 255, 1);
+  position: relative;
+  left: 20%;
+  top: -20px;
+}
+
+.btn-Tmarks p {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  display: inline;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.rectangleIntr {
+  background-color: rgba(33, 51, 78, 1);
+  width: 90%;
+  padding: 15px;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px; /* Espacement entre les réponses */
+  /* Défilement si trop de contenu */
+}
+
+/* Rectangle item */
+.rectangle-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 0px;
+  padding: 10px;
+  border-radius: 15px;
+  position: relative;
+  background-color: #3A4A5F;
+  top: 10%;
+  left: 0%;
+  z-index: 1;
+  overflow: visible;
+}
+
+/* Bouton à gauche avec une image */
+.btn-image-item {
+  order: -1;
+  width: 80px;
+  height: 80px;
+  border: 2px dashed #fff !important;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-self: flex-end;
+  position: relative;
+  top: 30%;
+  left: 0%;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.btn-image-item img {
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  object-fit: contain; /* Ajuste l'image sans déformation */
+}
+
+.btn-image-item:hover img {
+  transform: scale(1.05);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* Conteneur pour le texte et le bouton "answer mark" */
+.answer-content {
+  order: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  width: 100%;
+  gap: 0px;
+  margin-top: 130px; /* Espace entre l'image et le contenu de réponse */
+  margin-right: 100px;
+}
+
+/* Texte au milieu */
+.answer-content p {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+}
+
+.btn-mark {
+  display: flex;
+  align-self: flex-start;
+  justify-content: center;
+  width: 120px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  background-color: #4D5D75;
+  color: #FFFFFF;
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  top: -70px;
+  left: 30%;
+}
+
+/* Bouton à droite pour cocher */
+.btn-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  position: relative;
+  cursor: pointer;
+  top: 30%;
+  left: 0px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+a.btn-check {
+  display: inline-flex;
+  width: auto;
+}
+.btn-check:hover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}
+.check-icon {
+  width: 80%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.btn-check:hover .check-icon {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+.tick-icon {
+  position: absolute;
+  right: -35px;
+  top:10px;
+  transform: translate(-50%, -50%);
+  width: 5%;
+  height: 70%;
+  pointer-events: none;
+}
+#imgTick {
+  width: 50px;
+  position: relative;
+  right: -350px;
+  top :50px ;
+}
+
+/* Désactiver le clic sur la ligne */
+.answer-top-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  min-height: 60px;
+  pointer-events: none; /* Désactive les clics sur toute la ligne */
+}
+
+/* Réactiver le clic sur le bouton check */
+.btn-check {
+  pointer-events: auto; /* Réactive les clics sur le bouton */
+}
+.btn-check img {
+  width: 50px;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Bouton "Add Answer" */
+.btn-addAnswr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 40px;
+  border: none;
+  position: relative;
+  top: -20px;
+  left : 160px ;
+  border-radius: 20px;
+  background-color: rgba(200, 229, 255, 1);
+  font-family: Montserrat, sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  color: rgba(33, 51, 78, 1);
+  cursor: pointer;
+}
+
+.btn-addAnswr:hover {
+  background-color: #3A4A5F;
+  transform: scale(1.05);
+}
+
+.main-image, .answer-image {
+  border: 1px solid #ccc; /* Bordure unique */
+  box-sizing: border-box;
+}
+
+/* Style pour l'image principale */
+.main-image {
+  max-width: 200px; /* Ajustez la taille selon vos besoins */
+  max-height: 150px;
+  border-radius: 10px; /* Optionnel : pour des coins arrondis */
+  transition: transform 0.2s ease, opacity 0.2s ease; /* Animation fluide */
+}
+
+/* Style pour les images des réponses */
+.answer-image {
+  display: flex;
+  justify-content: center;
+  width: 120px; /* augmenter la largeur */
+  height: 120px; /* augmenter la hauteur */
+  object-fit: contain;
+  border-radius: 8px; /* Optionnel : pour des coins arrondis */
+  transition: transform 0.2s ease, opacity 0.2s ease; /* Animation fluide */
+}
+.answer-image-container{
+  width:80px;
+  position: relative;
+  left : 180px;
+  top : -70px;
+}
+
+.active-border {
+  border: 2px solid white !important;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.image-expanded-container {
+  position: absolute;
+  top: 0; /* Déplace l'image AU-DESSUS du conteneur */
+  left: 50%;
+  margin-bottom: 30px;
+  transform: translateX(-50%);
+  z-index: 1000; /* Force l'affichage au premier plan */
+  width: 150px;
+  height: 120px;
+  background: transparent;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: float 0.3s ease-out;
+  border: none !important;
+}
+
+@keyframes float {
+  from {
+    transform: translate(-50%, 20px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.expanded-image {
+  width: auto;
+  height: auto;
+  max-height: 200px;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+  margin-bottom: 10px;
+  cursor: zoom-in;
+}
+.expanded-image img {
+  width: 100%;
+}
+
+.expanded-image-container ~ .btn-image-item {
+  opacity: 0;
+  pointer-events: none;
+}
+.close-btn {
+  position: relative;
+  top: -145px;
+  left: 120px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*Pour la partie du display Type 2*/
+.rectangle{
+  background-color: rgba(255, 255, 255, 1);
+  width: 1000px;
+  min-height: 650px; /* Hauteur minimale */
+  padding: 20px; /* Ajout de padding */
+  position: relative;
+  left: 25%;
+  top: 20px;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Organisation verticale */
+  gap: 15px; /* Espacement entre éléments */
+}
+.boutons {
+  width: 490px;
+  height: 60px;
+  position: relative;
+  top: 10px;
+  left: 25%;
+  display:inline-flex;
+  text-align:center;
+  justify-content: space-between;
+  gap: 100% ;
+  margin-right: 50px ;
+ 
+}
+.btn-haut{
+  border: 1px solid rgba(0, 0, 0, 1);
+  border-radius: 34px ;
+}
+.btn-haut p {
+  text-align: center;
+
+}
+
+.boutons p {
+  color: rgba(0, 0, 0, 0.7);
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align:center;
+}
+
+.insideRectangle{
+  background-color: rgba(255, 255, 255, 1);
+  width: 500px;
+  min-height: 450px; /* Hauteur minimale */
+  padding: 20px; /* Ajout de padding */
+  position: relative;
+  left: 25%;
+  top: 20px;
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Organisation verticale */
+  gap: 15px; /* Espacement entre éléments */
+}
+.insideRectangle h1{
+  text-align: center;
+  left:20%;
+}
+/*La page Create Type2 with Pic*/
+
+
+
+.exterieure{
+  background-color: rgba(255, 255, 255, 1);
+  width: 800px;
+  min-height: 650px; /* Hauteur minimale */
+  padding: 20px; /* Ajout de padding */
+  position: relative;
+  left: 30%;
+  margin-top: 50px;
+
+  border: 2px solid rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Organisation verticale */
+  gap: 15px; /* Espacement entre éléments */
+}
+
+.btns-up{
+  display: flex;
+  justify-content: space-between;
+ 
+}
+.btn-1 , .btn-2 {
+  background-color: rgba(255, 255, 255, 1) !important;
+  padding: 5px ;
+  width: 250px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 34px;
+  border: 1px solid rgba(0, 0, 0, 1);
+  font-family: Montserrat;
+font-weight: 600;
+font-size: 18px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+color: rgba(0, 0, 0, 1);
+
+}
+
+.interieure{
+  background-color:  rgba(255, 255, 255, 1) !important;
+  border-radius: 34px;
+  border: 1px solid rgba(0, 0, 0, 1);
+  padding: 5px ;;
+  width: 90%;
+  height: 350px;
+  padding: 15px;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px; 
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ajouter-image{
+  order: -1;
+  width: 80px;
+  height: 80px;
+  border: 2px solid #fff !important;
+  background-color:  rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-self: flex-end;
+  position: relative;
+  top: 30%;
+  left: 0%;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ajouter-image img {
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  object-fit: contain;
+}
+.full-time{
+  background-color: rgba(136, 183, 175, 0.2)!important;
+  padding: 5px ;
+  width: 250px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 34px;
+  border: 1px solid rgba(0, 0, 0, 1);
+  font-family: Montserrat;
+font-weight: 600;
+font-size: 18px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+color: rgba(0, 0, 0, 1);
+}
+.goback{
+  background-color:rgba(78, 134, 129, 1)!important;
+  padding: 5px ;
+  width: 250px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 34px;
+  border: 1px solid rgba(0, 0, 0, 1);
+  font-family: Rammetto One;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+ color: rgba(255, 255, 255, 1);
+position: relative;
+left: 70%;
+margin-top: 2px;
+}
+.mark.paused {
+  background-color: red;
+}
+
+.entre{
+  background-color:   rgba(255, 255, 255, 1) !important;
+  border: 1px solid rgba(0, 0, 0, 1);
+  border-radius: 50px;
+}
+.pause button{
+  background-color: rgba(78, 134, 129, 1);
+  border: none;
+  padding: 5px;
+  font-weight: 400;
+  font-size: 20px;
+  width: 150px !important;
+  color: white !important;
+  height: 30px;
+  position: relative;
+  margin-left: 40px;
+  
+}
+
+.default-image {
+  width: 250px; /* taille par défaut */
+  height: 250px;
+  transition: all 0.3s ease;
+}
+
+.large-image {
+  width: 500px; /* taille agrandie souhaitée */
+  height: auto; /* laisse le navigateur ajuster la hauteur proportionnellement */
+  transition: all 0.3s ease;
+}
+.title {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  color: rgba(0, 0, 0, 1);
+  border: none;
+  position: relative;
+
+}

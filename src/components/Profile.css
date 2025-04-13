@@ -1,0 +1,176 @@
+/* General Styling */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    background: #E8EEF1;
+    background-image: url('../images/background.png');
+}
+
+/* Navigation Bar */
+.Nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    background: #EDF6F9;
+    border-radius: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 440px;
+    position: relative;
+    left: 60%;
+}
+
+.Nav-Logo img {
+    width: 40px;
+}
+
+.Nav-Menu {
+    display: flex;
+    gap: 10px;
+}
+
+.Nav-Menu p {
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 18px;
+    margin: 0;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: background 0.3s ease;
+}
+
+.Nav-Menu p:hover, .Nav-Menu .active {
+    background: #C8DEDC;
+}
+
+/* Profile Section */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 180px;
+    height: 180px;
+    background: rgba(239, 255, 253, 1);
+    border-radius: 50%;
+    margin: 40px auto 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-icon img {
+    width: 60%;
+}
+
+/* Image Upload Button */
+.add-image {
+    width: 60px;
+    position: absolute;
+    top: 145px;
+    right: 85%;
+    border: none;
+    background: none;
+    cursor: pointer;
+     background-color: rgba(239, 255, 253, 1);
+     border: 2px solid rgba(81, 131, 129, 1);
+     border-radius: 13px;
+}
+
+.add-image img {
+    width: 100%;
+    height: 100%;
+}
+
+/* Hidden file input */
+.file-input {
+    display: none;
+}
+/* Rectangle Container */
+.rectContainer {
+    border-top: 2px solid rgba(78, 134, 129, 1);
+    background-color: rgba(239, 255, 253, 1);
+    min-height: 500px;
+    position: relative;
+    top: 0px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+/* Welcome Message */
+.rectContainer .msg-welcome {
+    width: 400px;
+    height: 70px;
+    display: flex;
+    justify-content: flex-start;
+    align-self: flex-start;
+    position: relative;
+    top : 60px ;
+    left : 10px ;
+    background-color:rgba(81, 131, 129, 1);
+    border-radius: 22px;
+    box-shadow: -6px 4px 4px rgba(0, 0, 0, 0.25);
+   
+}
+
+.msg-welcome p {
+    font-family: 'Rammetto One', sans-serif;
+    font-weight: 400;
+    font-size: 28px;
+    color: white;
+    margin: 0;
+   
+   
+}
+
+
+/* Menu */
+.Menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: flex-end;
+  
+    position: relative;
+    top : -140px ;
+    left : 800px ;
+}
+
+.list-elem {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    border: 2px solid rgba(0, 0, 0, 0.7);
+    border-radius: 13px;
+    margin: 5px 0;
+    width: 300px;
+    height: 50px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+    padding: 5px;
+}
+
+.list-elem p {
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.7);
+    margin: 0;
+}
+
+.list-elem:hover {
+    background-color: rgba(81, 131, 129, 1);
+    color: white;
+    cursor: pointer;
+}

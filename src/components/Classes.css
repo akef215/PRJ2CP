@@ -1,0 +1,149 @@
+.classes-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .titre{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent !important;
+  }
+  .titre p{
+    font-family: Rammetto One;
+font-weight: 400;
+font-size: 40px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+
+    color: rgba(33, 51, 78, 1);
+    margin-bottom: 30px;
+  }
+  
+  .classes-list {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    
+    
+  }
+  
+  .class-row {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    background: rgba(79, 132, 130, 1);
+    border-radius: 17px;
+    margin-bottom: 12px; /* Espace entre les lignes */
+  }
+ 
+  
+  .class-row:last-child {
+    border-bottom: none;
+  }
+  
+  .class-info {
+    display: flex;
+    flex:1;
+    gap: 15px;
+    align-items: baseline;
+    font-family: Rammetto One;
+font-weight: 400;
+font-size: 18px;
+line-height: 100%;
+letter-spacing: 0%;
+color:rgba(243, 249, 255, 1);
+  }
+  
+  
+
+  
+  .class-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .view-students {
+    width: 120px;
+    background-color: transparent;
+    color:  rgba(255, 255, 255, 1);
+
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  
+  .delete-btn {
+   
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    left: 10%;
+  }
+  
+  .view-students:hover,
+  .delete-btn:hover {
+    opacity: 0.9;
+  }
+  .class-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 20px;
+  }
+  .class-icon img{
+    border-radius: 50%;
+  }
+
+
+
+  .btn {
+    border-radius: 50%;
+    position: fixed;
+    width: clamp(50px, 15%, 100px);
+    height: clamp(50px, 15%, 100px);
+    padding: 15px;
+    bottom: 70px;
+    right: 70px;
+    background-color: rgba(136, 183, 175, 1);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .btn:hover {
+    border-radius: 50%;
+    background-color: rgba(106, 153, 145, 0.5);
+    
+  }
+  
+  .btn img {
+    border-radius: 50%;
+    
+  
+  }
+  
+  .btn:hover img {
+    transform: scale(1.2);
+  }
+  @media (max-width: 768px) {
+    .class-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .class-actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }

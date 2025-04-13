@@ -1,0 +1,210 @@
+/* Empêche le défilement */
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Conteneur principal */
+.layout-container {
+  position: relative; /* Gère les superpositions */
+ 
+  width: 100%;
+  height: 100vh; /* Pleine hauteur */
+}
+
+
+
+.createQuizContainer, .moduleContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Rectangle extérieur */
+.outerRectangle {
+    position: relative;
+  width: 90%;
+  height: px;
+  background-color: rgba(101, 117, 153, 1);
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+}
+.content, .moduleContent {
+    position: absolute;
+    z-index: 1; /* Devant l'arrière-plan */
+  }
+/* Rectangle intérieur */
+.innerRectangle {
+  width: 95%;
+  height: 470px;
+  border-radius: 30px;
+  background-color: rgba(243, 249, 255, 1);
+}
+
+/* Contenu interactif */
+.rectangle-container {
+  position: relative; /* Sur le rectangle */
+  top : -120px ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1; /* Devant l'arrière-plan */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px; /* Espacement augmenté */
+  padding-top: 100px; /* Décale en dessous */
+  text-align: center;
+  margin-left: -10px;
+}
+
+/* Bouton de fermeture */
+
+.btn-container{
+   position: relative;
+   top : 120px;
+   left: 980px;
+}
+
+.close-btn {
+  position: relative;
+  top: 10%;
+  right: 300px;
+  left: auto; /* Remplace la position left */
+  width: 100px; /* Taille réduite */
+  height: 100px;
+  background: transparent !important;
+  border: none;
+  padding: 0;
+}
+
+.close-btn img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25)); /* Optionnel */
+}
+/* Style des items */
+.rectangle-item {
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border: 2px solid rgba(0, 0, 0, 0.6);
+  background-color:  rgba(239, 255, 253, 1) !important;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); 
+  width: 80%;
+  cursor: pointer;
+  width: 300px;
+  gap : 40px ;
+height: 200px;
+position: relative;
+top: -110px;
+
+border-radius: 17px;
+border-width: 2px;
+
+
+}
+
+
+.rectangle-item img {
+  width: 90%;
+  height: 80%;
+  object-fit: fill;
+  background-color: rgba(239, 255, 253, 1) !important;
+}
+
+.rectangle-item p {
+  font-family: Montserrat;
+  font-size: 25px;
+  font-weight: bold;
+  position: relative;
+  top : -10px ;
+  color: rgba(0, 0, 0, 1);
+}
+
+
+.background-rectangle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(243, 249, 255, 1);
+    z-index: -1; /* Reste en arrière-plan */
+  }
+
+
+  /* Media Queries */
+
+/* Pour les écrans de moins de 1200px */
+@media (max-width: 1200px) {
+  .rectangle-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 colonnes au lieu de 3 */
+    gap: 20px; /* Réduit l'espacement */
+  }
+
+  .close-btn {
+    left: 400px; /* Ajuste la position du bouton de fermeture */
+  }
+}
+
+/* Pour les écrans de moins de 768px */
+@media (max-width: 768px) {
+  .rectangle-container {
+    grid-template-columns: 1fr; /* 1 colonne */
+    gap: 15px; /* Réduit encore l'espacement */
+    padding-top: 50px; /* Ajuste le décalage */
+  }
+
+  .close-btn {
+    left: 200px; /* Ajuste la position du bouton de fermeture */
+    top: 30px;
+  }
+
+  .rectangle-item {
+    width: 250px; /* Réduit la largeur des items */
+    height: 180px;
+  }
+
+  .rectangle-item p {
+    font-size: 20px; /* Réduit la taille du texte */
+  }
+}
+
+/* Pour les écrans de moins de 480px */
+@media (max-width: 480px) {
+  .outerRectangle {
+    width: 80%; /* Ajuste la largeur du rectangle extérieur */
+  }
+
+  .innerRectangle {
+    height: 200px; /* Réduit la hauteur du rectangle intérieur */
+  }
+
+  .close-btn {
+    left: 100px; /* Ajuste la position du bouton de fermeture */
+    top: 20px;
+  }
+
+  .rectangle-item {
+    width: 200px; /* Réduit encore la largeur des items */
+    height: 150px;
+  }
+
+  .rectangle-item p {
+    font-size: 18px; /* Réduit encore la taille du texte */
+  }
+}

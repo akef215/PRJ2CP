@@ -1,0 +1,46 @@
+[
+    {
+        "label" : "M1",
+        "revenue" :10 
+       
+    },
+    {
+        "label" : "M2",
+        "revenue" : 30
+       
+    },
+    {
+        "label" : "M3",
+        "revenue" : 80
+       
+    },
+    {
+        "label" : "M4",
+        "revenue" : 60
+       
+    },
+    {
+        "label" : "M5",
+        "revenue" : 10
+       
+    },
+    {
+        "label" : "M6",
+        "revenue" : 40      
+    },
+    {
+        "label" : "M7",
+        "revenue" : 100
+       
+    },
+    {
+        "label" : "M8",
+        "revenue" : 200
+       
+    },
+    {
+        "label" : "M9",
+        "revenue" : 130
+       
+    }
+]

@@ -1,0 +1,230 @@
+
+.container{
+    background-color: rgba(243, 249, 255, 1);
+    border: 8px solid rgba(101, 117, 153, 1);
+    border-radius : 55px ;
+    overflow: hidden !important;
+    width: 100% !important;
+}
+.data-table-wrapper {
+    overflow-x: hidden !important;
+    width: 100% !important;
+}
+.rdt_Table {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    width: auto !important;
+  }
+  .rdt_TableRow {
+    min-width: 100% !important;
+  }
+  
+  .rdt_TableBody {
+    overflow-x: hidden !important;
+  }
+/* Bordures pour le tableau */
+.rdt_Table {
+    border: 1px solid #dee2e6 !important;
+}
+
+.rdt_TableHeadRow, .rdt_TableRow {
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+.rdt_TableCell {
+    border-right: 1px solid #dee2e6 !important;
+    vertical-align: middle !important;
+}
+
+.rdt_TableCol:not(:last-child) {
+    border-right: 1px solid #dee2e6 !important;
+}
+/* Changer la police globale du tableau */
+.rdt_Table {
+    font-family: Montserrat;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+   color: rgba(0, 0, 0, 1);
+
+    
+}
+
+/* Police pour l'en-tête */
+.rdt_TableCol {
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+    color:rgba(0, 0, 0, 1);
+
+}
+
+/* 2. Style des boutons */
+/* Bouton Ajouter/Annuler */
+.toggle-form-btn {
+    background-color: rgba(154, 199, 196, 0.14) !important;
+    border: 2px solid rgba(102, 138, 159, 1) !important;
+    width: 400px;
+    padding: 12px 25px !important; /* Taille */
+    font-size: 14px !important;
+    letter-spacing: 1px;
+    border-radius: 25px !important;
+    transition: all 0.3s ease !important;
+    font-family: Montserrat;
+font-weight: 600;
+font-size: 28px;
+line-height: 100%;
+letter-spacing: 0%;
+vertical-align: middle;
+color: rgba(102, 138, 159, 1) !important;
+display: flex;
+justify-content: center;
+align-items: center;
+position: relative;
+gap: 10px;
+
+  }
+  
+  .ajouter img{
+    width: 30px;
+    position: relative;
+    right : 220px;
+  }
+  .toggle-form-btn.cancel {
+    background-color: transparent !important;
+  }
+  
+  /* Champ de recherche */
+  .header-controls input[type="text"] {
+    background-color: rgba(154, 199, 196, 0.14) !important;
+    border: 2px solid rgba(102, 138, 159, 1) !important;
+    padding: 10px 15px !important;
+    border-radius: 25px !important;
+    width: 300px !important;
+  }
+
+
+
+.search img{
+    width: 30px;
+    position: relative;
+    left: 45px;
+    top: 10px;
+}
+
+/* Header avec les contrôles */
+.header-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
+
+/* Bouton d'ajout principal */
+.toggle-form-btn {
+    background-color: #2196F3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-form-btn.cancel {
+    background-color: #f44336;
+}
+
+.toggle-form-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Formulaire */
+.add-form {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color:  rgba(243, 249, 255, 1);
+    border-radius: 8px;
+    animation: slideDown 0.3s ease-out;
+}
+.add-form input{
+    
+    border: 2px solid rgba(102, 138, 159, 1) !important;
+    width: 400px;
+    padding: 12px 25px !important; /* Taille */
+    font-size: 14px !important;
+    letter-spacing: 1px;
+    border-radius: 25px !important;
+    transition: all 0.3s ease !important;
+    font-family: Montserrat;
+font-weight: 600;
+font-size: 28px;
+line-height: 100%;
+letter-spacing: 0%;
+vertical-align: middle;
+color: rgba(102, 138, 159, 1) !important;
+}
+.add-button{
+    background-color: rgba(154, 199, 196, 0.14) !important;
+    border: 2px solid rgba(102, 138, 159, 1) !important;
+    width: 200px;
+    padding: 12px 25px !important; /* Taille */
+    font-size: 14px !important;
+    letter-spacing: 1px;
+    border-radius: 25px !important;
+    transition: all 0.3s ease !important;
+    font-family: Montserrat;
+font-weight: 600;
+font-size: 28px;
+line-height: 100%;
+letter-spacing: 0%;
+vertical-align: middle;
+color: rgba(102, 138, 159, 1) !important;
+}
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.add-form form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.add-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.add-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    grid-column: span 2;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover {
+    background-color: #45a049;
+}

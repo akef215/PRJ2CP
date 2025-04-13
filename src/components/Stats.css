@@ -1,0 +1,367 @@
+/* General Styling */
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    background: #E8EEF1;
+    background-image: url('../images/background.png');
+}
+
+
+/* Navigation Bar */
+.Nav {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    background: #EDF6F9;
+    border-radius: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 440px;
+    position: relative;
+    left : 65%;
+}
+
+.Nav-Logo {
+    font-weight: bold;
+    font-size: 24px;
+    color: #4A7A74;
+   
+}
+
+
+
+.Nav-Menu {
+    display: flex;
+    gap: 10px;
+}
+
+.Nav-Menu p {
+    font-family: Montserrat;
+font-weight: 600;
+font-size: 18px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+text-decoration: underline;
+text-decoration-style: solid;
+text-decoration-offset: 0%;
+text-decoration-thickness: 2%;
+text-decoration-skip-ink: auto;
+    margin: 0;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: background 0.3s ease;
+}
+
+.Nav-Menu p:hover {
+    background: #C8DEDC;
+}
+
+/* Profile Icon */
+.profile-icon {
+    width: 120px;
+    height: 120px;
+    background:rgba(239, 255, 253, 1);
+    border-radius: 50%;
+    border: 5px solid rgba(154, 199, 196, 1);
+    margin: 40px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    right: 680px ;
+    top: 5%;
+    z-index: 999;
+    }
+.profile-icon img{
+    border-radius: 50%;
+    width: 100%;
+}
+/* Welcome Message */
+.msg-welcome {
+    width: 650px ;
+    height: 70px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    position: relative;
+    left : 12% ;
+    top: -140px;
+    background-color:  rgba(154, 199, 196, 1);
+    border-radius: 22px;
+    box-shadow: -6px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    z-index: 999;
+
+}
+.msg-welcome p {
+    font-family: Rammetto One;
+font-weight: 400;
+font-size: 44px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+ justify-content: center;
+ align-items: center;
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: rgba(255 , 255 , 255 ,1);
+  
+    padding: 10px 20px;
+    border-radius: 20px;
+    z-index: 9999999;
+}
+.rectMenu {
+    height: 600px;
+    width: 95%;
+    display: flex;
+    left: 2%;
+    background-color: rgba(243, 249, 255, 1);
+    border: 6px solid rgba(101, 117, 153, 1);
+    border-radius: 64px;
+    position: relative;
+    top:-150px;
+}
+.nav-second {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: rgba(243, 249, 255, 1);
+    border-radius: 20px;
+    margin: 20px;
+    padding: 10px 20px;
+    width: 100%;
+    position: relative;
+    
+}
+
+.first-nav, .second-nav {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1; /* Fait en sorte que chaque div prenne l'espace disponible */
+    justify-content: space-between; /* Sépare les éléments */
+    border-bottom: 2px solid rgba(170, 207, 215, 0.8);
+    padding-bottom: 5px; /* Ajoute un peu d'espace sous la bordure */
+    position: relative;
+    top : -45%;
+}
+
+.first-nav {
+    justify-content: flex-start; /* Aligner le premier groupe à gauche */
+}
+
+.second-nav {
+    justify-content: flex-end; /* Aligner le second groupe à droite */
+    position: relative;
+    left: 45%;
+}
+.first-nav p, .second-nav p {
+    font-family: Montserrat;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;  
+    color: rgba(0, 0, 0, 1);  
+    margin: 0;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: background 0.3s ease;
+}
+.first-nav p:hover {
+    background: #C8DEDC;
+}
+
+ .second-nav p:hover {
+    background: rgba(154, 199, 196, 1);
+}
+
+/* Style du cadre de légende */
+.custom-legend-container {
+
+    border-radius: 37px;
+    padding: 20px;
+    margin-right: 30px;
+    background: white;
+    box-shadow: -7px 4px 45px 0px rgba(0, 0, 0, 0.25);
+
+    align-self: flex-start; 
+    position: relative;
+    width: 250px;
+    right: 120% ;
+    top: 50px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin : 20px;
+    gap:20px;
+  }
+  
+  .color-box {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.32);
+    margin-right: 10px;
+  }
+  
+  .legend-label {
+ 
+    font-family: Montserrat;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 30px;
+    letter-spacing: 0%;
+    vertical-align: middle;
+    color:rgba(0, 0, 0, 1);
+  }
+  
+  /* Disposition globale */
+  .dataCard {
+    display: flex;
+    justify-content: flex-start; /* Tout aligner à gauche */
+  }
+
+  .Line-container {
+    width: 100%;
+    max-width: 1200px; /* Limite la largeur */
+    background: white;
+    box-shadow: -7px 4px 45px 0px rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 0 auto; /* Centre horizontalement */
+    position: relative;
+     right: 35%;
+    border-radius: 37px;
+    top: 50px; 
+}
+/*Cote BAR*/
+.Bar-container {
+    width: 800px;
+    height: 400px;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(243, 249, 255, 1);
+    border-radius: 15px;
+   
+    position: relative;
+    right : 30% ;
+    top: 5%;
+}
+/* Modification des bars */
+.Bar-container canvas {
+    border-radius: 10px;
+}
+
+.chartjs-render-monitor {
+    border-radius: 15px !important;
+}
+
+.chartjs-bar {
+    border-radius: 10px;
+}
+
+.chartjs-grid-line {
+    display: none;
+}
+
+.Bar-container .chartjs-bar {
+    width: 40px !important;
+    height: auto !important;
+}
+
+/*Pour la page de stats */
+/* Conteneur principal pour afficher les colonnes */
+.Stats-Container {
+    display: flex;
+    justify-content: space-around; /* Espace entre les colonnes */
+    align-items: flex-start; /* Aligner les cartes en haut */
+    gap: 20px; /* Espacement entre les colonnes */
+    margin-top: 50px;
+}
+
+/* Styles des cartes */
+.Rec-1, .Rec-2, .Rec-3 {
+    width: 300px; /* Largeur fixe pour chaque carte */
+    height: 450px;
+    background: rgba(239, 255, 253, 1); /* Couleur de fond */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style pour l'image */
+.img-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 12px solid rgba(170, 207, 215, 1);
+    position: relative;
+    left:30%;
+    top:50px;
+}
+.img-pic img {
+    border-radius: 50%;
+    width: 100%;
+  
+    margin-bottom: 10px;
+}
+.title {
+    background-color: rgba(170, 207, 215, 1);
+    border-radius: 26px;
+    margin-top: 80px;
+    padding: 1px;
+}
+.title p {
+
+font-family: Rammetto One;
+font-weight: 400;
+font-size: 25px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+color:rgba(33, 51, 78, 1);
+}
+.par p {
+padding-top: 40px;
+font-family: Montserrat;
+font-weight: 500;
+font-size: 20px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+color:rgba(0, 0, 0, 1);
+}
+
+/* Style basique pour la flèche */
+/* --- Le SVG qui dessine les flèches en fond --- */
+/* --- Le SVG qui dessine les flèches en fond --- */
+.bg-arrows {
+    position: absolute;
+    top: 25%;
+    left: 40%;
+    transform: translate(-50%, -45%);
+    width: 80%;
+    height: 60%;
+    z-index: 0;
+    color: rgba(170, 207, 215, 1);
+}
+
+.bg-arrows path {
+    transition: all 0.3s ease;
+}

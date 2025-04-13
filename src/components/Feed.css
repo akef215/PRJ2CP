@@ -1,0 +1,271 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    background: #E8EEF1;
+    background-image: url('../images/background.png');
+}
+
+/* Navigation Bar */
+.Nav {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    background: #EDF6F9;
+    border-radius: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 440px;
+    position: relative;
+    left : 3%;    
+    top: 40px;
+    z-index: 99;
+}
+
+.Nav-Logo {
+    font-weight: bold;
+    font-size: 24px;
+    color: #4A7A74;
+   
+}
+
+
+
+.Nav-Menu {
+    display: flex;
+    gap: 10px;
+}
+
+.Nav-Menu p {
+    font-family: Montserrat;
+font-weight: 600;
+font-size: 18px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+text-decoration: underline;
+text-decoration-style: solid;
+text-decoration-offset: 0%;
+text-decoration-thickness: 2%;
+text-decoration-skip-ink: auto;
+
+    margin: 0;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: background 0.3s ease;
+}
+
+.Nav-Menu p:hover {
+    background: #C8DEDC;
+}
+
+.homeDiv {
+    padding: 0.5rem 10rem;
+}
+button {
+    width: 60px;
+    display: inline-block !important;
+    
+  }
+.Btn {
+    position: relative;
+    display: inline-block;
+  
+}
+
+
+  
+  .read-btn {
+    background-color: rgba(81, 131, 129, 1);
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 60px;
+    cursor: pointer;
+    position: relative;
+    width: 150px;
+    right : 145%;
+  }
+  .read-btn p {
+    font-family: Montserrat;
+font-weight: 500;
+font-size: 20px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+color: rgba(255, 255, 255, 1);
+  }
+  
+  .delete-btn {
+    background: none;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    right : 140%;
+  }
+  
+  .read-btn:hover,
+  .delete-btn:hover {
+    opacity: 0.9;
+  }
+  
+
+
+.main-container{
+    position: relative;
+    
+    top: 10px;
+}
+
+  
+ 
+  
+  .data-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .data-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .data-row p {
+    margin: 0;
+    flex: 1;
+    text-align: center;
+  }
+  .data-cell p {
+    font-family: Montserrat;
+font-weight: 500;
+font-size: 20px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+color : rgba(0, 0, 0, 1);
+  }
+
+  /*1pour le fedd indiv */
+  /* Conteneur global du "feedback" */
+.rec-ext {
+  background: #FFFFFF;
+  border: 5px solid rgba(101, 117, 153, 1);
+  border-radius: 40px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  width: 90%;
+  height: 100% ;         /* Ajuste la largeur */
+  margin: 100px auto 0;    /* Centré horizontalement, marge en haut */
+  padding: 20px;
+  position: relative;
+  top: 0;                  /* Ajuste si besoin plus de décalage */
+}
+
+/* Bouton du haut (texte "Fedd backs from: Class") */
+.btnHaut {
+  margin-bottom: 10px;
+}
+
+.from {
+   background-color: rgba(148, 191, 188, 1);
+  border-radius: 62px;
+  padding: 2px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  width: 500px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  left: 65%;
+  top: 12px;
+}
+
+.from p {
+  font-family: Rammetto One;
+font-weight: 400;
+font-size: 18px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+color:rgba(28, 81, 79, 1);
+}
+
+.from:hover {
+  background-color: #C8DEDC;
+  color: #4A7A74;
+}
+
+/* Zone de texte */
+.rec-int {
+  background-color: #F8F8F8;
+  border-radius: 30px;
+  border: 5px solid rgba(101, 117, 153, 1);
+  padding: 15px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  margin-top: -7px;
+  margin-bottom: 20px;
+}
+.rec-int p{
+  font-family: Montserrat;
+font-weight: 400;
+font-size: 26px;
+line-height: 100%;
+letter-spacing: 0%;
+color: rgba(0, 0, 0, 1);
+}
+/* Boutons du bas */
+.btnBas {
+  display: flex;
+  justify-content: space-between;
+}
+
+.asRead,
+.Back {
+  background-color: rgba(101, 117, 153, 1);
+  color: #fff;
+  border: none;
+  border-radius: 62px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  width: 100px;
+}
+
+.asRead p,
+.Back p {
+  margin: 0;
+  font-family: Rammetto One;
+font-weight: 400;
+font-size: 15px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+
+}
+
+.asRead:hover,
+.Back:hover {
+  background-color: #C8DEDC;
+  color: #4A7A74;
+}
+  

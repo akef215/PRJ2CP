@@ -1,0 +1,261 @@
+/* Fond avec motif de points d'interrogation */
+body {
+    margin: 0;
+    padding: 60px 0;
+    font-family: 'Segoe UI', sans-serif;
+    
+    background-size: 80px;
+    min-height: 100vh;
+  }
+  
+  /* Conteneur principal - exactement comme l'image */
+  .externe {
+    width: 820px;
+    height: 600px;
+    margin: 0 auto;
+    padding: 35px 40px;
+    background: white;
+    border-radius: 25px;
+    border: 2px solid rgba(0, 0, 0, 0.8);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+    position: relative;
+  }
+  
+  /* Barre haute - alignement parfait */
+  .btn-haut {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border: none;
+  }
+  
+  .time {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 1);
+    color:  rgba(0, 0, 0, 0.7)!important;
+    border-radius: 34px;
+    padding: 12px 28px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    width: 150px;
+    display : flex ;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .mark {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 1);
+    border-radius: 34px;
+    color:  rgba(0, 0, 0, 0.7)!important;
+    width: 190px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* Zone de question - dimensions exactes */
+  .interne {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 1);
+    border-radius: 34px;
+    padding: 45px 60px;
+    margin: 0 auto 30px;
+    height: 50%;
+  }
+  .title{
+    background-color: transparent !important;
+    position: relative;
+    top: -120px;
+  }
+  
+  .title p {
+    font-family: Montserrat !important;
+    font-weight: 600 !important;
+    font-size: 40px !important;
+    line-height: 100% !important;
+    letter-spacing: 0% !important;
+    text-align: center !important; 
+color:rgba(0, 0, 0, 1);    
+  }
+
+  .mark.paused {
+    background-color: red;
+  }
+  
+  .entre{
+    background:  rgba(136, 183, 175, 0.2);
+    border: 1px solid rgba(0, 0, 0, 1);
+    border-radius: 50px;
+  }
+  .pause button{
+    background-color: rgba(78, 134, 129, 1);
+    border: none;
+    padding: 5px;
+    font-weight: 400;
+    font-size: 20px;
+    width: 150px !important;
+    color: white !important;
+    height: 30px;
+    position: relative;
+    right: 230%;
+  }
+  .bouton {
+    background-color: rgba(78, 134, 129, 1);
+    padding: 5px;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+      border-radius: 50px;
+        width: 150px !important;
+  }
+  /* Bouton "Full Quiz Time left" */
+  .full-time {
+    display: flex;
+    width: fit-content;
+    margin: 25px auto 35px;
+    background:  rgba(136, 183, 175, 0.2);
+    border: 1px solid rgba(0, 0, 0, 1);
+    border-radius: 50px;
+    padding: 14px 40px;
+    position: relative;
+    left: 30%;
+   top: -5%;
+  }
+  .full-time p {
+    font-family: Montserrat;
+font-weight: 600;
+font-size: 20px;
+line-height: 100%;
+letter-spacing: 0%;
+color: rgba(0, 0, 0, 0.7);
+
+  }
+  .image{
+    position: relative;
+    left: 30% !important;
+    top:-40%;
+  }
+  .image img{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
+  }
+  /* Boutons navigation - version screenshot */
+  .btn-bas {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px;
+  }
+  
+  .go-back, .Next {
+    background-color: rgba(78, 134, 129, 1);
+    padding: 18px 50px;
+    border-radius: 15px;
+    font-family: Rammetto One;
+font-weight: 400;
+font-size: 20px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+vertical-align: middle;
+
+    width: 150px !important;
+    height: 70px;
+    font-weight: 600;
+    border: 3px solid transparent;
+    color: rgba(243, 249, 255, 1)!important;
+    position: relative;
+    top: -50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .go-back{
+    position:relative;
+    left: 25%;
+  }
+  .Next{
+    position: relative;
+    right:25%;
+  }
+  /* Effets au survol exacts */
+  .go-back:hover { background: #5c636a; }
+  .Next:hover { background: #1557b0; }
+  
+
+  /*Pour la page completed*/
+  .rectangle {
+    display: flex;
+    width: 600px;
+    height: auto;  /* Permet au rectangle de s’adapter à son contenu */
+    min-height: 30px;  /* Assure qu’il ne devient pas trop petit */
+    padding: 10px; /* Donne de l'espace au texte */
+    border: 6px solid rgba(136, 183, 175, 1);
+    background-color: rgba(255, 253, 253, 1);  
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-top: 120px;
+    margin-left: 80px;
+}
+  .rectangle p {
+    font-family: Rammetto One;
+font-weight: 400;
+font-size: 34px;
+line-height: 100%;
+letter-spacing: 0%;
+text-align: center;
+color: rgba(79, 132, 130, 1);
+  }
+  .btn{
+    
+      display: flex;
+      justify-content: space-between;
+     
+    
+  }
+   .btn1 , .btn2 {
+      background-color: rgba(78, 134, 129, 1) !important;
+      padding: 18px 50px;
+      border-radius: 15px;
+      font-family: Rammetto One;
+  font-weight: 200;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  padding:10px;
+      width: 150px !important;
+      height: 70px;
+      
+      border: 3px solid transparent;
+      
+      position: relative;
+      top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+   
+  .btn1{
+    position:relative;
+    left: 60%;
+  }
+  .btn2{
+    position: relative;
+    left:15%;
+  }

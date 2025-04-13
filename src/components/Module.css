@@ -1,0 +1,245 @@
+.body {
+  overflow: auto; /* Prevent scrolling */
+  height: 100vh; /* Full viewport height */
+  margin: 0; /* Supprimer la marge par défaut */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.module-content {
+  position: relative;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  top: 150px;
+  gap: 30px; /* Espacement augmenté */
+  text-align: center;
+  z-index: 1; /* Devant l'arrière-plan */
+}
+
+
+.first-line {
+  display: flex;
+  justify-content: center; /* Center the 3 cards in the first line */
+  gap: 30px; /* Space between cards */
+  margin-bottom: 30px; /* Space between first and second lines */
+}
+
+.second-line {
+  display: flex;
+  justify-content: flex-start; /* Align the single card to the left */
+  align-items: flex-start;
+  margin-left: -53%;
+}
+
+.btn {
+  border-radius: 50%;
+  position: fixed;
+  width: clamp(50px, 15%, 100px);
+  height: clamp(50px, 15%, 100px);
+  padding: 15px;
+  bottom: 70px;
+  right: 70px;
+  background-color: rgba(136, 183, 175, 1);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+  border-radius: 50%;
+  background-color: rgba(106, 153, 145, 0.5);
+  
+}
+
+.btn img {
+  border-radius: 50%;
+  
+
+}
+
+.btn:hover img {
+  transform: scale(1.2);
+}
+
+.rectangle-elem {
+  position: relative; /* Pour positionner les éléments internes */
+  border: none;
+  border-radius: 28px;
+  padding: 20px; /* Réduire le padding pour plus d'espace */
+  width: 350px; /* Augmenter la largeur */
+  height: 200px; /* Définir une hauteur fixe */
+  text-align: center;
+  background-color: rgba(101, 117, 153, 1);
+  transition: transform 0.2s ease-in-out;
+  flex: 1 1 300px; /* Chaque carte peut s'étendre jusqu'à 300px */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Espacer les éléments */
+  align-items: center;
+  top: -100px;
+  overflow: visible; /* Pour permettre au menu de déborder */
+}
+
+.image-container {
+  position: relative;
+  width: 380px;
+  height: 210px;
+  border-radius: 4px;
+  overflow: hidden; /* Pour s'assurer que le rectangle ne dépasse pas */
+}
+
+.rectangle-elem:hover {
+  transform: scale(1.05);
+}
+
+.rectangle-elem img {
+  width: 95%;
+  height: 95%;
+  border-radius: 28px;
+  object-fit: fill;
+}
+
+.rectangle-elem h3 {
+  font-family: Rammetto One;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(243, 249, 255, 1);
+  overflow: visible;
+}
+
+/* Conteneur du titre et du bouton */
+.title-container {
+  position: relative; /* Nécessaire pour positionner le menu déroulant */
+  width: 100%; /* Prendre toute la largeur disponible */
+  display: flex;
+  justify-content: space-between; /* Aligner le texte à gauche et le bouton à droite */
+  align-items: center;
+  padding: 0 10px; /* Ajouter un peu de padding */
+}
+
+/* Menu déroulant */
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Positionner sous le bouton */
+  right: 0;
+  min-width: 150px; /* Largeur minimale du menu */
+  background-color: rgba(33, 51, 78, 1);
+  
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* S'assurer que le menu est au-dessus des autres éléments */
+}
+
+/* Bouton options */
+.options-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  width: 24px; /* Largeur fixe */
+  height: 24px; /* Hauteur fixe */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.options-button img {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.options-button:hover img {
+  transform: rotate(90deg); /* Rotation de l'image */
+}
+
+/* Options du menu */
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+   margin: 0;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  background-color: rgba(33, 51, 78, 1);
+  font-family: Rammetto One;
+font-weight: 400;
+font-size: 14px;
+line-height: 100%;
+letter-spacing: 0%;
+
+}
+
+.dropdown-menu button:hover {
+  background-color: rgba(243, 249, 255, 0.5); /* Effet au survol */
+  border-radius: 28px;
+  
+}
+
+/* Media Queries */
+
+/* Pour les écrans de petite taille (mobiles) */
+@media (max-width: 768px) {
+  .module-content {
+    top: 50px; /* Ajuster la position */
+    gap: 20px; /* Réduire l'espacement */
+  }
+
+  .first-line,
+  .second-line {
+    flex-direction: column; /* Empiler les cartes verticalement */
+    align-items: center;
+    gap: 20px; /* Espacement entre les cartes */
+    margin-left: 0; /* Réinitialiser la marge */
+  }
+
+  .rectangle-elem {
+    width: 90%; /* Largeur relative à l'écran */
+    height: auto; /* Hauteur automatique */
+    padding: 15px; /* Réduire le padding */
+    top: 0; /* Réinitialiser la position */
+  }
+
+  .image-container {
+    width: 100%; /* Largeur relative à l'écran */
+    height: auto; /* Hauteur automatique */
+  }
+
+  .btn {
+    bottom: 20px; /* Ajuster la position */
+    right: 20px; /* Ajuster la position */
+  }
+}
+
+/* Pour les écrans de taille moyenne (tablettes) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .module-content {
+    top: 100px; /* Ajuster la position */
+    gap: 25px; /* Espacement moyen */
+  }
+
+  .first-line,
+  .second-line {
+    gap: 25px; /* Espacement entre les cartes */
+  }
+
+  .rectangle-elem {
+    width: 300px; /* Largeur fixe pour les tablettes */
+    height: 180px; /* Hauteur ajustée */
+  }
+
+  .btn {
+    bottom: 40px; /* Ajuster la position */
+    right: 40px; /* Ajuster la position */
+  }
+}

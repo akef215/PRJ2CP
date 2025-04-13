@@ -1,0 +1,317 @@
+/* Base Styles */
+body {
+  background-image: url(../images/background.png);
+  background-size: cover; /* Pour que l'image couvre tout l'arrière-plan */
+  background-position: center; /* Pour centrer l'image */
+  background-repeat: no-repeat;
+}
+
+.createQuizContainer {
+  position: relative;
+  z-index: 1; /* Assure que le contenu est au-dessus du BackgroundRectangle */
+  min-height: 100vh; /* Prend toute la hauteur de l'écran */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Empêche le défilement */
+  width: 20%;
+}
+
+.outerRectangle {
+  padding: 20px;
+  background-color: rgba(101, 117, 153, 1);
+  width: 80%;
+  max-width: 1200px;
+  min-height: 600px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px auto;
+  position: relative;
+}
+
+.innerRectangle {
+  background-color: rgba(243, 249, 255, 1);
+  border-radius: 10px;
+  padding: 40px;
+  width: 90%;
+  min-height: 500px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Close button */
+.close-button-container {
+  text-align: right;
+  margin-bottom: 20px;
+  width: 150%;
+  position: relative;
+  left: 270px;
+  top: -30px;
+}
+
+.close-button-container img {
+  width: 60px;
+}
+
+.close-button-container img:hover {
+  filter: brightness(80%); /* Rend l'image plus sombre */
+  cursor: pointer; /* Ajoute un effet de clic */
+}
+
+/* Title */
+h1 {
+  font-family: 'Rammetto One', sans-serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.2;
+  color: #21334e;
+  position: relative;
+  top: -140px;
+  left: 50px;
+  margin-bottom: -3px;
+  display: flex;
+  text-align: start;
+  justify-content: flex-start;
+}
+
+/* Content container */
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%; /* Prend toute la hauteur disponible */
+  position: relative;
+  top: -80px;
+  margin-left: 40px;
+}
+
+/* Form container */
+.form-container {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Image section */
+.img-section {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center; /* Centre l'image verticalement */
+  background-color: rgba(243, 249, 255, 1);
+  border-radius: 18px;
+}
+
+.img-section img {
+  width: 100%;
+  height: 60%;
+  max-width: 400px;
+  height: auto;
+  position: relative;
+  top: -35px;
+  margin-right: 60px;
+  box-shadow: 12px 10px 12.9px 0px rgba(0, 0, 0, 0.25);
+  background-color: none;
+}
+
+/* Select button */
+.select-elem {
+  display: flex;
+  align-items: center;
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  background-color: #f3f9ff;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  height: 50px;
+  justify-content: space-between;
+}
+
+.select-elem:hover {
+  background-color: #e0e0e0; /* Effet hover */
+}
+
+.select-elem span {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.2;
+  color: rgba(0, 0, 0, 0.7);
+  margin-right: 10px;
+}
+
+.select-elem .dropdown-icon {
+  width: 10px;
+  height: 10px;
+}
+
+/* Copy button (sans hover) */
+.copy-button {
+  display: flex;
+  align-items: center;
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  background-color: #f3f9ff;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  height: 50px;
+  justify-content: space-between;
+}
+
+.copy-button:hover {
+  background-color: #f3f9ff !important; /* Désactive le hover */
+}
+
+.copy-button span {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.2;
+  color: rgba(0, 0, 0, 0.7);
+  margin-right: 10px;
+}
+
+/* Style pour le champ de saisie Quiz Name */
+.quiz-name-input {
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  background-color: #f3f9ff;
+  border-radius: 5px;
+  padding: 10px 15px;
+  width: 100%;
+  height: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.7);
+  outline: none;
+}
+
+.quiz-name-input::placeholder {
+  color: rgba(0, 0, 0, 0.7);
+  opacity: 1;
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  width: 100%;
+  position: relative;
+  top: -21%;
+  left: 350px;
+}
+
+.cancel-button,
+.next-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 26px;
+  cursor: pointer;
+  width: 10%;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #4e8681;
+  font-family: 'Rammetto One', sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #f3f9ff;
+  position: relative;
+}
+
+.cancel-button:hover,
+.next-button:hover {
+  background-color: #6ca49f;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.image-upload-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.image-upload-button {
+  display: flex;
+  align-items: center;
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  background-color: #f3f9ff;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  height: 40px; /* Hauteur réduite */
+  justify-content: space-between; /* Texte à gauche, icône à droite */
+  gap: 10px;
+}
+
+.image-upload-button span {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.2;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+
+
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 30px;
+  }
+
+  .content-container {
+    flex-direction: column;
+  }
+
+  .form-container {
+    max-width: 100%;
+  }
+
+  .img-section {
+    justify-content: center;
+  }
+
+  .img-section img {
+    width: 60%;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  .img-section img {
+    width: 80%;
+  }
+
+  .select-elem {
+    height: 40px;
+    padding: 5px;
+  }
+
+  .select-elem span {
+    font-size: 16px;
+  }
+}
