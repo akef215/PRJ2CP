@@ -32,20 +32,32 @@ async def create_group(db: AsyncSession, level: str, numero: int) -> GroupeBase:
     
     return groupe
 
-async def create_module(db: AsyncSession, code: str, titre: str, level: str, coef : int) -> ModuleBase:
-    stmt = select(Module).filter(Module.code == code)
+async def create_module(db: AsyncSession, module: ModuleBase) -> ModuleBase:
+    stmt = select(Module).filter(Module.code == module.code)
     result = await db.execute(stmt)
     db_module = result.scalar_one_or_none()
 
     if db_module:
         raise HTTPException(status_code=400, detail="Le module existe déjà")
 
-    module = Module(code=code, titre=titre, coef=coef, level=level)
+    module = Module(code=module.code, titre=module.titre, coef=module.coef, level=module.level)
     db.add(module)
     await db.commit()
     await db.refresh(module)
     
     return module
+
+async def supp_module(db: AsyncSession, module_code: int):
+    result = await db.execute(select(Module).filter(Module.code == module_code))
+    module = result.scalars().first()
+
+    if not module:
+        raise HTTPException(status_code=404, detail=f"module with code {module_code} not found")
+
+    await db.delete(module)
+    await db.commit()
+
+    return {"message": f"module with ID {module_code} deleted successfully"}
 
 async def get_groups(db: AsyncSession):
     result = await db.execute(select(Groupe))
