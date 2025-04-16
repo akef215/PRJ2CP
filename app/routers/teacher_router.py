@@ -2,9 +2,17 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
 from app.schemas.module import ModuleBase
-from app.services.teacher_service import get_groups, get_all_students, get_students_by_groupe, create_group, create_module, get_modules, supp_module
+from app.services.teacher_service import get_groups, get_all_students, get_students_by_groupe, create_group, create_module, get_modules, supp_module, supp_groupe, profile, update_profile
 
 router = APIRouter()
+
+@router.get("/me")
+async def get_profile():
+    return profile()
+
+#@router.get("/update_profile")
+#async def edit_profile(name:str | None, email: str | None, password: str | None):
+#    return update_profile(name, email, password)
 
 @router.post("/add_groupe")
 async def add_groupe(level : str, numero: int, db: AsyncSession = Depends(get_db)):
@@ -17,6 +25,10 @@ async def add_module(module: ModuleBase, db: AsyncSession = Depends(get_db)):
 @router.delete("/delete_module")
 async def delete_module(code: str, db: AsyncSession = Depends(get_db)):
     return await supp_module(db, code)
+
+@router.delete("/delete_groupe")
+async def delete_module(code: str, db: AsyncSession = Depends(get_db)):
+    return await supp_groupe(db, code)
 
 @router.get("/groupes")
 async def show_groupes(db: AsyncSession = Depends(get_db)):

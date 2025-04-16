@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.quiz_service import get_available_quizzes_service
-from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice, get_students_within_score_range, get_students_who_did_quiz
+from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice, get_students_within_score_range, get_students_who_did_quiz, get_available_questions_service, get_available_choices_service
 from app.schemas.quiz import QuizOut
 from app.schemas.quiz import QuizCreate
 from app.schemas.question import QuestionModel
@@ -16,6 +16,14 @@ router = APIRouter()
 @router.get("/available", response_model=List[QuizOut])
 async def get_available_quizzes(db: AsyncSession = Depends(get_db)):
     return await get_available_quizzes_service(db)
+
+@router.get("/{quiz_id}/questions")
+async def get_available_quizzes(quiz_id: int, db: AsyncSession = Depends(get_db)):
+    return await get_available_questions_service(quiz_id, db)
+
+@router.get("/{quiz_id}/{qstn_id}/choices")
+async def get_available_choices(quiz_id: int, qstn_id: int, db: AsyncSession = Depends(get_db)):
+    return await get_available_choices_service(quiz_id, qstn_id, db)
 
 @router.post("/add_quiz")
 async def add_quizzes(quiz: QuizCreate, db: AsyncSession = Depends(get_db)):

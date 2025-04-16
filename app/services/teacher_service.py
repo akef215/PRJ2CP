@@ -8,6 +8,41 @@ from app.models.module import Module
 from app.schemas.module import ModuleBase
 from app.schemas.groupe import GroupeBase
 from database import get_db
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+def profile():
+    email = os.getenv('TEACHER_EMAIL')
+    name = os.getenv('TEACHER_NAME')
+    return {"email": email, "name": name}
+
+def update_profile(name=None, email=None, password=None):
+    env_vars = {}
+
+    # Lire et stocker les valeurs actuelles du fichier .env
+    if os.path.exists('.env'):
+        with open('.env', 'r') as file:
+            for line in file:
+                if '=' in line:
+                    key, value = line.strip().split('=', 1)
+                    env_vars[key] = value
+
+    # Mettre à jour les champs spécifiés
+    if email is not None:
+        env_vars['TEACHER_EMAIL'] = email
+    if name is not None:
+        env_vars['TEACHER_NAME'] = name
+    if password is not None:
+        env_vars['TEACHER_PASSWORD'] = password
+
+    # Réécriture du fichier .env avec les nouvelles valeurs
+    with open('.env', 'w') as file:
+        for key, value in env_vars.items():
+            file.write(f"{key}={value}\n")
+
+    return profile()
 
 async def get_groupe_students(n_groupe : int, db : AsyncSession = Depends(get_db)):
     stmt = select(Student).where(Student.groupe == n_groupe)
@@ -58,6 +93,18 @@ async def supp_module(db: AsyncSession, module_code: int):
     await db.commit()
 
     return {"message": f"module with ID {module_code} deleted successfully"}
+
+async def supp_groupe(db: AsyncSession, groupe_id: int):
+    result = await db.execute(select(Groupe).filter(Groupe.id == groupe_id))
+    groupe = result.scalars().first()
+
+    if not groupe:
+        raise HTTPException(status_code=404, detail=f"groupe with code {groupe_id} not found")
+
+    await db.delete(groupe)
+    await db.commit()
+
+    return {"message": f"groupe with ID {groupe_id} deleted successfully"}
 
 async def get_groups(db: AsyncSession):
     result = await db.execute(select(Groupe))

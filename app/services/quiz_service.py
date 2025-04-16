@@ -249,3 +249,32 @@ async def get_students_within_score_range(quiz_id: int, min_score: int, max_scor
     
     return {"students_in_score_range": passed_students}
 
+async def get_available_questions_service(quiz_id: int, db: AsyncSession) -> List[Question]:
+    result = await db.execute(select(Question).where(Question.quiz_id == quiz_id))
+    quiz_questions = result.scalars().all()
+    
+    return quiz_questions or []
+
+async def get_available_choices_service(quiz_id: int, qstn_id: int, db: AsyncSession) -> List[Choice]:
+    # Vérifie que la question existe bien
+    qstn_result = await db.execute(
+        select(Question).where(
+            Question.quiz_id == quiz_id,
+            Question.question_id == qstn_id
+        )
+    )
+    question = qstn_result.scalars().first()
+
+    if not question:
+        return []
+
+    # Récupère les choix associés à la question
+    result = await db.execute(
+        select(Choice).where(
+            Choice.quiz_id == quiz_id,
+            Choice.question_id == question.id  # on utilise qstn_id directement
+        )
+    )
+    choices = result.scalars().all()
+
+    return choices or []
