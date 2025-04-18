@@ -2,6 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, ForeignKey, Date, Text
 from app.models import Base 
 from app.models.quiz_groupe import quiz_groupe
+import datetime
 
 class Quiz(Base):
     __tablename__ = "quizzes" 
@@ -16,3 +17,7 @@ class Quiz(Base):
 
     groupes = relationship("Groupe", secondary=quiz_groupe, back_populates="quizzes")
     questions = relationship("Question", back_populates="quizzes", cascade="all, delete-orphan")
+
+def __repr__(self):
+    return f"<Quiz id={self.id} title={self.title} date={self.date} type={self.type_quizz}>"
+

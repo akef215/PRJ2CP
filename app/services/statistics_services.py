@@ -76,3 +76,6 @@ async def update_statistic(quizz_id: int, db: AsyncSession):
         raise HTTPException(status_code=500, detail="Database error while updating statistics")
 
     return {"message": "Statistics updated successfully"}
+
+
+    

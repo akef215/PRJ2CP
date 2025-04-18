@@ -251,3 +251,37 @@ async def get_students_within_score_range(
         raise HTTPException(status_code=404, detail="No students found within the score range.")
 
     return {"students_in_score_range": passed_students}
+
+
+async def get_quiz_details_service(quiz_id: int, db: AsyncSession):
+    # Vérifier que le quiz existe
+    result = await db.execute(
+        select(Quiz)
+        .where(Quiz.id == quiz_id)
+        .options(selectinload(Quiz.questions).selectinload(Question.choices))
+    )
+    quiz = result.scalars().first()
+
+    if not quiz:
+        raise HTTPException(status_code=404, detail="Quiz non trouvé")
+
+    # Formater la réponse avec les données du quiz
+    quiz_data = {
+        "quiz_id": quiz.id,
+        "time_limit": quiz.duree,
+        "total_questions": len(quiz.questions),
+        "questions": []
+    }
+
+    # Parcourir toutes les questions du quiz
+    for question in quiz.questions:
+        # Collecter toutes les réponses possibles pour chaque question
+        choices = [{"choiceId": choice.id, "answer": choice.answer, "points": choice.score} for choice in question.choices]
+
+        # Ajouter les détails de chaque question avec toutes les réponses possibles
+        quiz_data["questions"].append({
+            "statement": question.statement,
+            "choices": choices,  # Liste de toutes les réponses possibles
+        })
+
+    return quiz_data

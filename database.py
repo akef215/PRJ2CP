@@ -5,6 +5,9 @@ from sqlalchemy.orm import sessionmaker
 
 from sqlalchemy import text
 from typing import List
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
 
 # Charger les variables d'environnement depuis .env
 load_dotenv()

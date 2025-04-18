@@ -3,7 +3,7 @@ import argparse
 import requests
 
 # Configuration de l'URL de l'API
-API_URL = "http://127.0.0.1:8000/students/SignUp"
+API_URL = "http://192.168.56.1:8000/students/SignUp"
 
 def upload_students_from_csv(file_path):
     with open(file_path, newline='', encoding='utf-8') as csvfile:

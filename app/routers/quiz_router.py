@@ -5,7 +5,7 @@ from app.services.quiz_service import (
     get_available_quizzes_service, add_quiz, add_question, add_choice,
     delete_quiz_service, delete_question_service, delete_choice_service,
     update_quiz, update_question, update_choice, get_students_within_score_range,
-    get_students_who_did_quiz, answer_quiz
+    get_students_who_did_quiz, answer_quiz, get_quiz_details_service
 )
 from app.schemas.quiz import QuizOut, QuizCreate, AnswerSubmission
 from app.schemas.question import QuestionModel
@@ -83,3 +83,8 @@ async def get_students_within_score_range_route(
     quiz_id: int, min_score: int, max_score: int, db: AsyncSession = Depends(get_db)
 ):
     return await get_students_within_score_range(quiz_id, min_score, max_score, db)
+
+
+@router.get("/quizzes/{quiz_id}/details")
+async def get_quiz_details(quiz_id: int, db: AsyncSession = Depends(get_db)):
+    return await get_quiz_details_service(quiz_id, db)
