@@ -27,7 +27,7 @@ class _SubmitSurveyState extends State<SubmitSurvey> {
     return Scaffold(
 
       backgroundColor: Colors.white,
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Submit", true),
 
       /*----------------------------MAIN--------------------------*/
       body: Column(

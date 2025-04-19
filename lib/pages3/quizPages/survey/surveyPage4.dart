@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../../widgets/appbar.dart';
 
-
 class SurveyPage4 extends StatefulWidget {
   const SurveyPage4({super.key});
 
@@ -12,12 +11,11 @@ class SurveyPage4 extends StatefulWidget {
 }
 
 class _SurveyPage4State extends State<SurveyPage4> {
-
   // Dynamic data (will be fetched from the API)
-  String quizTimeText = "Loading...";  // Placeholder for "Quiz Time"
-  String questionMarkText = "Loading...";  // Placeholder for "Question Mark"
+  String quizTimeText = "Loading..."; // Placeholder for "Quiz Time"
+  String questionMarkText = "Loading..."; // Placeholder for "Question Mark"
   String question = "Loading question...";
-  List<String> answers = ["True" , "False"];
+  List<String> answers = ["True", "False"];
 
   // Store the selected answers by user
   Set<String> selectedAnswers = {};
@@ -55,15 +53,13 @@ class _SurveyPage4State extends State<SurveyPage4> {
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Quiz", true),
 
       /*-------------------------------MAIN---------------------------*/
       body: SizedBox(
@@ -73,7 +69,6 @@ class _SurveyPage4State extends State<SurveyPage4> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-
             Positioned.fill(
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
@@ -91,7 +86,7 @@ class _SurveyPage4State extends State<SurveyPage4> {
             ),
 
             Positioned(
-              top: screenHeight * 0.1 ,
+              top: screenHeight * 0.1,
               left: 0,
               right: 0,
               child: Column(
@@ -101,19 +96,29 @@ class _SurveyPage4State extends State<SurveyPage4> {
                   Container(
                     height: screenHeight * 0.08,
                     width: screenWidth * 0.58,
-                    margin: EdgeInsets.only(top: 20, bottom : 10, left: 80, right: 80),
-                    padding: EdgeInsets.only(right: 60, left: 65 , top: 15, bottom : 0),
+                    margin: EdgeInsets.only(
+                      top: 20,
+                      bottom: 10,
+                      left: 80,
+                      right: 80,
+                    ),
+                    padding: EdgeInsets.only(
+                      right: 60,
+                      left: 65,
+                      top: 15,
+                      bottom: 0,
+                    ),
                     decoration: BoxDecoration(
                       color: Color(0xff21334E),
-                      borderRadius: BorderRadius.circular(40) ,
-                      border: Border.all(color: Color(0xff8AB3D7), width : 5),
+                      borderRadius: BorderRadius.circular(40),
+                      border: Border.all(color: Color(0xff8AB3D7), width: 5),
                     ),
-                    child : Text(
-                      quizTimeText ,
+                    child: Text(
+                      quizTimeText,
                       style: TextStyle(
-                        color: Colors.white ,
-                        fontFamily: "MontserratSemi" ,
-                        fontSize: 15 ,
+                        color: Colors.white,
+                        fontFamily: "MontserratSemi",
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -123,15 +128,15 @@ class _SurveyPage4State extends State<SurveyPage4> {
                   Container(
                     height: screenHeight * 0.29,
                     width: screenWidth * 0.7,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical : 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30) ,
-                      color:Color(0xff21334E) ,
+                      borderRadius: BorderRadius.circular(30),
+                      color: Color(0xff21334E),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20,),
+                        SizedBox(height: 20),
                         Text(
                           "Question 4",
                           style: TextStyle(
@@ -142,113 +147,149 @@ class _SurveyPage4State extends State<SurveyPage4> {
                           ),
                         ),
 
-                        SizedBox(height: 15,),
+                        SizedBox(height: 15),
                         Text(
                           question,
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: "MontserratSemi",
-                            fontSize: 13 ,
+                            fontSize: 13,
                           ),
                         ),
-
                       ],
                     ),
                   ),
 
-                  SizedBox(height: 15,),
+                  SizedBox(height: 15),
 
                   /*------------------QUESTION MARK BOX--------------------*/
                   Container(
                     height: screenHeight * 0.08,
                     width: screenWidth * 0.58,
-                    margin: EdgeInsets.only(top: 20, bottom : 10, left: 80, right: 80),
-                    padding: EdgeInsets.only(right: 60, left: 65 , top: 15, bottom : 0),
+                    margin: EdgeInsets.only(
+                      top: 20,
+                      bottom: 10,
+                      left: 80,
+                      right: 80,
+                    ),
+                    padding: EdgeInsets.only(
+                      right: 60,
+                      left: 65,
+                      top: 15,
+                      bottom: 0,
+                    ),
                     decoration: BoxDecoration(
                       color: Color(0xff21334E),
-                      borderRadius: BorderRadius.circular(40) ,
-                      border: Border.all(color: Color(0xff8AB3D7), width : 5),
+                      borderRadius: BorderRadius.circular(40),
+                      border: Border.all(color: Color(0xff8AB3D7), width: 5),
                     ),
-                    child : Text(
-                      quizTimeText ,
+                    child: Text(
+                      quizTimeText,
                       style: TextStyle(
-                        color: Colors.white ,
-                        fontFamily: "MontserratSemi" ,
-                        fontSize: 15 ,
+                        color: Colors.white,
+                        fontFamily: "MontserratSemi",
+                        fontSize: 15,
                       ),
                     ),
                   ),
 
-                  SizedBox(height: 15,),
+                  SizedBox(height: 15),
 
                   /*--------------------ANSWERS BOX(TRUE/FALSE)-------------------*/
                   Theme(
                     data: Theme.of(context).copyWith(
                       checkboxTheme: CheckboxThemeData(
-                        side: const BorderSide(color: Colors.white, width: 1.5), // White borders
+                        side: const BorderSide(
+                          color: Colors.white,
+                          width: 1.5,
+                        ), // White borders
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7), // Rounded corners
+                          borderRadius: BorderRadius.circular(
+                            7,
+                          ), // Rounded corners
                         ),
-                        checkColor: MaterialStateProperty.all(const Color(0xff21334E)), // Inner check color
-                        fillColor: MaterialStateProperty.resolveWith<Color>(
-                              (states) {
-                            if (states.contains(MaterialState.selected)) {
-                              return Colors.white; // Background color when checked
-                            }
-                            return Colors.transparent; // Transparent when unchecked
-                          },
-                        ),
+                        checkColor: MaterialStateProperty.all(
+                          const Color(0xff21334E),
+                        ), // Inner check color
+                        fillColor: MaterialStateProperty.resolveWith<Color>((
+                          states,
+                        ) {
+                          if (states.contains(MaterialState.selected)) {
+                            return Colors
+                                .white; // Background color when checked
+                          }
+                          return Colors
+                              .transparent; // Transparent when unchecked
+                        }),
                       ),
                     ),
                     child: Container(
-                        width: screenWidth * 0.5,
-                        margin: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Color(0xff21334E),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: answers.map((answer) => Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Transform.scale(
-                                  scale: 1.5, // Resizing the checkboxes
-                                  child: Checkbox(
-                                    value: selectedAnswers.contains(answer),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        selectedAnswers.clear();
-                                        if (value == true) selectedAnswers.add(answer);
-                                      });
-                                    },
+                      width: screenWidth * 0.5,
+                      margin: EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Color(0xff21334E),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children:
+                            answers
+                                .map(
+                                  (answer) => Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 5,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Transform.scale(
+                                          scale: 1.5, // Resizing the checkboxes
+                                          child: Checkbox(
+                                            value: selectedAnswers.contains(
+                                              answer,
+                                            ),
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                selectedAnswers.clear();
+                                                if (value == true)
+                                                  selectedAnswers.add(answer);
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 8,
+                                        ), // Spacing between checkbox and text
+                                        Text(
+                                          answer,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: "RammettoOne",
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 8), // Spacing between checkbox and text
-                                Text(
-                                  answer,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "RammettoOne",
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )).toList(),
-                        )
-
+                                )
+                                .toList(),
+                      ),
                     ),
                   ),
 
-                  SizedBox(height: 60,),
+                  SizedBox(height: 60),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, bottom: 15, right:20),
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      bottom: 15,
+                      right: 20,
+                    ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Pushes them to left & right
+                      mainAxisAlignment:
+                          MainAxisAlignment
+                              .spaceBetween, // Pushes them to left & right
                       children: [
                         // BACK BUTTON
                         GestureDetector(
@@ -260,7 +301,10 @@ class _SurveyPage4State extends State<SurveyPage4> {
                               SizedBox(
                                 height: 37,
                                 width: 37,
-                                child: Image.asset("images/left-arrow (1).png", fit: BoxFit.contain),
+                                child: Image.asset(
+                                  "images/left-arrow (1).png",
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                               SizedBox(width: 7),
                               Text(
@@ -278,7 +322,12 @@ class _SurveyPage4State extends State<SurveyPage4> {
                         // NEXT BUTTON
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => SubmitSurvey())) ;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SubmitSurvey(),
+                              ),
+                            );
                           },
                           child: Row(
                             children: [
@@ -296,7 +345,10 @@ class _SurveyPage4State extends State<SurveyPage4> {
                                 child: SizedBox(
                                   height: 37,
                                   width: 37,
-                                  child: Image.asset("images/left-arrow (1).png", fit: BoxFit.contain),
+                                  child: Image.asset(
+                                    "images/left-arrow (1).png",
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
                               ),
                             ],
@@ -305,15 +357,12 @@ class _SurveyPage4State extends State<SurveyPage4> {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
-
           ],
         ),
       ),
-
     );
   }
 }

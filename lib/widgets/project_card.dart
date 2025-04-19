@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class ProjectCard extends StatefulWidget {
   final String imagePath;
   final String text;
@@ -9,7 +7,8 @@ class ProjectCard extends StatefulWidget {
   final Color defaultColor;
   final VoidCallback onTap; // For navigation
 
-  const ProjectCard({ // Project card constructor
+  const ProjectCard({
+    // Project card constructor
     required this.imagePath,
     required this.text,
     required this.defaultTextColor,
@@ -36,7 +35,7 @@ class _ProjectCardState extends State<ProjectCard> {
   void _changeColor(bool isTapped) {
     setState(() {
       if (isTapped) {
-        currentColor = Color(0xff21334E);  // Change color when we tap
+        currentColor = Color(0xff21334E); // Change color when we tap
         currentTextColor = Color(0xffFFFFFF);
       } else {
         // Default color on release
@@ -68,7 +67,7 @@ class _ProjectCardState extends State<ProjectCard> {
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15), 
+              color: Colors.black.withOpacity(0.15),
               blurRadius: 5,
               spreadRadius: 1, // How much it spreads
               offset: Offset(1, 4), // Shadow position (x, y)
@@ -78,11 +77,11 @@ class _ProjectCardState extends State<ProjectCard> {
         child: Column(
           children: [
             SizedBox(
-              height: 90,
-              width: 90,
-              child: Image.asset(
-                widget.imagePath,
-                fit: BoxFit.contain,
+              height: 120,
+              width: 120,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child: Image.asset(widget.imagePath, fit: BoxFit.contain),
               ),
             ),
             SizedBox(height: 10),
@@ -104,4 +103,3 @@ class _ProjectCardState extends State<ProjectCard> {
     );
   }
 }
-

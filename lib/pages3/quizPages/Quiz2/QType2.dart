@@ -25,7 +25,7 @@ class _QuizT2State extends State<QuizT2> {
       backgroundColor: Color(0xffDFF0FF),
 
       /*-----------------APPBAR------------------*/
-      appBar: Custom_appBar(),
+      appBar:Custom_appBar().buildAppBar(context, "Quiz", true),
 
       body: Column(
         children: [

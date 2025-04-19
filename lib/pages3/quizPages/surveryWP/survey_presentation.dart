@@ -23,7 +23,7 @@ class _Survery_presentationState extends State<Survey_presentation> {
       backgroundColor: Color(0xffDFF0FF),
 
       /*-----------------APPBAR------------------*/
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Quiz", true),
 
       body: Column(
         children: [

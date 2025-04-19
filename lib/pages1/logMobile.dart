@@ -13,7 +13,6 @@ class LogMobile extends StatefulWidget {
 }
 
 class _LogMobileState extends State<LogMobile> {
-
   /*------------PASSWORD VARIABLE--------------*/
   bool _obscureText = true; // Initially hide the user password
 
@@ -23,13 +22,15 @@ class _LogMobileState extends State<LogMobile> {
 
   /*------------VERIFICATION METHODS--------------*/
 
-  bool isValidEmail(String email) { // EMAIL VERIFICATION
+  bool isValidEmail(String email) {
+    // EMAIL VERIFICATION
     String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     RegExp regex = RegExp(emailPattern);
     return regex.hasMatch(email);
   }
 
-  bool isValidPassword(String password) { // PASSWORD VERIFICATION
+  bool isValidPassword(String password) {
+    // PASSWORD VERIFICATION
     return password.length >= 4;
   }
 
@@ -39,8 +40,6 @@ class _LogMobileState extends State<LogMobile> {
   String loginMessage = "";
   bool _isLoading = false;
 
-
-
   Future<String> login() async {
     setState(() {
       _isLoading = true;
@@ -49,7 +48,9 @@ class _LogMobileState extends State<LogMobile> {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    final url = Uri.parse('http://192.168.151.146:8000/auth/students/login'); // For Android emulator we use 'http://10.0.2.2:8000/auth/students/login'
+    final url = Uri.parse(
+      'http://192.168.43.147:8000/auth/students/login',
+    ); // For Android emulator we use 'http://10.0.2.2:8000/auth/students/login'
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({'email': email, 'password': password});
 
@@ -73,14 +74,12 @@ class _LogMobileState extends State<LogMobile> {
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
         );
-
       } else if (response.statusCode == 401) {
         print("❌ Invalid email or password.");
         setState(() {
           loginMessage = "Invalid email or password.";
           _isLoading = false;
         });
-
       } else {
         print("⚠️ Unexpected error: ${response.statusCode} - ${response.body}");
         setState(() {
@@ -91,9 +90,10 @@ class _LogMobileState extends State<LogMobile> {
     } catch (e) {
       print("🚨 Network error: $e");
       setState(() {
-        loginMessage = e.toString().contains('Connection failed')
-            ? "Server unreachable. Is the backend running?"
-            : "Network error: $e";
+        loginMessage =
+            e.toString().contains('Connection failed')
+                ? "Server unreachable. Is the backend running?"
+                : "Network error: $e";
         _isLoading = false;
       });
     }
@@ -103,7 +103,6 @@ class _LogMobileState extends State<LogMobile> {
 
   @override
   Widget build(BuildContext context) {
-
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -113,30 +112,38 @@ class _LogMobileState extends State<LogMobile> {
         /*---------------BACKGROUND----------------*/
         height: screenHeight, // Make it full screen
         width: screenWidth,
-        child: Stack(// Used for overlapping
-          clipBehavior: Clip.none, // Allows the image to go outside the box if needed
+        child: Stack(
+          // Used for overlapping
+          clipBehavior:
+              Clip.none, // Allows the image to go outside the box if needed
 
           children: [
             Positioned.fill(
               child: Image.asset(
                 'images/background.jpg',
-                fit : BoxFit.cover , // Fill the screen while preventing streches
+                fit: BoxFit.cover, // Fill the screen while preventing streches
               ),
             ),
 
             /*---------------FOREGROUND----------------*/
-
-            Align(// Makes sure Container is in the center of stack
+            Align(
+              // Makes sure Container is in the center of stack
               alignment: Alignment.center,
-              child: SingleChildScrollView(// Ensures UI not shrinking when keyboard shows
-                physics: NeverScrollableScrollPhysics(), // Prevents user scrolling
+              child: SingleChildScrollView(
+                // Ensures UI not shrinking when keyboard shows
+                physics:
+                    NeverScrollableScrollPhysics(), // Prevents user scrolling
 
-                child: Container(  /*-------------MAIN BOX-------------*/
+                child: Container(
+                  /*-------------MAIN BOX-------------*/
                   constraints: BoxConstraints(
                     minHeight: screenHeight * 0.8, // Prevents shrinking
                     maxWidth: screenWidth * 0.85,
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 70.0),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 50.0,
+                    vertical: 70.0,
+                  ),
                   margin: EdgeInsets.fromLTRB(35.0, 100.0, 35.0, 100.0),
                   decoration: BoxDecoration(
                     color: Color(0xff21334e),
@@ -146,7 +153,8 @@ class _LogMobileState extends State<LogMobile> {
               ),
             ),
 
-            Align( /*-------------MAIN PAGE-------------*/
+            Align(
+              /*-------------MAIN PAGE-------------*/
               alignment: Alignment.topCenter,
               child: Column(
                 mainAxisSize: MainAxisSize.min, // Wrap content height
@@ -155,35 +163,37 @@ class _LogMobileState extends State<LogMobile> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Log into your account' ,
+                      'Log into your account',
                       style: TextStyle(
-                        fontFamily: "RammettoOne" ,
-                        fontSize: 16 ,
-                        fontWeight: FontWeight.w500 ,
-                        color: Colors.white ,
+                        fontFamily: "RammettoOne",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
                     ),
                   ),
 
-                  SizedBox(height: 60.0,),
+                  SizedBox(height: 60.0),
 
-                  Column(/*-------------LOGIN COLUMN-------------*/
+                  Column(
+                    /*-------------LOGIN COLUMN-------------*/
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 18.0 , bottom: 8.0),
+                        padding: const EdgeInsets.only(left: 18.0, bottom: 8.0),
                         child: Text(
-                          'work email' ,
+                          'work email',
                           style: TextStyle(
-                            fontFamily: "Montserrat" ,
-                            fontSize: 14 ,
-                            fontWeight: FontWeight.w500 ,
-                            color: Colors.white ,
+                            fontFamily: "Montserrat",
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
                           ),
                         ),
                       ),
 
-                      Container(/*---------EMAIL BOX----------*/
+                      Container(
+                        /*---------EMAIL BOX----------*/
                         width: screenWidth * 0.7,
                         height: screenHeight * 0.09,
 
@@ -203,20 +213,28 @@ class _LogMobileState extends State<LogMobile> {
                           child: TextField(
                             controller: emailController,
                             keyboardType: TextInputType.emailAddress,
-                            style: TextStyle(color: Colors.black), // User input text black
+                            style: TextStyle(
+                              color: Colors.black,
+                            ), // User input text black
                             decoration: InputDecoration(
-                              hintText: "Enter your email" ,
+                              hintText: "Enter your email",
                               hintStyle: TextStyle(
-                                color: Colors.grey[500] ,
-                                fontSize: 15 ,
+                                color: Colors.grey[500],
+                                fontSize: 15,
                               ),
-                              border: InputBorder.none, // Removes the default black line
-                              suffixIcon: Icon(Icons.email, color: Colors.grey[400],), // Set Email icon on the right
-                              contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0) ,
+                              border:
+                                  InputBorder
+                                      .none, // Removes the default black line
+                              suffixIcon: Icon(
+                                Icons.email,
+                                color: Colors.grey[400],
+                              ), // Set Email icon on the right
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 8.0,
+                              ),
                             ),
-
                           ),
-
                         ),
                       ),
 
@@ -231,21 +249,22 @@ class _LogMobileState extends State<LogMobile> {
                           ),
                         ),
 
-                      SizedBox(height: 40.0,),
+                      SizedBox(height: 40.0),
                       Padding(
-                        padding: const EdgeInsets.only(left: 18.0 , bottom: 8.0),
+                        padding: const EdgeInsets.only(left: 18.0, bottom: 8.0),
                         child: Text(
-                          'Password' ,
+                          'Password',
                           style: TextStyle(
-                            fontFamily: "Montserrat" ,
-                            fontSize: 14 ,
-                            fontWeight: FontWeight.w500 ,
-                            color: Colors.white ,
+                            fontFamily: "Montserrat",
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white,
                           ),
                         ),
                       ),
 
-                      Container(/*---------PASSWORD BOX----------*/
+                      Container(
+                        /*---------PASSWORD BOX----------*/
                         width: screenWidth * 0.7,
                         height: screenHeight * 0.09,
 
@@ -266,27 +285,37 @@ class _LogMobileState extends State<LogMobile> {
                             controller: passwordController,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: _obscureText, // Toggle visibility
-                            style: TextStyle(color: Colors.black), // User input text black
+                            style: TextStyle(
+                              color: Colors.black,
+                            ), // User input text black
                             decoration: InputDecoration(
-                              hintText: "Enter your password" ,
+                              hintText: "Enter your password",
                               hintStyle: TextStyle(
-                                color: Colors.grey[500] ,
-                                fontSize: 15 ,
+                                color: Colors.grey[500],
+                                fontSize: 15,
                               ),
-                              border: InputBorder.none, // Removes the default black line of TextField
+                              border:
+                                  InputBorder
+                                      .none, // Removes the default black line of TextField
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                                  _obscureText
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
                                   color: Colors.grey[400],
                                 ),
-                                onPressed: () {// When the icon is pressed we update obscureText state
+                                onPressed: () {
+                                  // When the icon is pressed we update obscureText state
                                   setState(() {
-                                    _obscureText = !_obscureText; // Toggle state
+                                    _obscureText =
+                                        !_obscureText; // Toggle state
                                   });
                                 },
                               ),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0) ,
-
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 8.0,
+                              ),
                             ),
                           ),
                         ),
@@ -302,7 +331,7 @@ class _LogMobileState extends State<LogMobile> {
                             style: TextStyle(color: Colors.red, fontSize: 12),
                           ),
                         ),
-                      SizedBox(height: 7.0) ,
+                      SizedBox(height: 7.0),
 
                       Padding(
                         padding: const EdgeInsets.only(left: 14.0),
@@ -312,22 +341,27 @@ class _LogMobileState extends State<LogMobile> {
                             Text(
                               'Forgot Password? ',
                               style: TextStyle(
-                                color: Colors.white ,
+                                color: Colors.white,
                                 // fontFamily: "Montserrat" ,
-                                fontSize: 12.0 ,
+                                fontSize: 12.0,
                               ),
                             ),
 
                             GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => Recover()));
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Recover(),
+                                  ),
+                                );
                               },
                               child: Text(
-                                'Click here' ,
+                                'Click here',
                                 style: TextStyle(
                                   color: Colors.blueAccent,
-                                  fontSize: 12.0 ,
-                                  decoration: TextDecoration.underline ,
+                                  fontSize: 12.0,
+                                  decoration: TextDecoration.underline,
                                   decorationColor: Colors.blueAccent,
                                 ),
                               ),
@@ -338,43 +372,60 @@ class _LogMobileState extends State<LogMobile> {
                     ],
                   ),
 
-                  SizedBox(height: 50.0,),
+                  SizedBox(height: 50.0),
 
-                  Container(/*------------LOGIN BOX------------*/
+                  Container(
+                    /*------------LOGIN BOX------------*/
                     width: screenWidth * 0.6,
                     height: screenHeight * 0.095,
                     //margin: EdgeInsets.symmetric(horizontal : 40.0, vertical : 10.0),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.white ,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(40.0),
                     ),
 
                     child: ElevatedButton(
-                      onPressed: () async{ setState(() { // Update UI
-                        String email = emailController.text.trim();// Retrieves the current text from the _emailController in TextField
-                        String password = passwordController.text.trim();// Retrieves the current text from the _passwordController in TextField
+                      onPressed: () async {
+                        setState(() {
+                          // Update UI
+                          String email =
+                              emailController.text
+                                  .trim(); // Retrieves the current text from the _emailController in TextField
+                          String password =
+                              passwordController.text
+                                  .trim(); // Retrieves the current text from the _passwordController in TextField
 
-                        _emailError = isValidEmail(email) ? null : "Invalid email format";
-                        _passwordError = isValidPassword(password) ? null : "Password must be at least 8 characters";
+                          _emailError =
+                              isValidEmail(email)
+                                  ? null
+                                  : "Invalid email format";
+                          _passwordError =
+                              isValidPassword(password)
+                                  ? null
+                                  : "Password must be at least 8 characters";
 
-                        // if (_emailError == null && _passwordError == null) { // VALIDATION
-                        //   String message = await login();
-                        //   //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                        // }
-                      });
-                      if (_emailError == null && _passwordError == null) {
-                        String message = await login();  // wait for login and get the result message
+                          // if (_emailError == null && _passwordError == null) { // VALIDATION
+                          //   String message = await login();
+                          //   //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                          // }
+                        });
+                        if (_emailError == null && _passwordError == null) {
+                          String message =
+                              await login(); // wait for login and get the result message
 
-                        // Show snackbar for successful/error login
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(message),
-                            backgroundColor: message.contains("successful") ? Colors.green : Colors.red,
-                            duration: Duration(seconds: 3),
-                          ),
-                        );
-                      }
+                          // Show snackbar for successful/error login
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(message),
+                              backgroundColor:
+                                  message.contains("successful")
+                                      ? Colors.green
+                                      : Colors.red,
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xffc8e5ff),
@@ -384,18 +435,17 @@ class _LogMobileState extends State<LogMobile> {
                         padding: EdgeInsets.all(8),
                         elevation: 0.4, // Shadow
                       ),
-                      child:Center(
+                      child: Center(
                         child: Text(
-                          'Log In' ,
+                          'Log In',
                           style: TextStyle(
-                            fontFamily: "RammettoOne" ,
-                            fontSize: 18 ,
-                            fontWeight: FontWeight.w500 ,
+                            fontFamily: "RammettoOne",
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
                             color: Color(0xff21334e),
                           ),
                         ),
                       ),
-
                     ),
                   ),
 
@@ -429,7 +479,6 @@ class _LogMobileState extends State<LogMobile> {
                   //     ),
                   //   ],
                   // ),
-
                 ],
               ),
             ),

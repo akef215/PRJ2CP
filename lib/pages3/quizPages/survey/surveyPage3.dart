@@ -74,7 +74,7 @@ class _SurveyPage3State extends State<SurveyPage3> {
     return Scaffold(
       backgroundColor: Color(0xffFFFDFD),
 
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Quiz", true),
 
       /*------------------------------MAIN---------------------------------------*/
 

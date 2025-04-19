@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../pages2/agenda.dart';
 import '../../../pages2/profile.dart';
 
+
+/////START QUIZ 1
 class QuizPage1 extends StatefulWidget {
   const QuizPage1({super.key});
 
@@ -63,7 +65,8 @@ class _QuizPage1State extends State<QuizPage1> {
       backgroundColor: Color(0xffFFFDFD),
 
       /*-----------------APPBAR------------------*/
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Quiz", true),
+
       /*------------------------------MAIN---------------------------------------*/
 
       body: Column(

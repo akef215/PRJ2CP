@@ -63,7 +63,7 @@ class _Quiz2PageState extends State<Quiz2Page> {
       backgroundColor: Color(0xffFFFDFD),
 
       /*-----------------APPBAR------------------*/
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Quiz", true),
 
       /*------------------------------MAIN---------------------------------------*/
 

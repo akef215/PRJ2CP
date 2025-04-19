@@ -46,7 +46,7 @@ class _AgendaPageState extends State<Agenda> {
       appBar: PreferredSize(/*---------------AGENDA APPBAR----------------*/
         preferredSize: const Size.fromHeight(80),
         child: AppBar(
-          backgroundColor: Color(0xff0F3D64),
+          backgroundColor: Color(0xff21334e),
           title: const Text(
               'Agenda',
               style: TextStyle(
@@ -69,7 +69,7 @@ class _AgendaPageState extends State<Agenda> {
             children: [
               /*------------------------------CALENDAR---------------------------*/
               Container(
-                color: Color(0xff0F3D64),
+                color: Color(0xff21334e),
                 margin: EdgeInsets.only(top : 3.0),
 
                 child: TableCalendar(
@@ -142,7 +142,7 @@ class _AgendaPageState extends State<Agenda> {
                     margin: EdgeInsets.all(8.0),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Color(0xff0F3D64),
+                      color: Color(0xff21334e),
                       borderRadius: BorderRadius.circular(20),
                     ),
 
@@ -227,12 +227,12 @@ class _AgendaPageState extends State<Agenda> {
                               Text(
                                 eventDate.day.toString(),
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff0F3D64)),
+                                    fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff21334e)),
                               ),
                               Text(
                                 DateFormat('MMM').format(eventDate).toUpperCase(),
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold, color:  Color(0xff0F3D64)),
+                                    fontSize: 16, fontWeight: FontWeight.bold, color:  Color(0xff21334e)),
                               ),
                             ],
                           ),

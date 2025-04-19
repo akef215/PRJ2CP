@@ -168,7 +168,7 @@ class _Surveywppage1State extends State<Surveywppage1> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: Custom_appBar(),
+      appBar:Custom_appBar().buildAppBar(context, "Quiz", true),
 
       /*------------------------------MAIN---------------------------------------*/
       extendBodyBehindAppBar: true,

@@ -25,7 +25,8 @@ class _Submit_QT1State extends State<Submit_QT1> {
     return Scaffold(
 
       backgroundColor: Colors.white,
-      appBar: Custom_appBar(),
+    appBar: Custom_appBar().buildAppBar(context, "Quiz", false),
+
 
       /*----------------------------MAIN--------------------------*/
       body: Column(

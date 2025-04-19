@@ -63,7 +63,7 @@ class _Quiz2State extends State<Quiz2> {
     return Scaffold(
       backgroundColor: Color(0xffFFFDFD),
 
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Quiz", false),
 
       /*------------------------------MAIN---------------------------------------*/
 

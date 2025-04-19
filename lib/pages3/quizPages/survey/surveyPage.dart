@@ -66,7 +66,7 @@ class _SurveyPage1State extends State<SurveyPage1> {
       backgroundColor: Color(0xffFFFDFD),
 
       /*-----------------APPBAR------------------*/
-      appBar:Custom_appBar(),
+      appBar:Custom_appBar().buildAppBar(context, "Quiz", true),
 
       /*------------------------------MAIN---------------------------------------*/
 

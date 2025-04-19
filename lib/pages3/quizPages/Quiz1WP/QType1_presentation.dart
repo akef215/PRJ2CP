@@ -7,7 +7,7 @@ import '../../../pages2/agenda.dart';
 import '../../../pages2/profile.dart';
 import 'QWP_page1.dart';
 
-
+/// QUIZ WITH PERSTANTION START PGAE
 class QuizT1_presentation extends StatefulWidget {
   const QuizT1_presentation({super.key});
 
@@ -27,7 +27,8 @@ class _QuizT1_presentationState extends State<QuizT1_presentation> {
       backgroundColor: Color(0xffDFF0FF),
 
       /*-----------------APPBAR------------------*/
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Quiz", true),
+
       body: Column(
         children: [
           Padding(

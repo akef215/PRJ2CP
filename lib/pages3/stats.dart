@@ -68,7 +68,7 @@ class _StatisticsState extends State<Statistics> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Statsitics", false),
 
       body: Column(
         children: [

@@ -62,7 +62,7 @@ class _Quiz4State extends State<Quiz4> {
 
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Profile", false),
 
       /*-------------------------------MAIN---------------------------*/
       body: SizedBox(

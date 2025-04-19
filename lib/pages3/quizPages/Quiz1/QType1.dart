@@ -6,6 +6,7 @@ import '../../../pages2/agenda.dart';
 import '../../../pages2/profile.dart';
 import 'Qpage1.dart';
 
+////START THE QUIZ
 class QuizT1 extends StatefulWidget {
   const QuizT1({super.key});
 
@@ -24,7 +25,8 @@ class _QuizT1State extends State<QuizT1> {
       backgroundColor: Color(0xffDFF0FF),
 
       /*-----------------APPBAR------------------*/
-      appBar: Custom_appBar(),
+      appBar: Custom_appBar().buildAppBar(context, "Quiz", true),
+
 
       body: Column(
         children: [
