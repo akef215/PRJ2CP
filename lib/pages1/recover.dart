@@ -155,7 +155,7 @@ class _RecoverState extends State<Recover> {
 
                       Container(
                         width: screenWidth * 0.7,
-                        height: screenHeight * 0.08,
+                        height: screenHeight * 0.09,
                         padding: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
                           color: Color(0xffc8e5ff),
@@ -216,7 +216,7 @@ class _RecoverState extends State<Recover> {
 
                       Container(/*---------VERIFICATION CODE BOX----------*/
                         width: screenWidth * 0.7,
-                        height: screenHeight * 0.08,
+                        height: screenHeight * 0.09,
                         padding: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
                           color: Color(0xffc8e5ff),
@@ -289,7 +289,7 @@ class _RecoverState extends State<Recover> {
 
 
 
-                  SizedBox(height: 50.0),
+                  SizedBox(height: 70.0),
                   /*---------------LOGIN BUTTON--------------*/
                   Container(
                     width: screenWidth * 0.6,
@@ -328,36 +328,36 @@ class _RecoverState extends State<Recover> {
                     ),
                   ),
 
-
-                  SizedBox(height: 12.0,),
-                  Row(/*-----------DONT HAVE AN ACCOUNT?-------------*/
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Don't have an account? " ,
-                        style: TextStyle(
-                          color: Colors.white ,
-                          // fontFamily: "Montserrat" ,
-                          fontSize: 12.0 ,
-                        ),
-                      ),
-
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAcc2()));
-                        },
-                        child: Text(
-                          'Create Account' ,
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontSize: 12.0 ,
-                            decoration: TextDecoration.underline ,
-                            decorationColor: Colors.blueAccent,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  //
+                  // SizedBox(height: 12.0,),
+                  // Row(/*-----------DONT HAVE AN ACCOUNT?-------------*/
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   children: [
+                  //     Text(
+                  //       "Don't have an account? " ,
+                  //       style: TextStyle(
+                  //         color: Colors.white ,
+                  //         // fontFamily: "Montserrat" ,
+                  //         fontSize: 12.0 ,
+                  //       ),
+                  //     ),
+                  //
+                  //     GestureDetector(
+                  //       onTap: (){
+                  //         Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAcc2()));
+                  //       },
+                  //       child: Text(
+                  //         'Create Account' ,
+                  //         style: TextStyle(
+                  //           color: Colors.blueAccent,
+                  //           fontSize: 12.0 ,
+                  //           decoration: TextDecoration.underline ,
+                  //           decorationColor: Colors.blueAccent,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

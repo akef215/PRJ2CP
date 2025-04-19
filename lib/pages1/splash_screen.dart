@@ -15,8 +15,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    // Wait for 10 seconds then navigate to the main screen
-    Timer(Duration(seconds: 5), () {
+    // Wait for 4 seconds then navigate to the main screen
+    Timer(Duration(seconds: 4), () {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => FirstPage()));
     });

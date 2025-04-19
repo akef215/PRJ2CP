@@ -30,7 +30,7 @@ class _LogMobileState extends State<LogMobile> {
   }
 
   bool isValidPassword(String password) { // PASSWORD VERIFICATION
-    return password.length >= 8;
+    return password.length >= 4;
   }
 
   String? _emailError;
@@ -39,45 +39,9 @@ class _LogMobileState extends State<LogMobile> {
   String loginMessage = "";
   bool _isLoading = false;
 
-  // Future<void> login() async {
-  //   setState(() {
-  //     _isLoading = true;
-  //   });
-  //
-  //   String email = emailController.text.trim();
-  //   String password = passwordController.text.trim();
-  //
-  //   final url = Uri.parse('https://your-api-url.com/auth/students/login');
-  //   final headers = {'Content-Type': 'application/json'};
-  //   final body = jsonEncode({'email': email, 'password': password});
-  //
-  //   try {
-  //     final response = await http.post(url, headers: headers, body: body);
-  //
-  //     print('API Response: ${response.statusCode} - ${response.body}');
-  //     if (response.statusCode == 200) {
-  //       final data = jsonDecode(response.body);
-  //       setState(() {
-  //         loginMessage = "Login successful!";
-  //         _isLoading = false;
-  //       });
-  //       Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-  //     } else {
-  //       setState(() {
-  //         loginMessage = "Login failed: ${jsonDecode(response.body)['detail'] ?? 'Unknown error'}";
-  //         _isLoading = false;
-  //       });
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       loginMessage = "Network error: $e";
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
 
 
-  Future<void> login() async {
+  Future<String> login() async {
     setState(() {
       _isLoading = true;
     });
@@ -85,7 +49,7 @@ class _LogMobileState extends State<LogMobile> {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    final url = Uri.parse('http://192.168.1.3:8000/auth/students/login'); // For Android emulator: use 'http://10.0.2.2:8000/auth/students/login'
+    final url = Uri.parse('http://192.168.151.146:8000/auth/students/login'); // For Android emulator we use 'http://10.0.2.2:8000/auth/students/login'
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({'email': email, 'password': password});
 
@@ -134,6 +98,7 @@ class _LogMobileState extends State<LogMobile> {
       });
     }
     print("🛑 Login process complete.");
+    return loginMessage;
   }
 
   @override
@@ -220,7 +185,7 @@ class _LogMobileState extends State<LogMobile> {
 
                       Container(/*---------EMAIL BOX----------*/
                         width: screenWidth * 0.7,
-                        height: screenHeight * 0.08,
+                        height: screenHeight * 0.09,
 
                         padding: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
@@ -282,7 +247,7 @@ class _LogMobileState extends State<LogMobile> {
 
                       Container(/*---------PASSWORD BOX----------*/
                         width: screenWidth * 0.7,
-                        height: screenHeight * 0.08,
+                        height: screenHeight * 0.09,
 
                         padding: EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
@@ -373,7 +338,7 @@ class _LogMobileState extends State<LogMobile> {
                     ],
                   ),
 
-                  SizedBox(height: 30.0,),
+                  SizedBox(height: 50.0,),
 
                   Container(/*------------LOGIN BOX------------*/
                     width: screenWidth * 0.6,
@@ -386,18 +351,30 @@ class _LogMobileState extends State<LogMobile> {
                     ),
 
                     child: ElevatedButton(
-                      onPressed: (){ setState(() { // Update UI
+                      onPressed: () async{ setState(() { // Update UI
                         String email = emailController.text.trim();// Retrieves the current text from the _emailController in TextField
                         String password = passwordController.text.trim();// Retrieves the current text from the _passwordController in TextField
 
                         _emailError = isValidEmail(email) ? null : "Invalid email format";
                         _passwordError = isValidPassword(password) ? null : "Password must be at least 8 characters";
 
-                        if (_emailError == null && _passwordError == null) { // VALIDATION
-                         // login();
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                        }
+                        // if (_emailError == null && _passwordError == null) { // VALIDATION
+                        //   String message = await login();
+                        //   //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                        // }
                       });
+                      if (_emailError == null && _passwordError == null) {
+                        String message = await login();  // wait for login and get the result message
+
+                        // Show snackbar for successful/error login
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(message),
+                            backgroundColor: message.contains("successful") ? Colors.green : Colors.red,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xffc8e5ff),
@@ -422,35 +399,36 @@ class _LogMobileState extends State<LogMobile> {
                     ),
                   ),
 
-                  SizedBox(height: 12.0,),
-                  Row(/*----------------DONT HAVE AN ACCOUNT?----------------*/
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Don't have an account? " ,
-                        style: TextStyle(
-                          color: Colors.white ,
-                          // fontFamily: "Montserrat" ,
-                          fontSize: 12.0 ,
-                        ),
-                      ),
-
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAcc2()));
-                        },
-                        child: Text( //TODO : MAKE IT A TEXT BUTTON
-                          'Create Account' ,
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontSize: 12.0 ,
-                            decoration: TextDecoration.underline ,
-                            decorationColor: Colors.blueAccent,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  /*-----------CREATE ACCOUNT IF USER DO NOT HAVE ONE : WON'T BE USE !!!------*/
+                  // SizedBox(height: 12.0,),
+                  // Row(/*----------------DONT HAVE AN ACCOUNT?----------------*/
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   children: [
+                  //     Text(
+                  //       "Don't have an account? " ,
+                  //       style: TextStyle(
+                  //         color: Colors.white ,
+                  //         // fontFamily: "Montserrat" ,
+                  //         fontSize: 12.0 ,
+                  //       ),
+                  //     ),
+                  //
+                  //     GestureDetector(
+                  //       onTap: (){
+                  //         Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAcc2()));
+                  //       },
+                  //       child: Text( //TODO : MAKE IT A TEXT BUTTON
+                  //         'Create Account' ,
+                  //         style: TextStyle(
+                  //           color: Colors.blueAccent,
+                  //           fontSize: 12.0 ,
+                  //           decoration: TextDecoration.underline ,
+                  //           decorationColor: Colors.blueAccent,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
 
                 ],
               ),

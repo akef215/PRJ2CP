@@ -1,35 +1,100 @@
+/*------------------PAGES OF THE QUIZ------------------*/
+
+import 'dart:convert';
+
+import 'package:esi_quiz/pages3/quizPages/Quiz1WP/quizQuestion.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:http/http.dart' as http;
+import '../../../pages2/homePage.dart';
 import '../../../widgets/appbar.dart';
 
+
+//correct one is this
+Future<Map<String, dynamic>> fetchQuizData() async {
+  final response = await http.get(Uri.parse('http://192.168.151.146:8000/quizzes/quizzes/2/details'));
+
+  if (response.statusCode == 200) {
+    print('Response Body: ${response.body}');
+    final data = json.decode(response.body);
+
+    return {
+      'quizId': data['quiz_id'],
+      'timeLimit': data['time_limit'], // Keep this as it is (already an integer)
+      'totalQuestions': data['total_questions'],
+      'questions': (data['questions'] as List)
+          .map((q) => QuizQuestion.fromJson(q))
+          .toList(),
+    };
+  } else {
+    throw Exception('Failed to load quiz');
+  }
+}
+
+
 // Future<Map<String, dynamic>> fetchQuizData() async {
-//   // Simulate fetching data from backend
-//   await Future.delayed(Duration(seconds: 1));
+//   await Future.delayed(Duration(milliseconds: 500)); // Simulate network delay
+//
+//   final fakeJson = {
+//     "quizId": 123,
+//     "timeLimit": 5,
+//     "totalQuestions": 2,
+//     "questions": [
+//       {
+//         "statement": "What is Flutter?",
+//         "choices": [
+//           {
+//             "choiceId": 1,
+//             "answer": "A mobile development SDK",
+//             "points": 1
+//           },
+//           {
+//             "choiceId": 2,
+//             "answer": "A backend framework",
+//             "points": 0
+//           },
+//         ]
+//       },
+//       {
+//         "statement": "Who developed Dart?",
+//         "choices": [
+//           {
+//             "choiceId": 3,
+//             "answer": "Google",
+//             "points": 1
+//           },
+//           {
+//             "choiceId": 6,
+//             "answer": "Facebook",
+//             "points": 0
+//           },
+//           {
+//             "choiceId": 7,
+//             "answer": "A backend framework",
+//             "points": 0
+//           },
+//           {
+//             "choiceId": 9,
+//             "answer": "A backend framework",
+//             "points": 0
+//           }
+//         ]
+//       }
+//     ]
+//   };
+//
 //   return {
-//     'timeLimit': 30,
-//     'answers': ['Strongly satisfied', 'Satisfied', 'Neutral', 'Not satisfied'],
-//     'totalQuestions': 5
+//     'quizId': fakeJson['quizId'],
+//     'timeLimit': fakeJson['timeLimit'],
+//     'totalQuestions': fakeJson['totalQuestions'],
+//     'questions': (fakeJson['questions'] as List)
+//         .map((q) => QuizQuestion.fromJson(q))
+//         .toList(),
 //   };
 // }
 
-Future<Map<String, dynamic>> fetchSimulatedPageData(int page) async {
-  await Future.delayed(Duration(milliseconds: 500)); // Simulate network delay
-  return {
-    'timeLimit': 30,
-    'answers': [
-      'Answer ${page * 4 + 1}',
-      'Answer ${page * 4 + 2}',
-      'Answer ${page * 4 + 3}',
-      'Answer ${page * 4 + 4}'
-    ],
-    'totalQuestions': 5
-  };
-}
-
 class QuizWPPage1 extends StatefulWidget {
   const QuizWPPage1({super.key});
-
-
 
   @override
   State<QuizWPPage1> createState() => _QuizWPPage1State();
@@ -38,15 +103,25 @@ class QuizWPPage1 extends StatefulWidget {
 
 class _QuizWPPage1State extends State<QuizWPPage1> {
 
-  int timeLimit = 30;
-  String questionMarkText = "Loading...";  // Placeholder for "Question Mark"
-  List<String> answers = [];
+
+  late List<QuizQuestion> questions;
+  late int timeLimit;
+  late int quizId;
+
+  String questionMarkText = "Loading..."; // Placeholder for points info
+  List<Choice> choices = []; // ← Was List<String> answers — now it's a list of Choice objects
+
   int totalQuestions = 1;
   int currentPage = 0;
-  List<List<String>> userAnswers = [];
+
+// UserAnswers will store a list of selected choiceIds per question
+  List<List<int>> userAnswers = [];
 
   late Timer _timer;
   int _remainingTime = 0;
+
+  bool isLoading = true;
+
 
   @override
   void initState() {
@@ -54,17 +129,36 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
     loadQuizData();
   }
 
+
   void loadQuizData() async {
-    var data = await fetchSimulatedPageData(currentPage);
-    setState(() {
-      timeLimit = data['timeLimit'];
-      answers = List<String>.from(data['answers']);
-      totalQuestions = data['totalQuestions'];
-      userAnswers = List.generate(totalQuestions, (index) => []);
-      _remainingTime = timeLimit;
+    try {
+      final data = await fetchQuizData();
+
+      setState(() {
+        print("Inside setState");
+        timeLimit = data['timeLimit'];
+        quizId = data['quizId'];
+        totalQuestions = data['totalQuestions'];
+
+        // No need to parse again — already QuizQuestion objects
+        questions = List<QuizQuestion>.from(data['questions']);
+
+        userAnswers = List.generate(totalQuestions, (index) => []);
+        choices = questions[currentPage].choices;
+        questionMarkText = "${choices.fold(0.0, (sum, c) => sum + c.points)} points";
+        _remainingTime = timeLimit;
+        isLoading = false;
+      });
+
       startTimer();
-    });
+    } catch (e) {
+      print('Error loading quiz data: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
+
 
   void startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -77,56 +171,105 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
     });
   }
 
-  // void nextPage() {
-  //   if (currentPage < totalQuestions - 1) {
-  //     setState(() => currentPage++);
-  //     _remainingTime = timeLimit;
-  //     startTimer();
-  //   } else {
-  //     // Submit or end survey
-  //     print('Survey complete: $userAnswers');
-  //   }
-  // }
+
 
   void nextPage() async {
     if (currentPage < totalQuestions - 1) {
-      setState(() => currentPage++);
-
-      // Fetch new answers for the new page
-      var newPageData = await fetchSimulatedPageData(currentPage);
-
       setState(() {
-        answers = List<String>.from(newPageData['answers']);
-        _remainingTime = timeLimit; // Reset the timer
-
+        currentPage++;
+        choices = questions[currentPage].choices;
+        questionMarkText = "${questions[currentPage].choices.fold<double>(0, (sum, c) => sum + c.points)} points";
+        _remainingTime = timeLimit;
       });
+
       _timer.cancel();
       startTimer();
     } else {
-      print('Survey complete: $userAnswers');
+      print('Quiz complete: $userAnswers');
+      // You could call a submitQuiz() method here
     }
   }
 
 
-  void toggleAnswer(String answer) {
+
+  void toggleAnswer(int choiceId) {
     setState(() {
-      if (userAnswers[currentPage].contains(answer)) {
-        userAnswers[currentPage].remove(answer);
+      if (userAnswers[currentPage].contains(choiceId)) {
+        userAnswers[currentPage].remove(choiceId);
       } else {
-        userAnswers[currentPage].add(answer);
+        userAnswers[currentPage].add(choiceId);
       }
     });
   }
 
-  Widget buildAnswerOption(String answer) {/*--------------WIDGET FOR ANSWER BOXES---------------*/
+
+
+  // Check if the user selected the correct answer for the current question
+  bool isAnswerCorrect(int choiceId) {
+    // Check if the selected choice_id(s) match the correct answer(s) for the current question
+    return questions[currentPage].choices
+        .any((choice) => choice.choiceId == choiceId && choice.points > 0);
+  }
+
+  int calculateScore() {
+    int score = 0;
+
+    for (int i = 0; i < questions.length; i++) {
+      final correctChoices = questions[i].choices
+          .where((choice) => choice.points > 0) // Get the correct choices based on points
+          .map((choice) => choice.choiceId)
+          .toList();
+
+      final userChoices = userAnswers[i];
+
+      // Check if user selected the correct answers, avoiding double-counting
+      for (int choiceId in userChoices) {
+        if (correctChoices.contains(choiceId)) {
+          // Find the corresponding choice to get the points
+          final choice = questions[i].choices.firstWhere((choice) => choice.choiceId == choiceId);
+          score += choice.points.toInt(); // Add points for the correct answer (cast to int if needed)
+        }
+      }
+    }
+    return score;
+  }
+
+  void handleSubmit() async {
+    int score = calculateScore();
+
+    print("User answers: $userAnswers");
+    print("Final Score: $score");
+
+    // Optionally send data to backend here
+
+    // Show success + score
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Quiz submitted successfully!'),
+      backgroundColor: Colors.lightBlueAccent[100],
+      duration: Duration(seconds: 3),
+    ));
+
+    // Wait then go home
+    await Future.delayed(Duration(seconds: 2));
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()), // Replace with your home widget
+          (route) => false,
+    );
+
+  }
+
+
+  Widget buildAnswerOption(Choice choice) {/*--------------WIDGET FOR ANSWER BOXES---------------*/
     double screenHeight = MediaQuery.of(context).size.height;
 
-    bool isSelected = userAnswers[currentPage].contains(answer);
+    //bool isSelected = userAnswers[currentPage].contains(answer);
 
+    bool isSelected = userAnswers[currentPage].contains(choice.choiceId);
     return GestureDetector(
-      onTap: () => toggleAnswer(answer),
+      onTap: () => toggleAnswer(choice.choiceId),
       child: Container(
-        height: screenHeight * 0.075,
+        //height: screenHeight * 0.075,
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
@@ -146,13 +289,15 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
               size: 25,
             ),
             SizedBox(width: 10),
-            Text(
-              answer,
-              style: TextStyle(
-                fontFamily: "MontserratThin",
-                color: Color(0xff0f3d64),
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
+            Expanded(
+              child: Text(
+                choice.answer,
+                style: TextStyle(
+                  fontFamily: "MontserratThin",
+                  color: Color(0xff0f3d64),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                ),
               ),
             ),
           ],
@@ -172,7 +317,32 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
 
       /*------------------------------MAIN---------------------------------------*/
       extendBodyBehindAppBar: true,
-      body: Container(
+      body: isLoading
+          ? Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 40,
+              height: 40,
+              child: CircularProgressIndicator(
+                color: Color(0xff0F3D64),
+                strokeWidth: 4,
+              ),
+            ),
+            SizedBox(height: 30),
+            Text(
+              "Loading quiz...",
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xff21334E),
+                fontFamily: "MontserratSemi",
+              ),
+            ),
+          ],
+        ),
+      )
+       : Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -207,17 +377,12 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
                         ),
                       ],
                     ),
+                    // child: Column(
+                    //   children: answers.map((answer) => buildAnswerOption(answer)).toList(),
+                    //
+                    // ),
                     child: Column(
-                      children: answers.map((answer) => buildAnswerOption(answer)).toList(),
-                      // children: answers.map((answer) {
-                      //   return CheckboxListTile(
-                      //     value: userAnswers[currentPage].contains(answer),
-                      //     onChanged: (bool? value) => toggleAnswer(answer),
-                      //     title: Text(answer, style: TextStyle(color: Colors.white)),
-                      //     activeColor: Colors.white,
-                      //     checkColor: Color(0xff21334E),
-                      //   );
-                      // }).toList(),
+                      children: choices.map((choice) => buildAnswerOption(choice)).toList(),
                     ),
                   ),
 
@@ -256,65 +421,90 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
                 ],
               ),
 
-              SizedBox(height: screenHeight * 0.05,),
+              SizedBox(height: screenHeight * 0.02,),
 
               /*------------------QUESTION MARK BOX--------------------*/
               Container(
-                height: screenHeight * 0.07,
-                width: screenWidth * 0.58,
+                height: screenHeight * 0.075,
+                width: screenWidth * 0.5,
                 margin: EdgeInsets.only(bottom : 10, left: 80, right: 80),
-                padding: EdgeInsets.symmetric(horizontal: 65, vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 75, vertical: 15),
                 decoration: BoxDecoration(
                   color: Color(0xffFFFDFD),
                   borderRadius: BorderRadius.circular(40) ,
                   border: Border.all(color: Color(0xff0F3D64), width : 1),
                 ),
-                child : Text(
-                  questionMarkText ,
-                  style: TextStyle(
-                    color: Color(0xff21334E) ,
-                    fontFamily: "MontserratSemi" ,
-                    fontSize: 15 ,
-                  ),
-                ),
-              ),
-
-              // NEXT BUTTON
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        nextPage();
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Next',
-                            style: TextStyle(
-                              fontFamily: "MontserratSemi",
-                              color: Colors.grey[400],
-                              fontSize: 18,
-                            ),
-                          ),
-                          SizedBox(width: 7),
-                          Transform.rotate(
-                            angle: 3.1416, // Rotate 180 degrees
-                            child: SizedBox(
-                              height: 37,
-                              width: 37,
-                              child: Image.asset("images/left-arrow (1).png", fit: BoxFit.contain),
-                            ),
-                          ),
-                        ],
-                      ),
+                child : Center(
+                  child: Text(
+                    questionMarkText ,
+                    style: TextStyle(
+                      color: Color(0xff21334E) ,
+                      fontFamily: "MontserratSemi" ,
+                      fontSize: 17 ,
                     ),
                   ),
                 ),
               ),
+
+              // // NEXT BUTTON
+              // Expanded(
+              //   child: Align(
+              //     alignment: Alignment.bottomRight,
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(12.0),
+              //       child: GestureDetector(
+              //         onTap: () {
+              //           nextPage();
+              //         },
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.end,
+              //           children: [
+              //             Text(
+              //               'Next',
+              //               style: TextStyle(
+              //                 fontFamily: "MontserratSemi",
+              //                 color: Colors.grey[400],
+              //                 fontSize: 18,
+              //               ),
+              //             ),
+              //             SizedBox(width: 7),
+              //             Transform.rotate(
+              //               angle: 3.1416, // Rotate 180 degrees
+              //               child: SizedBox(
+              //                 height: 37,
+              //                 width: 37,
+              //                 child: Image.asset("images/left-arrow (1).png", fit: BoxFit.contain),
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
+              if (currentPage == totalQuestions - 1)
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: ElevatedButton(
+                    onPressed: handleSubmit,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff0F3D64),
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: Text(
+                      "Submit Quiz",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: "MontserratSemi",
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
 
             ],
           ),
@@ -325,10 +515,5 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
 }
 
 
-//
-// @override
-// void dispose() {
-//   _timer.cancel();
-//   super.dispose();
-// }
-// }
+
+

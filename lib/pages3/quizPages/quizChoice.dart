@@ -5,6 +5,7 @@ import 'package:esi_quiz/pages3/quizPages/surveryWP/survey_presentation.dart';
 import 'package:flutter/material.dart';
 import '../../pages2/agenda.dart';
 import '../../pages2/profile.dart';
+import '../../widgets/clickable_card.dart';
 import 'Quiz1/QType1.dart';
 import 'Quiz2/QType2.dart';
 
@@ -216,30 +217,50 @@ class _QuizChoiceState extends State<QuizChoice> {
                 mainAxisSpacing: 30,
                 childAspectRatio: 1.1,
                 children: [
-                  buildCard(context, "SURVEY", null ,Survey()),
-                  buildCard(context, "SURVEY", "presentation", Survey_presentation()),
-                  buildCard(context, "QUIZ 01", null ,QuizT1()),
-                  buildCard(context, "QUIZ 01", "presentation", QuizT1_presentation()),
-                 // buildCard(context, "QUIZ 02", null, QuizT2()),
+                  ClickableCard(
+                    mainText: "SURVEY",
+                    page: Survey(),
+                    subText: null,
+                  ),
+                  ClickableCard(
+                    mainText: "SURVEY",
+                    subText: "presentation",
+                    page: Survey_presentation(),
+                  ),
 
+                  ClickableCard(
+                    mainText: "QUIZ 01",
+                    subText: null,
+                    page: QuizT1(),
+                  ),
+
+                  ClickableCard(
+                    mainText: "QUIZ 01",
+                    subText: "presentation",
+                    page: QuizT1_presentation(),
+                  ),
                 ],
               ),
             ),
           ),
-          Transform.translate(
+          Transform.translate(// To center the quiz 2 container
             offset: Offset(0, -70),
             child: Container(
                 width: screenWidth * 0.4,
                 height: screenHeight * 0.173,
-                child: buildCard(context, "QUIZ 02", null, QuizT2())
+              child:   ClickableCard(
+                mainText: "QUIZ 02",
+                subText: null,
+                page: QuizT2(),
+              ),
             ),
           ),
 
-          SizedBox(height: screenHeight * 0.05),
+          SizedBox(height: screenHeight * 0.03),
 
           /*-----------------BACK ARROW----------------------*/
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.bottomLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 20, bottom: 20),
               child: GestureDetector(
@@ -275,73 +296,73 @@ class _QuizChoiceState extends State<QuizChoice> {
   }
 }
 
-Widget buildCard(BuildContext context, String mainText, String? subText, Widget page) {
-  double screenHeight = MediaQuery.of(context).size.height;
-  double screenWidth = MediaQuery.of(context).size.width;
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => page),
-      );
-    },
-    child: Container(
-      decoration: BoxDecoration(
-        color: Color(0xffEEF7FF),
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black38.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 12.9,
-            offset: Offset(12, 10),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              mainText,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Color(0xff21334E),
-                fontFamily: "RammettoOne",
-                letterSpacing: 1.5,
-                shadows: [
-                  Shadow(
-                    color: Colors.black26, // Shadow color
-                    offset: Offset(2, 2),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-            ),
-            if (subText != null) // Show subtitle only if provided
-              Text(
-                subText,
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12,
-                  color: Color(0xff21334E),
-                  fontFamily: "MontserratSemi",
-                  shadows: [
-                    Shadow(
-                      color: Colors.black26, // Shadow color
-                      offset: Offset(1, 1),
-                      blurRadius: 2,
-                    ),
-                  ],
-              ),
-              ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
+// Widget buildCard(BuildContext context, String mainText, String? subText, Widget page) {
+//   double screenHeight = MediaQuery.of(context).size.height;
+//   double screenWidth = MediaQuery.of(context).size.width;
+//   return GestureDetector(
+//     onTap: () {
+//       Navigator.push(
+//         context,
+//         MaterialPageRoute(builder: (context) => page),
+//       );
+//     },
+//     child: Container(
+//       decoration: BoxDecoration(
+//         color: Color(0xffEEF7FF),
+//         borderRadius: BorderRadius.circular(30),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black38.withOpacity(0.2),
+//             spreadRadius: 2,
+//             blurRadius: 12.9,
+//             offset: Offset(12, 10),
+//           ),
+//         ],
+//       ),
+//       child: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Text(
+//               mainText,
+//               style: TextStyle(
+//                 fontWeight: FontWeight.bold,
+//                 fontSize: 18,
+//                 color: Color(0xff21334E),
+//                 fontFamily: "RammettoOne",
+//                 letterSpacing: 1.5,
+//                 shadows: [
+//                   Shadow(
+//                     color: Colors.black26, // Shadow color
+//                     offset: Offset(2, 2),
+//                     blurRadius: 4,
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             if (subText != null) // Show subtitle only if provided
+//               Text(
+//                 subText,
+//                 style: TextStyle(
+//                   fontWeight: FontWeight.w400,
+//                   fontSize: 12,
+//                   color: Color(0xff21334E),
+//                   fontFamily: "MontserratSemi",
+//                   shadows: [
+//                     Shadow(
+//                       color: Colors.black26, // Shadow color
+//                       offset: Offset(1, 1),
+//                       blurRadius: 2,
+//                     ),
+//                   ],
+//               ),
+//               ),
+//           ],
+//         ),
+//       ),
+//     ),
+//   );
+// }
 
 PopupMenuItem<int> _buildNotificationItem(String title, String time) {
   return PopupMenuItem(

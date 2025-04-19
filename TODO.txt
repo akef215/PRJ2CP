@@ -14,7 +14,8 @@
 - [✓] Grouping survey, quiz1, quiz2
 - [✓] Survey/Quiz with presentation pages handling
 - [ ] Survey/Quiz pages handling
-- [ ] Login Pages integration
+- [✓] Login Page integration
+- [ ] Create/Recover page integration
 - [✓] Statistics pages
 - [✓] Results pages
 - [ ] Correction pages
@@ -24,6 +25,6 @@
 - [ ] Stats page "Quizzes" click handling
 - [ ] Stats page "Modules" click handling
 - [ ] Results page "Quiz/Survey" click handling
-- [ ] Update see more
+- [✓] Update see more
 - [✓] Update Agenda Page
 
