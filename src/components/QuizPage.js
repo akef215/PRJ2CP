@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './QuizPage.css';
+import './styles/QuizPage.css';
 
 const QuizzesSurveysPage = () => {
   // State for data

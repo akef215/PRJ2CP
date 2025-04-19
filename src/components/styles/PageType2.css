@@ -19,6 +19,7 @@ body {
     border: 2px solid rgba(0, 0, 0, 0.8);
     box-shadow: 0 10px 35px rgba(0,0,0,0.12);
     position: relative;
+    top:35px ;
   }
   
   /* Barre haute - alignement parfait */
@@ -38,11 +39,13 @@ body {
     padding: 12px 28px;
     font-size: 18px;
     font-weight: 600;
+    position: relative;
+    top: -10px !important; 
     letter-spacing: 0.5px;
     width: 150px;
-    display : flex ;
+    display : flex !important ;
     justify-content: center;
-    align-items: center;
+    align-items: center !important;
   }
   
   .mark {
@@ -103,7 +106,7 @@ color:rgba(0, 0, 0, 1);
     color: white !important;
     height: 30px;
     position: relative;
-    right: 230%;
+    right: 5%;
   }
   .bouton {
     background-color: rgba(78, 134, 129, 1);
@@ -116,6 +119,8 @@ color:rgba(0, 0, 0, 1);
     vertical-align: middle;
       border-radius: 50px;
         width: 150px !important;
+    position: relative;
+    left: 5%;
   }
   /* Bouton "Full Quiz Time left" */
   .full-time {
@@ -130,15 +135,17 @@ color:rgba(0, 0, 0, 1);
     left: 30%;
    top: -5%;
   }
-  .full-time p {
-    font-family: Montserrat;
-font-weight: 600;
-font-size: 20px;
-line-height: 100%;
-letter-spacing: 0%;
-color: rgba(0, 0, 0, 0.7);
+ .full-time p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  margin: 0; /* Optional: remove default spacing */
+}
 
-  }
   .image{
     position: relative;
     left: 30% !important;
@@ -185,10 +192,12 @@ vertical-align: middle;
   .go-back{
     position:relative;
     left: 25%;
+    top: -80px;
   }
   .Next{
     position: relative;
     right:25%;
+    top: -80px;
   }
   /* Effets au survol exacts */
   .go-back:hover { background: #5c636a; }

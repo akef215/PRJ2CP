@@ -1,10 +1,8 @@
 import { useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
-import Rectangle from './Select';
-import CreateQuizT1 from './CreateQuizT1';
-import './Select.css';
-import './General.css';
+import './styles/Select.css';
+import './styles/General.css';
 import { useState, useMemo } from 'react';
 
 const Layout = ({ children }) => {
@@ -27,7 +25,7 @@ const Layout = ({ children }) => {
         <Navbar toggleSidebar={handleSidebarToggle} />
       )}
 
-      <main style={{ position: 'relative', zIndex: 1 }}>{children}</main>
+      <main style={{ position: 'relative', zIndex: 1, paddingBottom: '10px' }}>{children}</main>
 
       {/* ✅ Afficher le Sidebar uniquement quand isSidebarVisible est true */}
       {!hideNavAndSidebar && isSidebarVisible && <Sidebar />}

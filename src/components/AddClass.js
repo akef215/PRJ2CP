@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import './CreateQuiz.css'; // Importez votre fichier CSS
+import './styles/CreateQuiz.css'; // Importez votre fichier CSS
 import BtnX from './pic/btnX.png';
 import down from './pic/down.png';
 import imageIcon from '../images/image 1.png'; // Icône pour le bouton d'ajout d'image
 import Illustration from '../images/Photo2.png';
 import { useNavigate } from 'react-router-dom';
+import { customFetch } from '../customFetch';
 
 // Composant réutilisable SelectButton (avec flèche)
 const SelectButton = ({ label, onClick }) => {
@@ -77,29 +78,20 @@ const AddClass = () => {
     
 
     const handleNextClick = () => {
+      const url = `http://localhost:8000/teachers/add_groupe?level=${level}&numero=${Nb}`;
     
-      console.log(Nb, level);
-      
-      // Envoi au back
-      fetch(`http://localhost:8000/teachers/add_groupe?level=${level}&numero=${Nb}`, {
+      customFetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        }
       })
-      .then(res => {
-        if (res.status === 200) {
-          console.log("Groupe ajouté avec succès !");
-          navigate('../classesPage');  // Redirection vers la page Select
-        } else {
-          console.error("Erreur lors de la création :", res.status);
-        }
-      })
-      .then(data => {
-        console.log("Réponse du serveur :", data);
-        // Redirection ou feedback ici
-      })
-      .catch(err => console.error("Erreur d'envoi :", err));
+        .then(res => {
+          if (res && res.status === 200) {
+            console.log("Groupe ajouté avec succès !");
+            navigate('../classesPage');
+          } else if (res) {
+            console.error("Erreur lors de la création :", res.status);
+          }
+        })
+        .catch(err => console.error("Erreur d'envoi :", err));
     };
   // Gestionnaires d'événements définis
   const handleCloseButtonClick = () => {
@@ -111,7 +103,7 @@ const AddClass = () => {
   };
 
   const handleCancelClick = () => {
-    navigate("../classesPage")
+    navigate("../select")
   };
 
 

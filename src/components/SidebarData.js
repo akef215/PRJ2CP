@@ -6,6 +6,7 @@ import saveIcon from "../images/save-file.png";
 import setIcon from "../images/setting.png";
 import statsIcon from "../images/stats.png";
 import plusIcon from "../images/add.png";
+import moduleIcon from "../images/module.png";
 import classIcon from "../images/class.png"; // Correction du nom
 
 export const SidebarData = [
@@ -15,41 +16,21 @@ export const SidebarData = [
         link: "/homepage",
     },
     {
-        title: "Calendar",
-        icon: <img src={calendarIcon} className="sidebar-icon" alt="Calendar" />,
-        link: "/calendar",
-    },
-    {
         title: "Show Classes",
         icon: <img src={nextIcon} className="sidebar-icon" alt="Show Classes" />,
-        link: "#",
-        subMenu: [
+        link: "/classesPage",
+        /*subMenu: [
             {
                 icon: <img src={classIcon} className="sidebar-icon" alt="Class" />,
-                title: "Class 1",
-               
-            },
-            {
-                icon: <img src={classIcon} className="sidebar-icon" alt="Class" />,
-                title: "Class 2",
-              
-            },
-            {
-                icon: <img src={classIcon} className="sidebar-icon" alt="Class" />,
-                title: "Class 3",
+                title: "1CP1",
                
             }
-        ]
+        ]*/
     },
     {
-        title: "Archive",
-        icon: <img src={saveIcon} className="sidebar-icon" alt="Archive" />,
-        link: "/archive",
-    },
-    {
-        title: "Settings",
-        icon: <img src={setIcon} className="sidebar-icon" alt="Settings" />,
-        link: "/settings",
+        title: "Modules",
+        icon: <img src={moduleIcon} className="sidebar-icon" alt="Create" />,
+        link: "/module",
     },
     {
         title: "Statistics",

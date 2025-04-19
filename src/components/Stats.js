@@ -1,12 +1,13 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './Stats.css'; 
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './styles/Stats.css'; 
 import logo from '../images/logo _final.png';
 import img1 from '../images/Frame_5.png';
 import img2 from '../images/Frame_5.png';
 import img3 from '../images/Frame_5.png';
 
 const Stats = () => {
+  const navigate = useNavigate();
   return (
     <div>
       {/* Barre de navigation */}
@@ -15,11 +16,11 @@ const Stats = () => {
           <img src={logo} alt='Logo'/>
         </div>
        <div className='Nav-Menu'>
-                      <p> <Link to="/homepage">home</Link></p>
-                      <p><Link to="/stats">stats</Link></p>
-                      <p>  <Link to="/module">Modules</Link></p>
-                      <p><Link to="/profile">Profile</Link></p>
-                  </div>
+        <p onClick={() => {navigate("../homepage")}} className={'nav-item'}>home</p>
+        <p onClick={() => {navigate("../stats")}} className={'nav-item active'}>stats</p>
+        <p onClick={() => {navigate("../pageType2")}} className={'nav-item'}>Present</p>
+        <p onClick={() => {navigate("../profile")}} className={'nav-item'}>Profile</p>
+        </div>
       </div>
       
       {/* Conteneur principal des stats */}

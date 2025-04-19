@@ -20,8 +20,7 @@ body {
     height: 50px;
     width: auto;
     position: relative;
-    right: -999px;
-    left: 700px;
+    margin-left: -690px;
   }
   
   .logo img {
@@ -31,7 +30,7 @@ body {
   }
   
   .nav ul {
-    padding: 0;
+    padding-right: 20px;
     margin: 0;
     list-style: none;
     display: flex;
@@ -119,8 +118,12 @@ body {
   
   .btn-sec {
     height: 50px;
+    width: 150%;
     border-radius: 20px;
     background-color: rgba(78, 134, 129, 1);
+    font-weight: 600;
+    font-size: 32;
+    font-family: 'Rammetto One';
   }
   
   .rectangleExtr {
@@ -187,11 +190,11 @@ body {
     padding: 10px;
     border-radius: 15px;
     position: relative;
-    height: 80px;
+    height: 250px;
     top: -6%;
     left: 0%;
     z-index: 1;
-    background-color: rgba(33, 51, 78, 1) !important;
+    background-color: rgba(33, 51, 78, 1);
     border: none; 
   }
   

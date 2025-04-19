@@ -4,7 +4,7 @@ body {
     padding: 0;
     overflow-y: auto; /* Empêche le défilement */
     height: 100%;
-    background-image: url("../images/background.png");
+    background-image: url("../../images/background.png");
     background-size: cover; /* Couvre toute la zone */
     background-position: center; /* Centre l'image */
     background-repeat: no-repeat; /* Empêche la répétition */
@@ -48,6 +48,14 @@ body {
 .logo-esi {
   width: 60px;
   height: auto;
+}
+
+.logoNavBar {
+  height: 50px;
+  width: auto;
+  position: relative;
+  cursor: pointer;
+  margin-left: -1120px;
 }
 
 .quiz-logo {
@@ -125,7 +133,7 @@ body {
   position: relative; /* Fixe le Sidebar sans déplacer le contenu */
   left: 0;
   top: 76px; /* Ajuste la position sous la Navbar */
-  width: 145px; /* Largeur réduite */
+  width: 100px !important; /* Largeur réduite */
   height: calc(100vh - 80px); /* S'assure que le sidebar prend tout l'espace restant */
   overflow-y: scroll; /* Activation du scroll */
   overflow-x: hidden; /* Éviter le défilement horizontal */
@@ -152,7 +160,6 @@ body {
 .SidebarList .row {
   width: 100%;
   height: 90px ;
-  overflow-y: auto;
   display: flex;
   align-items: center;
   color: black;
@@ -228,7 +235,7 @@ color: rgba(36, 44, 63, 0.65);
     display: flex; 
     align-items: center; /* Center vertically */
     position: relative;
-    right: 50px ;
+    right: 65px !important;
   }
   
   /* Default icon size */

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./General.css";
+import "./styles/General.css";
 import { SidebarData } from "./SidebarData";
 
 function Sidebar() {
@@ -22,7 +22,7 @@ function Sidebar() {
               onClick={() => val.subMenu ? handleToggle(key) : navigate(val.link)}
             >
               <div className="icon">{val.icon}</div>
-              <div className="title">{val.title}</div>
+              
             </li>
 
             {/* Sous-menu */}
@@ -36,6 +36,7 @@ function Sidebar() {
                   >
                     <div className="icon">{subItem.icon}</div>
                     <div className="title">{subItem.title}</div>
+                    title
                   </li>
                 ))}
               </ul>

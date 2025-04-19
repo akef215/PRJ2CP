@@ -1,20 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import './CreateQuiz.css';
-import './General.css';
-import BtnX from './pic/btnX.png';
-import down from './pic/down.png';
-import Illustration from '../images/Photo3.png';
+import React, { useEffect, useState } from "react";
+import "./styles/CreateQuiz.css";
+import "./styles/General.css";
+import BtnX from "./pic/btnX.png";
+import down from "./pic/down.png";
+import Illustration from "../images/Photo3.png";
+import { useNavigate } from "react-router-dom";
 
 // Composant bouton de sélection avec menu déroulant
 const SelectDropdown = ({ label, options, onChange }) => {
   return (
     <div className="dropdown-container">
       <label className="select-label">{label}</label>
-      <select className="select-elem" onChange={(e) => onChange(e.target.value)}>
+      <select
+        className="select-elem"
+        onChange={(e) => {
+          const value = e.target.value;
+          const selectedOption = options.find(
+            (opt) => (opt.code || opt.titre || opt.id || "") === value
+          );
+          onChange(selectedOption);
+        }}
+      >
         <option value="">-- Select --</option>
         {options.map((option, index) => (
-          <option key={index} value={option.name || option}>
-            {option.name || option}
+          <option key={index} value={option.code || option.titre || option.id}>
+            {option.code || option.titre || option.id}
           </option>
         ))}
       </select>
@@ -38,43 +48,83 @@ const InputField = ({ placeholder, value, onChange }) => {
 const CreateSurvey = () => {
   const [modules, setModules] = useState([]);
   const [classes, setClasses] = useState([]);
-  const [surveyName, setSurveyName] = useState('');
-  const [selectedModule, setSelectedModule] = useState('');
-  const [selectedClass, setSelectedClass] = useState('');
-  const [minutes, setMinutes] = useState('');
-  const [seconds, setSeconds] = useState('');
+  const [surveyName, setSurveyName] = useState("");
+  const [selectedModule, setSelectedModule] = useState(null);
+  const [selectedClass, setSelectedClass] = useState(null);
+  const [minutes, setMinutes] = useState("");
+  const [seconds, setSeconds] = useState("");
 
   // Fetch des modules et classes
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/teachers/modules')
+    fetch("http://127.0.0.1:8000/teachers/modules")
       .then((res) => res.json())
-      .then((data) => Array.isArray(data) ? setModules(data) : setModules([]))
+      .then((data) => {
+        console.log("Modules:", data);
+        setModules(Array.isArray(data) ? data : []);
+      })
       .catch((err) => {
-        console.error('Erreur fetch modules:', err);
+        console.error("Erreur fetch modules:", err);
         setModules([]);
       });
 
-    fetch('http://127.0.0.1:8000/teachers/classes')
+    fetch("http://127.0.0.1:8000/teachers/groupes")
       .then((res) => res.json())
-      .then((data) => Array.isArray(data) ? setClasses(data) : setClasses([]))
+      .then((data) => {
+        console.log("Classes:", data);
+        setClasses(Array.isArray(data) ? data : []);
+      })
       .catch((err) => {
-        console.error('Erreur fetch classes:', err);
+        console.error("Erreur fetch classes:", err);
         setClasses([]);
       });
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const today = new Date().toISOString().split("T")[0];
     const payload = {
-      name: surveyName,
-      module: selectedModule,
-      classe: selectedClass,
-      time: `${minutes}:${seconds}`
+      title: surveyName,
+      date: today,
+      module: selectedModule?.code,
+      duree: parseInt(minutes + seconds / 60),
+      description: "", // Tu peux rendre ça dynamique
+      groupes: {
+        group_ids: [selectedClass?.id],
+      },
+      type: "S",
     };
 
-    console.log('Données du sondage :', payload);
-    // TODO : envoyer les données au backend via fetch POST
+    console.log("Payload à envoyer :", payload);
+
+    try {
+      // Attendre la réponse de fetch
+      const res = await fetch("http://localhost:8000/quizzes/add_quiz", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.status === 200) {
+        // Attendre que la réponse JSON soit traitée
+        const data = await res.json();
+        console.log("Réponse du serveur :", data); // Log pour la réponse
+
+        if (data.id) {
+          console.log("Survey créé avec succès !");
+          navigate(`/addSurvey/${data.id}`);
+        } else {
+          console.error("ID manquant dans la réponse du serveur.");
+        }
+      } else {
+        console.error("Erreur lors de la création :", res.status);
+      }
+    } catch (err) {
+      console.error("Erreur d'envoi :", err);
+    }
   };
 
+  const navigate = useNavigate();
   return (
     <div className="outerRectangle">
       <div className="innerRectangle">
@@ -82,7 +132,7 @@ const CreateSurvey = () => {
         <div className="close-button-container">
           <button
             onClick={() => window.history.back()}
-            style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+            style={{ border: "none", background: "none", cursor: "pointer" }}
           >
             <img src={BtnX} alt="Close" />
           </button>
@@ -104,7 +154,6 @@ const CreateSurvey = () => {
               options={modules}
               onChange={setSelectedModule}
             />
-
             <SelectDropdown
               label="Select Class"
               options={classes}
@@ -114,7 +163,7 @@ const CreateSurvey = () => {
             {/* Temps */}
             <div className="dropdown-container">
               <label className="select-label">Select Time</label>
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ display: "flex", gap: "10px" }}>
                 <input
                   type="number"
                   placeholder="Min"
@@ -140,7 +189,7 @@ const CreateSurvey = () => {
 
         {/* Boutons */}
         <div className="action-buttons">
-          <button className="cancel-button" onClick={() => window.history.back()}>
+          <button className="cancel-button" onClick={() => navigate("/select")}>
             Back
           </button>
           <button className="next-button" onClick={handleSubmit}>

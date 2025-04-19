@@ -1,5 +1,5 @@
 import React from 'react';
-import './Select.css';
+import './styles/Select.css';
 import Frame1 from '../images/Frame_1.png';
 import Frame2 from '../images/Frame_2.png';
 import Frame3 from '../images/Frame_3.png';

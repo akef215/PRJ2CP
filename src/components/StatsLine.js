@@ -1,5 +1,5 @@
 import React from 'react';
-import './Stats.css'; 
+import './styles/Stats.css'; 
 import logo from '../images/logo _final.png';
 import user from '../images/user.png';
 import { Bar, Doughnut, Line } from "react-chartjs-2";

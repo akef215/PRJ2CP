@@ -1,5 +1,5 @@
 import React from 'react';
-import "./GeneralT1.css";
+import "./styles/GeneralT1.css";
 import Add from '../images/icon-add.png';
 
 

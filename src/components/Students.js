@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
-import "./Students.css";
+import "./styles/Students.css";
 import S from "../images/S.png";
 import A from "../images/A.png";
+import photo from '../images/photo.png'
 
 const Students = () => {
   const [students, setStudents] = useState([]);
   const [records, setRecords] = useState([]);
   const [newStudent, setNewStudent] = useState({
-    matricule: '',
     name: '',
+    level: '',
+    groupe_id: '',
+    id: '',
     email: '',
-    photo: ''
+    password: ''
   });
   const [showForm, setShowForm] = useState(false);
 
@@ -47,32 +50,33 @@ const Students = () => {
   // Ajouter un nouvel étudiant
   const handleAddStudent = async (e) => {
     e.preventDefault();
-    if (!newStudent.matricule || !newStudent.name || !newStudent.email) {
+    if (!newStudent.id || !newStudent.name || !newStudent.email || !newStudent.groupe_id || !newStudent.level) {
       alert('Veuillez remplir tous les champs obligatoires');
       return;
     }
     
     try {
-      const response = await fetch("http://127.0.0.1:8000/teachers/students", {
+      const response = await fetch("http://127.0.0.1:8000/students/SignUp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(newStudent)
       });
+      console.log(response.body);
       const data = await response.json();
       console.log("Nouvel étudiant ajouté :", data);
 
       // On s'assure que l'objet retourné contienne bien "matricule"
       const studentAdded = {
         ...data,
-        matricule: data.matricule || newStudent.matricule  // Si le backend renvoie "id" au lieu de "matricule", on utilise la valeur saisie
+        id: data.id || newStudent.id  // Si le backend renvoie "id" au lieu de "id", on utilise la valeur saisie
       };
 
       // Mettez à jour la liste des étudiants
       setStudents([...students, studentAdded]);
       setRecords([...records, studentAdded]);
-      setNewStudent({ matricule: '', name: '', email: '', photo: '' });
+      setNewStudent({ id: '', name: '', email: '', photo: '' });
       setShowForm(false);
     } catch (error) {
       console.error("Erreur lors de l'ajout de l'étudiant :", error);
@@ -85,9 +89,11 @@ const Students = () => {
       selector: row => row.photo,
       cell: row => (
         <img 
-          src={row.photo || "https://via.placeholder.com/50"} 
+          src={row.photo || photo} 
           alt="Student" 
-          style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
+          style={{ width: '50px', height: '50px', borderRadius: '50%',   display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center' }} 
         />
       ),
       sortable: false
@@ -106,7 +112,6 @@ const Students = () => {
     <div className='container'>
       <div className='header-controls'>
         <div className='search'>
-          <img src={S} alt="Search"/> 
           <input type='text' onChange={handleFilter} placeholder='Search'/>
         </div>
         <div className='ajouter'>
@@ -126,8 +131,8 @@ const Students = () => {
             <input
               type="text"
               placeholder="Matricule *"
-              value={newStudent.matricule}
-              onChange={(e) => setNewStudent({...newStudent, matricule: e.target.value})}
+              value={newStudent.id}
+              onChange={(e) => setNewStudent({...newStudent, id: e.target.value, password: e.target.value,})}
               required
             />
             <input
@@ -146,9 +151,17 @@ const Students = () => {
             />
             <input
               type="text"
-              placeholder="URL de la photo"
-              value={newStudent.photo}
-              onChange={(e) => setNewStudent({...newStudent, photo: e.target.value})}
+              placeholder="Level *"
+              value={newStudent.level}
+              onChange={(e) => setNewStudent({...newStudent, level: e.target.value.toUpperCase()})}
+              required
+            />
+            <input
+              type="text"
+              placeholder="Groupe *"
+              value={newStudent.groupe_id}
+              onChange={(e) => setNewStudent({...newStudent, groupe_id: newStudent.level + e.target.value})}
+              required
             />
             <button type="submit" className="add-button">
               Confirmer l'ajout
@@ -163,6 +176,7 @@ const Students = () => {
         fixedHeader 
         noDataComponent="Aucun étudiant trouvé" 
       />
+      <footer></footer>
     </div>
   );
 };

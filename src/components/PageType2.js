@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Image from '../images/Frame_1.png';
-import "./PageType2.css";
+import logo from '../images/logo _final.png';
+import "./styles/PageType2.css";
+import { useNavigate } from 'react-router-dom';
 
 const PageType2 = () => {
   // États pour le temps
@@ -8,7 +10,7 @@ const PageType2 = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [timerStarted, setTimerStarted] = useState(false);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
-  
+  const navigate = useNavigate();
   // États pour la note du quiz
   const [quizNote, setQuizNote] = useState('');
   const [noteSubmitted, setNoteSubmitted] = useState(false);
@@ -56,6 +58,15 @@ const PageType2 = () => {
 
   return (
     <div>
+              <div className='Nav'>
+                  <div className='Nav-Logo'><img src={logo} alt='Logo'/></div>
+                  <div className='Nav-Menu'>
+                      <p onClick={() => {navigate("../homepage")}} className={'nav-item'}>home</p>
+                      <p onClick={() => {navigate("../stats")}} className={'nav-item'}>stats</p>
+                      <p onClick={() => {navigate("../pageType2")}} className={'nav-item active'}>Present</p>
+                      <p onClick={() => {navigate("../profile")}} className={'nav-item'}>Profile</p>
+                  </div>
+              </div>
       <div className='externe'>
         <div className='btn-haut'>
           {/* Affiche l'input et le bouton Démarrer tant que le timer n'est pas lancé */}

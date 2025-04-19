@@ -1,10 +1,8 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import LList from "../images/Rectangle 8.png";
-import Quiz from "../images/QUIZ.png";
 import Esi from "../images/logo.png";
-import Notif from "../images/notif.png";
 import Profile from "../images/user.png";
-import "./General.css";
+import "./styles/General.css";
 
 export default function Navbar({ toggleSidebar }) {
   return (
@@ -17,20 +15,12 @@ export default function Navbar({ toggleSidebar }) {
       >
         <img src={LList} className="navbar-icon" alt="Toggle Sidebar" />
       </button>
-
-      {/* Logo et Titre */}
-      <div className="nav-center">
-        <img src={Esi} className="logo-esi" alt="ESI Logo" />
-        <Link to="/homepage" className="site-title">
-          <img src={Quiz} className="quiz-logo" alt="Quiz Logo" />
-        </Link>
-      </div>
-
-      {/* Icônes de Notifications et Profil */}
       <ul className="nav-icons">
-        <CustomLink to="/notifications">
-          <img src={Notif} className="icon-end" alt="Notifications" />
+      {/* Logo et Titre */}
+        <CustomLink to='/HomePage'>
+          <img src={Esi} className="logoNavBar" alt="ESI Logo" />
         </CustomLink>
+      {/* Icônes de Profil */}
         <CustomLink to="/profile">
           <img src={Profile} className="icon-end" alt="Profile" />
         </CustomLink>

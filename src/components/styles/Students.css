@@ -4,7 +4,12 @@
     border: 8px solid rgba(101, 117, 153, 1);
     border-radius : 55px ;
     overflow: hidden !important;
-    width: 100% !important;
+    position: relative;
+    margin: 50px;
+    padding-bottom: 0;
+}
+footer {
+    padding-top: 50px;
 }
 .data-table-wrapper {
     overflow-x: hidden !important;

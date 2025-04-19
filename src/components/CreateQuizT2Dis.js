@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NavbarT1 from './NavBarT1.js';
 import SidebarT1 from './SideBarT1.js';
-import './GeneralT1.css';
+import './styles/GeneralT1.css';
 import Image from '../images/photo1.png' ;
 const CreateQuizT2Dis = () => {
   return (

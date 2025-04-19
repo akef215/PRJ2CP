@@ -5,7 +5,7 @@ body {
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
     background: #E8EEF1;
-    background-image: url('../images/background.png');
+    background-image: url('../../images/background.png');
 }
 
 /* Navigation Bar */
@@ -41,6 +41,8 @@ body {
     padding: 8px 16px;
     border-radius: 12px;
     transition: background 0.3s ease;
+    top: 20px;
+    right: 800px !important;
 }
 
 .Nav-Menu p:hover, .Nav-Menu .active {
@@ -54,36 +56,43 @@ body {
     align-items: center;
 }
 
-.profile-icon {
-    width: 180px;
-    height: 180px;
-    background: rgba(239, 255, 253, 1);
+.profile-iconP {
+    width: 120px;
+    height: 120px;
+    background:rgba(239, 255, 253, 1);
     border-radius: 50%;
-    margin: 40px auto 20px auto;
+    border: 5px solid rgba(154, 199, 196, 1);
+    margin: 40px auto;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
+    right: 680px ;
+    top: 100px;
+    right: 550px;
+    z-index: 999;
     cursor: pointer;
 }
 
-.profile-icon img {
-    width: 60%;
+.profile-iconP img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
 }
 
 /* Image Upload Button */
 .add-image {
     width: 60px;
     position: absolute;
-    top: 145px;
-    right: 85%;
+    top: 200px;
+    right: 1145px;
     border: none;
     background: none;
     cursor: pointer;
-     background-color: rgba(239, 255, 253, 1);
-     border: 2px solid rgba(81, 131, 129, 1);
-     border-radius: 13px;
+    background-color: rgba(239, 255, 253, 1);
+    border: 2px solid rgba(81, 131, 129, 1);
+    border-radius: 13px;
 }
 
 .add-image img {
@@ -111,7 +120,7 @@ body {
 /* Welcome Message */
 .rectContainer .msg-welcome {
     width: 400px;
-    height: 70px;
+    height: 100px;
     display: flex;
     justify-content: flex-start;
     align-self: flex-start;
@@ -141,13 +150,12 @@ body {
     flex-direction: column;
     align-items: center;
     align-self: flex-end;
-  
     position: relative;
     top : -140px ;
-    left : 800px ;
+    left : 40% ;
 }
 
-.list-elem {
+.list-elem, .red {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -171,6 +179,11 @@ body {
 
 .list-elem:hover {
     background-color: rgba(81, 131, 129, 1);
+    color: white;
+    cursor: pointer;
+}
+.red:hover {
+    background-color: rgb(156, 73, 73);
     color: white;
     cursor: pointer;
 }

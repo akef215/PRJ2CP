@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import loginImage from './pic/logpic.png';
-import GoogleIcon from './pic/googlepic.png';
 import eyeIcon from './pic/show.png';
-import './Login.css';
-import { Link, useNavigate } from 'react-router-dom';
+import './styles/Login.css';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -29,7 +28,7 @@ function Login() {
 
       if (response.status === 200) {
         // Succès : stocker le token, rediriger...
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.access_token);
         navigate('/homePage');
       } else {
         // Erreur : afficher message
@@ -84,11 +83,6 @@ function Login() {
                   >
                     <img src={eyeIcon} alt="Toggle Password Visibility" />
                   </button>
-                 <div className='frgt-pass'> <p>
-                Forgot your password ?{' '}
-                <Link to="/recover">Click here</Link>
-              </p>
-              </div>
                 </div>
               </div>
 

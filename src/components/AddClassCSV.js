@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'; 
 import Papa from 'papaparse';
-import './CreateQuiz.css';
-import './General.css';
+import './styles/CreateQuiz.css';
+import './styles/General.css';
 import BtnX from './pic/btnX.png';
 import down from './pic/down.png';
 import Illustration from '../images/photo.png';
@@ -90,7 +90,7 @@ const AddClassCSV = () => {
         console.error(`❌ Échec de l'envoi pour ${student.id}:`, error);
       }
     }
-  
+    navigate('/classesPage');
     setMessage("📤 Importation terminée !");
   };
   

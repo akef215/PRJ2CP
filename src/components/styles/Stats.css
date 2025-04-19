@@ -5,9 +5,8 @@ body {
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
     background: #E8EEF1;
-    background-image: url('../images/background.png');
+    background-image: url('../../images/background.png');
 }
-
 
 /* Navigation Bar */
 .Nav {
@@ -31,8 +30,6 @@ body {
    
 }
 
-
-
 .Nav-Menu {
     display: flex;
     gap: 10px;
@@ -40,17 +37,16 @@ body {
 
 .Nav-Menu p {
     font-family: Montserrat;
-font-weight: 600;
-font-size: 18px;
-line-height: 100%;
-letter-spacing: 0%;
-text-align: center;
-vertical-align: middle;
-text-decoration: underline;
-text-decoration-style: solid;
-text-decoration-offset: 0%;
-text-decoration-thickness: 2%;
-text-decoration-skip-ink: auto;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-thickness: 2%;
+    text-decoration-skip-ink: auto;
     margin: 0;
     cursor: pointer;
     padding: 8px 16px;
@@ -70,15 +66,11 @@ text-decoration-skip-ink: auto;
     border-radius: 50%;
     border: 5px solid rgba(154, 199, 196, 1);
     margin: 40px auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    right: 680px ;
-    top: 5%;
+    left: -550px !important;
+    top: 100px;
     z-index: 999;
-    }
+}
 .profile-icon img{
     border-radius: 50%;
     width: 100%;
@@ -91,7 +83,7 @@ text-decoration-skip-ink: auto;
     justify-content:center;
     align-items: center;
     position: relative;
-    left : 12% ;
+    left : 160px;
     top: -140px;
     background-color:  rgba(154, 199, 196, 1);
     border-radius: 22px;
@@ -295,7 +287,7 @@ vertical-align: middle;
 /* Styles des cartes */
 .Rec-1, .Rec-2, .Rec-3 {
     width: 300px; /* Largeur fixe pour chaque carte */
-    height: 450px;
+    height: 400px;
     background: rgba(239, 255, 253, 1); /* Couleur de fond */
     padding: 20px;
     border-radius: 10px;

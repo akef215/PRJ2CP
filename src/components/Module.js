@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import './Module.css';
+import './styles/Module.css';
 import moduleImage from './pic/Module.png';
 import Btn from './pic/plus.png';
 import threeDot from '../images/dots 1.png';

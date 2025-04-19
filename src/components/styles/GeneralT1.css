@@ -32,7 +32,7 @@ body {
 
 .btn-edit {
   width: 150px;
-  margin-left: -850px;
+  margin-left: -1000px;
   margin-top: 5px;
   padding: 0.5rem 1rem;
   background-color: rgba(136, 183, 175, 1);
@@ -586,7 +586,7 @@ a.btn-check {
 }
 .close-btn {
   position: relative;
-  top: -145px;
+  top: -170px;
   left: 120px;
   background: #ff4444;
   color: white;

@@ -2,7 +2,9 @@
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
+
   }
+ 
   .titre{
     display: flex;
     justify-content: center;
@@ -23,7 +25,6 @@ vertical-align: middle;
   }
   
   .classes-list {
-    border: 1px solid #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
     
@@ -86,11 +87,16 @@ color:rgba(243, 249, 255, 1);
     cursor: pointer;
     position: relative;
     left: 10%;
+    bottom: 10px;
   }
-  
+  .view-students{
+    position: relative;
+    bottom: 10px; ;
+  }
   .view-students:hover,
   .delete-btn:hover {
     opacity: 0.9;
+
   }
   .class-icon {
     width: 60px;

@@ -1,6 +1,6 @@
 /* Base Styles */
 body {
-  background-image: url(../images/background.png);
+  background-image: url(../../images/background.png);
   background-size: cover; /* Pour que l'image couvre tout l'arrière-plan */
   background-position: center; /* Pour centrer l'image */
   background-repeat: no-repeat;
@@ -16,6 +16,10 @@ body {
   overflow: hidden; /* Empêche le défilement */
   width: 20%;
 }
+.innerRectangle h1 {
+  border-bottom: none;
+}
+
 
 .outerRectangle {
   padding: 20px;
@@ -99,6 +103,8 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  position: relative;
+  bottom: 60px; ;
 }
 
 /* Image section */
@@ -117,25 +123,27 @@ h1 {
   max-width: 400px;
   height: auto;
   position: relative;
-  top: -35px;
+ bottom: 90px;
   margin-right: 60px;
   box-shadow: 12px 10px 12.9px 0px rgba(0, 0, 0, 0.25);
   background-color: none;
+  border-radius: 23px;
 }
 
 /* Select button */
 .select-elem {
-  display: flex;
-  align-items: center;
   border: 2px solid rgba(0, 0, 0, 0.7);
   background-color: #f3f9ff;
   border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 10px 15px;
   width: 100%;
   height: 50px;
-  justify-content: space-between;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.7);
+  outline: none;
+  cursor: pointer;
 }
 
 .select-elem:hover {
@@ -181,6 +189,20 @@ h1 {
   line-height: 1.2;
   color: rgba(0, 0, 0, 0.7);
   margin-right: 10px;
+}
+.edit-container, .archive-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  z-index: 999;
+  width: 90%;
+  max-width: 500px;
+  height: auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Style pour le champ de saisie Quiz Name */
@@ -229,6 +251,7 @@ h1 {
   line-height: 1.2;
   color: #f3f9ff;
   position: relative;
+  bottom: 60px; ;
 }
 
 .cancel-button:hover,

@@ -1,6 +1,8 @@
 import React from 'react'
-import './PageType2.css' ;
+import './styles/PageType2.css' ;
+import { useNavigate } from 'react-router-dom';
 const Page2Completed = () => {
+  const navigate = useNavigate();
   return (
     <div >
         <div className='rectangle'>
@@ -8,7 +10,7 @@ const Page2Completed = () => {
         </div> 
         <div className='btns'>
             <button className='btn1'>Check stats</button>
-            <button className='btn2'>Go Home</button>
+            <button className='btn2' onClick={() => navigate('/homePage')}>Go Home</button>
         </div>
     </div>
   )

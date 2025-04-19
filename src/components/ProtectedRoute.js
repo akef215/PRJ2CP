@@ -1,16 +1,24 @@
-// ProtectedRoute.js
-//protected routes that only logged-in users can
-//  access. This will ensure that users cannot 
-// access the quiz creation page without logging in.
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = () => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
+const isTokenValid = (token) => {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Math.floor(Date.now() / 1000);
+    return payload.exp > currentTime;
+  } catch (err) {
+    return false;
+  }
+};
 
-  // If the user is logged in, render the child routes
-  // Otherwise, redirect to the login page
-  return !isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+
+  if (!token || !isTokenValid(token)) {
+    localStorage.removeItem("token");
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 };
 
 export default ProtectedRoute;

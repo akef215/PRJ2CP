@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import './Feed.css';
+import './styles/Feed.css';
 import logo from '../images/logo _final.png';
 
 const FeedIndiv = () => {
@@ -14,10 +14,9 @@ const FeedIndiv = () => {
 
     const fetchFeedback = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/feedback', {
+        const res = await fetch('http://127.0.0.1:8000/feedback/feedback', {
           signal: abortController.signal,
         });
-        
         if (!res.ok) {
           const errorData = await res.json();
           throw new Error(errorData.message || "Erreur lors de la récupération du feedback.");
@@ -53,15 +52,15 @@ const FeedIndiv = () => {
   return (
     <div>
       {/* Navigation bar - Classes conservées */}
-      <div className='Nav'>
-        <div className='Nav-Logo'><img src={logo} alt='Logo' /></div>
-        <div className='Nav-Menu'>
-          <p><Link to="/homepage">Home</Link></p>
-          <p><Link to="/stats">Stats</Link></p>
-          <p><Link to="/module">Modules</Link></p>
-          <p><Link to="/profile">Profile</Link></p>
+        <div className='Nav'>
+            <div className='Nav-Logo'><img src={logo} alt='Logo'/></div>
+            <div className='Nav-Menu'>
+                <p onClick={() => navigate("../homepage")}>home</p>
+                <p onClick={() => navigate("../stats")}>stats</p>
+                <p onClick={() => navigate("../module")}>Modules</p>
+                <p onClick={() => navigate("../profile")}>Profile</p>
+            </div>
         </div>
-      </div>
 
       {/* Contenu principal - Classes originales conservées */}
       <div className='rec-ext'>

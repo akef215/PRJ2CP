@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import './CreateQuiz.css';
-import './General.css';
+import './styles/CreateQuiz.css';
+import './styles/General.css';
 import BtnX from './pic/btnX.png';
 import down from './pic/down.png';
 import Illustration from '../images/photo1.png';
@@ -71,7 +71,7 @@ const CreateQuiz = () => {
     );
   };  
 
-  const handleNextClick = () => {
+  const handleNextClick = async () => {
     const today = new Date().toISOString().split('T')[0];
     const payload = {
       title: quizName,
@@ -81,32 +81,40 @@ const CreateQuiz = () => {
       description: "",  // Tu peux rendre ça dynamique
       groupes: {
         group_ids: [selectedClass]
-      }
+      },
+      type: selectedType
     };
   
     console.log("Payload à envoyer :", payload);
   
     // Envoi au back
-    fetch('http://localhost:8000/quizzes/add_quiz', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload)
-    })
-    .then(res => {
+    try {
+      // Attendre la réponse de fetch
+      const res = await fetch("http://localhost:8000/quizzes/add_quiz", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
       if (res.status === 200) {
-        console.log("Quiz créé avec succès !");
-        navigate('../CreateQuizT1');  // Redirection vers la page Select
+        // Attendre que la réponse JSON soit traitée
+        const data = await res.json();
+        console.log("Réponse du serveur :", data); // Log pour la réponse
+
+        if (data.id) {
+          console.log("Quiz créé avec succès !");
+          navigate(`/addSurvey/${data.id}`);
+        } else {
+          console.error("ID manquant dans la réponse du serveur.");
+        }
       } else {
         console.error("Erreur lors de la création :", res.status);
       }
-    })
-    .then(data => {
-      console.log("Réponse du serveur :", data);
-      // Redirection ou feedback ici
-    })
-    .catch(err => console.error("Erreur d'envoi :", err));
+    } catch (err) {
+      console.error("Erreur d'envoi :", err);
+    }
   };
   
   const navigate = useNavigate();  // Appel du hook ici, au top niveau
