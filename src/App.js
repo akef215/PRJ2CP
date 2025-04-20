@@ -200,7 +200,7 @@ function App() {
         <Route element={<StatsLine />} path="/statsLine" />
         <Route element={<StatsBar />} path="/statsBar" />
         <Route element={<FeedBackView />} path="/feedbacks" />
-        <Route element={<FeedIndiv />} path="/feedIndiv" />
+        <Route element={<FeedIndiv />} path="/feedbacks" />
         <Route path="/feedback/:id" element={<FeedIndiv />} />
         <Route path="/" element={<Login />} />
       </Routes>

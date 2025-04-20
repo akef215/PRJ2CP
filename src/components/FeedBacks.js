@@ -12,7 +12,7 @@ const FeedBackview = () => {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/feedback/feedback")
+      .get("http://127.0.0.1:8000/feedback")
       .then((res) => setRecords(res.data))
       .catch((err) =>
         console.error("Erreur lors du chargement des feedbacks :", err)
@@ -38,7 +38,7 @@ const FeedBackview = () => {
       selector: (row) => row.description,
       cell: (row) => (
         <div className="data-cell">
-          <p>{row.description?.split(" ").slice(0, 15).join(" ") + "..."}</p>
+          <p>{row.description?.split(" ").slice(0, 13).join(" ") + "..."}</p>
         </div>
       ),
       width: "60%",

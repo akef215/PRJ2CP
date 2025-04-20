@@ -1,29 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import './styles/Feed.css';
-import logo from '../images/logo _final.png';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import "./styles/Feed.css";
+import logo from "../images/logo _final.png";
 
 const FeedIndiv = () => {
   const navigate = useNavigate();
   const [feedback, setFeedback] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const {id} = useParams();
 
   useEffect(() => {
     const abortController = new AbortController();
 
     const fetchFeedback = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/feedback/feedback', {
+        const res = await fetch(`http://127.0.0.1:8000/feedback/${id}`, {
           signal: abortController.signal,
         });
+
         if (!res.ok) {
           const errorData = await res.json();
-          throw new Error(errorData.message || "Erreur lors de la récupération du feedback.");
+          throw new Error(
+            errorData.message || "Erreur lors de la récupération du feedback."
+          );
         }
-        
+
         const data = await res.json();
-        setFeedback(data[0]); // Adaptez selon la structure de votre API
+
+        // Tu récupères description et groupe ici
+        const { description, groupe } = data;
+
+        setFeedback({ description, groupe }); // ou stocke-les séparément si tu veux
       } catch (err) {
         if (!abortController.signal.aborted) {
           setError(err.message);
@@ -42,50 +50,62 @@ const FeedIndiv = () => {
 
   const handleMarkAsRead = async () => {
     try {
-      // Ajoutez votre logique de mise à jour ici
-      alert('Marqué comme lu');
+      const res = await fetch(`http://127.0.0.1:8000/feedback/${id}`, {
+        method: "DELETE",
+      });
+  
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Erreur lors de la suppression.");
+      }
+  
+      navigate('/feedbacks'); // Retour à la page précédente
     } catch (err) {
       console.error("Erreur :", err);
+      alert("Une erreur est survenue : " + err.message);
     }
   };
+  
 
   return (
     <div>
       {/* Navigation bar - Classes conservées */}
-        <div className='Nav'>
-            <div className='Nav-Logo'><img src={logo} alt='Logo'/></div>
-            <div className='Nav-Menu'>
-                <p onClick={() => navigate("../homepage")}>home</p>
-                <p onClick={() => navigate("../stats")}>stats</p>
-                <p onClick={() => navigate("../module")}>Modules</p>
-                <p onClick={() => navigate("../profile")}>Profile</p>
-            </div>
+      <div className="Nav">
+        <div className="Nav-Logo">
+          <img src={logo} alt="Logo" />
         </div>
+        <div className="Nav-Menu">
+          <p onClick={() => navigate("../homepage")}>home</p>
+          <p onClick={() => navigate("../stats")}>stats</p>
+          <p onClick={() => navigate("../module")}>Modules</p>
+          <p onClick={() => navigate("../profile")}>Profile</p>
+        </div>
+      </div>
 
       {/* Contenu principal - Classes originales conservées */}
-      <div className='rec-ext'>
-        <div className='btnHaut'>
-          <button className='from'>
-            <p>Feedback from: {feedback?.class || "Unknown class"}</p>
+      <div className="rec-ext">
+        <div className="btnHaut">
+          <button className="from">
+            <p>Feedback from: {feedback?.groupe || "Unknown class"}</p>
           </button>
         </div>
 
-        <div className='rec-int'>
+        <div className="rec-int">
           {loading ? (
             <p>Chargement...</p>
           ) : error ? (
-            <p style={{ color: 'red' }}>{error}</p>
+            <p style={{ color: "red" }}>{error}</p>
           ) : (
-            <p>{feedback?.fullContent || "Aucun contenu disponible."}</p>
+            <p>{feedback?.description || "Aucun contenu disponible."}</p>
           )}
         </div>
 
         {/* Boutons avec classes originales */}
-        <div className='btnBas'>
-          <button className='asRead' onClick={handleMarkAsRead}>
+        <div className="btnBas">
+          <button className="asRead" onClick={handleMarkAsRead}>
             <p>Mark as read</p>
           </button>
-          <button className='Back' onClick={() => navigate(-1)}>
+          <button className="Back" onClick={() => navigate(-1)}>
             <p>Go back</p>
           </button>
         </div>
