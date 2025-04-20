@@ -13,13 +13,28 @@ from app.models.quiz_groupe import quiz_groupe
 from app.models.results import Result
 from app.schemas.quiz import QuizCreate, AnswerSubmission
 from app.schemas.question import QuestionModel
+from app.schemas.question import QuestionChange
 from app.schemas.choice import ChoiceModel
+from app.schemas.choice import ChoiceChange
 from app.schemas.quiz import QuizOut
+from app.schemas.quiz import QuizChange
 
 async def get_available_quizzes_service(db: AsyncSession) -> List[Quiz]:
     """Fetch quizzes that are available (i.e., their date is today or in the future)."""
     today = date.today()
-    stmt = select(Quiz).where(Quiz.date >= today)
+    stmt = select(Quiz).where(Quiz.date >= today, Quiz.type_quizz != 'S')
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
+async def get_quiz(quiz_id: int, db: AsyncSession):
+    stmt = select(Quiz).where(Quiz.id == quiz_id)
+    result = await db.execute(stmt)
+    return result.scalars().first()
+
+async def get_surveys(db: AsyncSession) -> List[Quiz]:
+    """Fetch Surveys that are available (i.e., their date is today or in the future)."""
+    today = date.today()
+    stmt = select(Quiz).where(Quiz.date >= today, Quiz.type_quizz == 'S')
     result = await db.execute(stmt)
     return result.scalars().all()
 
@@ -31,7 +46,7 @@ async def add_quiz_to_groups(db: AsyncSession, quiz_id: int, group_ids: list[str
 
 async def add_quiz(quizz: QuizCreate, db: AsyncSession):
     # Instanciation d'un quiz
-    quiz = Quiz(title=quizz.title, date=quizz.date, description=quizz.description, module_code=quizz.module, duree=quizz.duree)
+    quiz = Quiz(title=quizz.title, date=quizz.date, description=quizz.description, module_code=quizz.module, duree=quizz.duree, type_quizz=quizz.type)
 
     # La recherche du module
     result = await db.execute(select(Module).where(Module.code == quizz.module))
@@ -129,14 +144,14 @@ async def delete_choice_service(choice_id: int, quiz_id: int, question_id: int, 
     if not question:
         raise HTTPException(status_code=404, detail=f"Question not found")
 
-    result = await db.execute(select(Choice).where(Choice.choice_id == choice_id, Choice.question_id == question_id, Choice.id == quiz_id))
+    result = await db.execute(select(Choice).where(Choice.choice_id == choice_id, Choice.question_id == question.id, Choice.quiz_id == quiz_id))
     choice = result.scalars().first()
     await db.delete(choice)
     await db.commit()
 
     return {"message": f"Choice deleted successfully"}
 
-async def update_quiz(quiz_id: int, quiz_data: QuizOut, db: AsyncSession):
+async def update_quiz(quiz_id: int, quiz_data: QuizChange, db: AsyncSession):
     # Vérifier si le quiz existe
     result = await db.execute(select(Quiz).where(Quiz.id == quiz_id))
     quiz = result.scalars().first()
@@ -145,8 +160,8 @@ async def update_quiz(quiz_id: int, quiz_data: QuizOut, db: AsyncSession):
 
     # Mise à jour des champs fournis
     quiz.title = quiz_data.title if quiz_data.title else quiz.title
-    quiz.description = quiz_data.description if quiz_data.description else quiz.description
     quiz.duree = quiz_data.duree if quiz_data.duree else quiz.duree
+    quiz.module_code = quiz_data.module_code if quiz_data.module_code else quiz.module_code
     quiz.date = quiz_data.date if quiz_data.date else quiz.date
 
     await db.commit()
@@ -154,7 +169,7 @@ async def update_quiz(quiz_id: int, quiz_data: QuizOut, db: AsyncSession):
 
     return quiz
 
-async def update_question(quiz_id: int, question_id: int, question_data: QuestionModel, db: AsyncSession):
+async def update_question(quiz_id: int, question_id: int, question_data: QuestionChange, db: AsyncSession):
     # Vérifier si la question existe
     result = await db.execute(select(Question).where(Question.quiz_id == quiz_id, Question.question_id == question_id))
     question = result.scalars().first()
@@ -171,9 +186,15 @@ async def update_question(quiz_id: int, question_id: int, question_data: Questio
 
     return question
 
-async def update_choice(quiz_id: int, question_id: int, choice_id: int, choice_data: ChoiceModel, db: AsyncSession):
+async def update_choice(quiz_id: int, question_id: int, choice_id: int, choice_data: ChoiceChange, db: AsyncSession):
+
+    result = await db.execute(select(Question).where(Question.quiz_id == quiz_id, Question.question_id == question_id))
+    question = result.scalars().first()
+
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
     # Vérifier si le choix existe
-    result = await db.execute(select(Choice).where(Choice.quiz_id == quiz_id, Choice.question_id == question_id, Choice.choice_id == choice_id))
+    result = await db.execute(select(Choice).where(Choice.quiz_id == quiz_id, Choice.question_id == question.id, Choice.choice_id == choice_id))
     choice = result.scalars().first()
 
     if not choice:

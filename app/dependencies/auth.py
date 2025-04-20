@@ -9,3 +9,11 @@ async def get_current_student(token: str = Depends(oauth2_scheme)):
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
     return payload
+
+oauth2_scheme_teacher = OAuth2PasswordBearer(tokenUrl="/auth/teachers/login")
+
+async def get_current_teacher(token: str = Depends(oauth2_scheme_teacher)):
+    payload = verify_access_token(token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return payload

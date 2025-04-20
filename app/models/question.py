@@ -17,3 +17,4 @@ class Question(Base):
 
     choices = relationship("Choice", back_populates="questions", cascade="all, delete-orphan")
     quizzes = relationship("Quiz", back_populates="questions")
+    quiz_id = mapped_column(Integer, ForeignKey("quizzes.id", ondelete="CASCADE"))

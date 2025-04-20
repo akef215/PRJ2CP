@@ -7,8 +7,8 @@ class Choice(Base):
 
     id : Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, nullable=False)
     choice_id : Mapped[int] = mapped_column(Integer, nullable=False)
-    quiz_id : Mapped[int] = mapped_column(Integer, ForeignKey("quizzes.id"))
-    question_id : Mapped[int] = mapped_column(Integer, ForeignKey("questions.id", ondelete="CASCADE"))
+    quiz_id : Mapped[int] = mapped_column(ForeignKey("quizzes.id", ondelete="CASCADE"))
+    question_id : Mapped[int] = mapped_column(ForeignKey("questions.id", ondelete="CASCADE"))
     score : Mapped[float] = mapped_column(Float)
     answer : Mapped[str] = mapped_column(Text, nullable=False)
 

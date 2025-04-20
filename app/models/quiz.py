@@ -10,8 +10,8 @@ class Quiz(Base):
     title: Mapped[str] = mapped_column(String(50))
     date = mapped_column(Date, nullable=False)
     description: Mapped[str] = mapped_column(Text)
-    module_code: Mapped[str] = mapped_column(String(10), ForeignKey("modules.code"), nullable=False)
-    type_quizz: Mapped[str] = mapped_column(String(1), default="A")
+    module_code: Mapped[str] = mapped_column(String(10), ForeignKey("modules.code", ondelete="CASCADE"), nullable=False)
+    type_quizz: Mapped[str] = mapped_column(String(1), default="1")
     duree: Mapped[int] = mapped_column(Integer, nullable=False)
 
     groupes = relationship("Groupe", secondary=quiz_groupe, back_populates="quizzes")

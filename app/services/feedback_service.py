@@ -35,3 +35,22 @@ async def get_feedbacks_by_module(module: str, db: AsyncSession):
     )
     feedbacks = result.scalars().all()
     return feedbacks
+
+async def get_feedbacks_by_id(id: int, db: AsyncSession):
+    result = await db.execute(
+        select(Feedback).filter(Feedback.id == id)
+    )
+    feedback = result.scalars().first()
+    return feedback
+
+async def delete_feedback(id: int, db: AsyncSession):
+    result = await db.execute(
+        select(Feedback).filter(Feedback.id == id)
+    )
+    feedback = result.scalars().first()
+    if not feedback:
+        return "erreur"
+    
+    await db.delete(feedback);
+    await db.commit()
+    return "success"

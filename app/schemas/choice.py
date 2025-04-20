@@ -4,3 +4,7 @@ class ChoiceModel(BaseModel):
     id: int
     score: float
     answer: str
+
+class ChoiceChange(BaseModel):
+    score: float
+    answer: str

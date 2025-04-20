@@ -4,6 +4,7 @@ from sqlalchemy.future import select
 from app.models.student import Student
 from app.models.module import Module
 from app.models.quiz import Quiz
+from app.models.groupe import Groupe
 from app.models.question import Question
 from app.models.choice import Choice
 from app.schemas.student import StudentCreate
@@ -17,10 +18,16 @@ async def create_student_service(student: StudentCreate, db: AsyncSession = Depe
     # Vérifier si l'email est déjà utilisé
     stmt = select(Student).where(Student.email == student.email)
     result = await db.execute(stmt)  
-    existing_teacher = result.scalars().first()
-    if existing_teacher:
+    existing_student = result.scalars().first()
+    if existing_student:
         raise HTTPException(status_code=400, detail="Email already registered")
-
+    
+    # Vérifier si le groupe existe
+    group_stmt = select(Groupe).where(Groupe.id == student.groupe_id)
+    group_result = await db.execute(group_stmt)
+    existing_group = group_result.scalars().first()
+    if not existing_group:
+        raise HTTPException(status_code=400, detail="Group does not exist")
     # Hasher le mot de passe
     hashed_password = hash_password(student.password)
 

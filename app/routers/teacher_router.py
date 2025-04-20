@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_db
+from app.dependencies.auth import get_current_teacher 
 from app.schemas.module import ModuleBase
 from app.services.teacher_service import get_groups, get_all_students, get_students_by_groupe, create_group, create_module, get_modules, supp_module, supp_groupe, profile, update_profile
 
 router = APIRouter()
 
 @router.get("/me")
-async def get_profile():
+async def get_profile(current_teacher: dict = Depends(get_current_teacher)):
     return profile()
 
 #@router.get("/update_profile")
@@ -15,7 +16,7 @@ async def get_profile():
 #    return update_profile(name, email, password)
 
 @router.post("/add_groupe")
-async def add_groupe(level : str, numero: int, db: AsyncSession = Depends(get_db)):
+async def add_groupe(level : str, numero: int, db: AsyncSession = Depends(get_db), current_teacher: dict = Depends(get_current_teacher)):
     return await create_group(db, level, numero)
 
 @router.post("/add_module")
