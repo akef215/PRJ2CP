@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, ForeignKey, Date, Text
+from sqlalchemy import Boolean, String, Integer, ForeignKey, Date, Text
 from app.models import Base 
 from app.models.quiz_groupe import quiz_groupe
 
@@ -13,6 +13,7 @@ class Quiz(Base):
     module_code: Mapped[str] = mapped_column(String(10), ForeignKey("modules.code", ondelete="CASCADE"), nullable=False)
     type_quizz: Mapped[str] = mapped_column(String(1), default="1")
     duree: Mapped[int] = mapped_column(Integer, nullable=False)
+    launch: Mapped[bool] = mapped_column(Boolean, default=False,nullable=False)
 
     groupes = relationship("Groupe", secondary=quiz_groupe, back_populates="quizzes")
     questions = relationship("Question", back_populates="quizzes", cascade="all, delete-orphan")

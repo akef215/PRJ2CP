@@ -8,9 +8,7 @@ from app.schemas.quiz import QuizOut
 from app.schemas.quiz import QuizChange
 from app.schemas.quiz import QuizCreate
 from app.schemas.question import QuestionModel
-from app.schemas.question import QuestionChange
 from app.schemas.choice import ChoiceModel
-from app.schemas.choice import ChoiceChange
 from typing import List
 
 from app.schemas.quiz import AnswerSubmission  # Adjust the import path as necessary
@@ -44,7 +42,7 @@ async def add_quizzes(quiz: QuizCreate, db: AsyncSession = Depends(get_db)):
 async def add_questions(quiz_id: int, question: QuestionModel, db: AsyncSession = Depends(get_db)):
     return await add_question(quiz_id, question, db)
 
-@router.post("/{quiz_id}/add_questions/{question_id}/add_choices")
+@router.post("/{quiz_id}/{question_id}/add_choices")
 async def add_choices(quiz_id: int, question_id: int, choix: ChoiceModel, db: AsyncSession = Depends(get_db)):
     return await add_choice(quiz_id, question_id, choix, db)
 
@@ -52,26 +50,26 @@ async def add_choices(quiz_id: int, question_id: int, choix: ChoiceModel, db: As
 async def delete_quiz(quiz_id: int, db: AsyncSession = Depends(get_db)):
     return await delete_quiz_service(quiz_id, db)
 
-@router.delete("/{quiz_id}/delete_questions/{question_id}")
-async def delete_question(quiz_id: int, question_id: int, db: AsyncSession = Depends(get_db)):
-    return await delete_question_service(quiz_id, question_id, db)
+@router.delete("/delete_questions/{question_id}")
+async def delete_question(question_id: int, db: AsyncSession = Depends(get_db)):
+    return await delete_question_service(question_id, db)
 
-@router.delete("/{quiz_id}/delete_questions/{question_id}/delete_choices/{choice_id}")
-async def delete_choice(choice_id: int, quiz_id: int, question_id: int, db: AsyncSession = Depends(get_db)):
-    return await delete_choice_service(choice_id, quiz_id, question_id, db)
+@router.delete("/delete_choices/{choice_id}")
+async def delete_choice(choice_id: int, db: AsyncSession = Depends(get_db)):
+    return await delete_choice_service(choice_id, db)
 
 @router.put("/modify/{quiz_id}")
 async def update_quizzes(quiz_id: int, quiz_data: QuizChange, db: AsyncSession = Depends(get_db)):
     return await update_quiz(quiz_id, quiz_data, db)
 
 
-@router.put("/{quiz_id}/modify_questions/{question_id}")
-async def update_questions(quiz_id: int, question_id: int, question_data: QuestionChange, db: AsyncSession = Depends(get_db)):
-    return await update_question(quiz_id, question_id ,question_data, db)
+@router.put("/modify_questions/{question_id}")
+async def update_questions(question_id: int, question_data: QuestionModel, db: AsyncSession = Depends(get_db)):
+    return await update_question(question_id ,question_data, db)
 
-@router.put("/{quiz_id}/modify_questions/{question_id}/modify_choices/{choice_id}")
-async def update_choices(quiz_id: int, question_id: int, choice_id: int, choice_data: ChoiceChange, db: AsyncSession = Depends(get_db)):
-    return await update_choice(quiz_id, question_id , choice_id, choice_data, db)
+@router.put("/modify_choices/{choice_id}")
+async def update_choices(choice_id: int, choice_data: ChoiceModel, db: AsyncSession = Depends(get_db)):
+    return await update_choice(choice_id, choice_data, db)
 # Answer a quiz
 @router.post("/quizzes/{quiz_id}/answer")
 async def answer_quiz(quiz_id: int, submission: AnswerSubmission, db: AsyncSession = Depends(get_db)):

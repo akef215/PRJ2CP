@@ -14,3 +14,4 @@ from .results import Result
 from .quiz_groupe import quiz_groupe
 from .feedback import Feedback
 from .statistics import Statistic
+from .chapter import Chapter

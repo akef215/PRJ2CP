@@ -13,9 +13,7 @@ from app.models.quiz_groupe import quiz_groupe
 from app.models.results import Result
 from app.schemas.quiz import QuizCreate, AnswerSubmission
 from app.schemas.question import QuestionModel
-from app.schemas.question import QuestionChange
 from app.schemas.choice import ChoiceModel
-from app.schemas.choice import ChoiceChange
 from app.schemas.quiz import QuizOut
 from app.schemas.quiz import QuizChange
 
@@ -78,7 +76,7 @@ async def add_quiz(quizz: QuizCreate, db: AsyncSession):
 
 async def add_question(quiz_id: int, question: QuestionModel, db: AsyncSession):
     # Instanciation de la question
-    qstn = Question(question_id=question.id, quiz_id=quiz_id, statement=question.statement, duree=question.duree)
+    qstn = Question(quiz_id=quiz_id, statement=question.statement, duree=question.duree)
 
     # Verifier que le quiz existe deja
     results = await db.execute(select(Quiz).where(Quiz.id == quiz_id))
@@ -93,7 +91,7 @@ async def add_question(quiz_id: int, question: QuestionModel, db: AsyncSession):
 
 async def add_choice(quiz_id: int, question_id: int, choix: ChoiceModel, db: AsyncSession):
     # Instanciation de la question
-    choice = Choice(choice_id=choix.id, quiz_id=quiz_id, score=choix.score, answer=choix.answer)
+    choice = Choice(quiz_id=quiz_id, question_id = question_id, score=choix.score, answer=choix.answer)
 
     # Verifier que le quiz existe deja
     results = await db.execute(select(Quiz).where(Quiz.id == quiz_id))
@@ -102,13 +100,11 @@ async def add_choice(quiz_id: int, question_id: int, choix: ChoiceModel, db: Asy
         raise HTTPException(status_code=404, detail="No quiz found")
     
     # Verifier que la question existe deja
-    results = await db.execute(select(Question).where(Question.quiz_id == quiz_id, Question.question_id == question_id))
+    results = await db.execute(select(Question).where(Question.quiz_id == quiz_id, Question.id == question_id))
     qstn = results.scalars().first()
     if not qstn:
         raise HTTPException(status_code=404, detail="No question found")
     
-    qid = qstn.id
-    choice.question_id = qid
     db.add(choice)
     await db.commit()
     return choice
@@ -125,8 +121,8 @@ async def delete_quiz_service(quiz_id: int, db: AsyncSession):
 
     return {"message": f"Quiz with ID {quiz_id} deleted successfully"}
 
-async def delete_question_service(quiz_id: int, question_id: int, db: AsyncSession):
-    result = await db.execute(select(Question).filter(Question.question_id == question_id, Question.quiz_id == quiz_id))
+async def delete_question_service(question_id: int, db: AsyncSession):
+    result = await db.execute(select(Question).filter(Question.id == question_id))
     question = result.scalars().first()
 
     if not question:
@@ -137,14 +133,8 @@ async def delete_question_service(quiz_id: int, question_id: int, db: AsyncSessi
 
     return {"message": f"Question deleted successfully"}
 
-async def delete_choice_service(choice_id: int, quiz_id: int, question_id: int, db: AsyncSession):
-    result = await db.execute(select(Question).filter(Question.question_id == question_id, Question.quiz_id == quiz_id))
-    question = result.scalars().first()
-
-    if not question:
-        raise HTTPException(status_code=404, detail=f"Question not found")
-
-    result = await db.execute(select(Choice).where(Choice.choice_id == choice_id, Choice.question_id == question_id, Choice.id == quiz_id))
+async def delete_choice_service(choice_id: int, db: AsyncSession):
+    result = await db.execute(select(Choice).where(Choice.id == choice_id))
     choice = result.scalars().first()
     await db.delete(choice)
     await db.commit()
@@ -170,9 +160,10 @@ async def update_quiz(quiz_id: int, quiz_data: QuizChange, db: AsyncSession):
 
     return quiz
 
-async def update_question(quiz_id: int, question_id: int, question_data: QuestionChange, db: AsyncSession):
+async def update_question(question_id: int, question_data: QuestionModel, db: AsyncSession):
+
     # Vérifier si la question existe
-    result = await db.execute(select(Question).where(Question.quiz_id == quiz_id, Question.question_id == question_id))
+    result = await db.execute(select(Question).where(Question.id == question_id))
     question = result.scalars().first()
 
     if not question:
@@ -187,19 +178,14 @@ async def update_question(quiz_id: int, question_id: int, question_data: Questio
 
     return question
 
-async def update_choice(quiz_id: int, question_id: int, choice_id: int, choice_data: ChoiceChange, db: AsyncSession):
+async def update_choice(choice_id: int, choice_data: ChoiceModel, db: AsyncSession):
 
-    result = await db.execute(select(Question).where(Question.quiz_id == quiz_id, Question.question_id == question_id))
-    question = result.scalars().first()
-
-    if not question:
-        raise HTTPException(status_code=404, detail="Question not found")
     # Vérifier si le choix existe
-    result = await db.execute(select(Choice).where(Choice.quiz_id == quiz_id, Choice.question_id == question.id, Choice.choice_id == choice_id))
+    result = await db.execute(select(Choice).where(Choice.id == choice_id))
     choice = result.scalars().first()
 
     if not choice:
-        raise HTTPException(status_code=404, detail="Choix non trouvé")
+        raise HTTPException(status_code=404, detail="Choice not found")
 
     # Mise à jour des champs fournis
     choice.answer = choice_data.answer if choice_data.answer else choice.answer
@@ -282,7 +268,7 @@ async def get_available_choices_service(quiz_id: int, qstn_id: int, db: AsyncSes
     qstn_result = await db.execute(
         select(Question).where(
             Question.quiz_id == quiz_id,
-            Question.question_id == qstn_id
+            Question.id == qstn_id
         )
     )
     question = qstn_result.scalars().first()
