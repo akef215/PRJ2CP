@@ -10,7 +10,13 @@ from app.models.results import Result
 from app.models.choice import Choice
 from app.schemas.student import StudentCreate
 from database import get_db
+from collections import defaultdict
+from datetime import datetime
+from typing import List, Literal
+from app.models.quiz import Quiz
 
+from collections import defaultdict
+from datetime import datetime
 
 async def update_statistic(quizz_id: int, db: AsyncSession):
     # Récupérer tous les choix de réponses du quiz
@@ -78,4 +84,29 @@ async def update_statistic(quizz_id: int, db: AsyncSession):
     return {"message": "Statistics updated successfully"}
 
 
-    
+def generate_chart_data(stats, group_by="month"):
+    data = defaultdict(list)
+
+    for stat in stats:
+        date = stat.quiz.date if stat.quiz and stat.quiz.date else None
+        if not date:
+            continue
+
+        if group_by == "month":
+            # Crée une clé comme "2025-03-S1", "2025-03-S2", ...
+            week_number = (date.day - 1) // 7 + 1  # 1ère semaine = jours 1-7, etc.
+            key = f"{date.year}-{date.month:02d}-S{week_number}"
+        elif group_by == "year":
+            # Clé comme "2025-03"
+            key = f"{date.year}-{date.month:02d}"
+        else:
+            continue
+
+        data[key].append(stat.pourcentage)
+
+    # Tri des clés pour garder l’ordre chronologique
+    sorted_keys = sorted(data.keys())
+    x = sorted_keys
+    y = [sum(data[k]) / len(data[k]) for k in sorted_keys]  # Moyenne des pourcentages
+
+    return x, y
