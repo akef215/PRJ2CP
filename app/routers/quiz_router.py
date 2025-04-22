@@ -96,12 +96,3 @@ async def get_students_within_score_range_route(
     # Call the service function
     return await get_students_within_score_range(quiz_id, min_score, max_score, db)
 
-
-@router.put("/{quiz_id}/modify_questions/{question_id}")
-async def update_questions(quiz_id: int, question_id: int, question_data: QuestionModel, db: AsyncSession = Depends(get_db)):
-    return await update_question(quiz_id, question_id ,question_data, db)
-
-@router.put("/{quiz_id}/modify_questions/{question_id}/modify_choices/{choice_id}")
-async def update_questions(quiz_id: int, question_id: int, choice_id: int, choice_data: ChoiceModel, db: AsyncSession = Depends(get_db)):
-    return await update_question(quiz_id, question_id , choice_id, choice_data, db)
-
