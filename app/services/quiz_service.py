@@ -144,7 +144,7 @@ async def delete_choice_service(choice_id: int, quiz_id: int, question_id: int, 
     if not question:
         raise HTTPException(status_code=404, detail=f"Question not found")
 
-    result = await db.execute(select(Choice).where(Choice.choice_id == choice_id, Choice.question_id == question.id, Choice.quiz_id == quiz_id))
+    result = await db.execute(select(Choice).where(Choice.choice_id == choice_id, Choice.question_id == question_id, Choice.id == quiz_id))
     choice = result.scalars().first()
     await db.delete(choice)
     await db.commit()
@@ -163,6 +163,7 @@ async def update_quiz(quiz_id: int, quiz_data: QuizChange, db: AsyncSession):
     quiz.duree = quiz_data.duree if quiz_data.duree else quiz.duree
     quiz.module_code = quiz_data.module_code if quiz_data.module_code else quiz.module_code
     quiz.date = quiz_data.date if quiz_data.date else quiz.date
+
 
     await db.commit()
     await db.refresh(quiz)
