@@ -4,6 +4,7 @@ from sqlalchemy.future import select
 from app.models.student import Student
 from app.models.module import Module
 from app.models.quiz import Quiz
+from app.models.groupe import Groupe
 from app.models.question import Question
 from app.models.choice import Choice
 from app.models.results import Result
@@ -15,6 +16,7 @@ from app.dependencies.auth import get_current_student
 
 async def create_student_service(student: StudentCreate, db: AsyncSession = Depends(get_db)):
     # Vérifier si l'email est déjà utilisé
+
     existing_student = await db.scalar(select(Student).where(Student.email == student.email))
 
     if existing_student:
@@ -26,6 +28,20 @@ async def create_student_service(student: StudentCreate, db: AsyncSession = Depe
         groupe = await db.get(Groupe, student.groupe_id)
         if not groupe:
             raise HTTPException(status_code=404, detail="Groupe not found")
+
+
+    stmt = select(Student).where(Student.email == student.email)
+    result = await db.execute(stmt)  
+    existing_student = result.scalars().first()
+    if existing_student:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Vérifier si le groupe existe
+    group_stmt = select(Groupe).where(Groupe.id == student.groupe_id)
+    group_result = await db.execute(group_stmt)
+    existing_group = group_result.scalars().first()
+    if not existing_group:
+        raise HTTPException(status_code=400, detail="Group does not exist")
 
     # Hasher le mot de passe
     hashed_password = hash_password(student.password)

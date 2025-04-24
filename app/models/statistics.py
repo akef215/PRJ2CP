@@ -11,4 +11,4 @@ class Statistic(Base):
     id_quiz: Mapped[int] = mapped_column(Integer, ForeignKey("quizzes.id"), nullable=False)
     pourcentage: Mapped[int] = mapped_column(Float, nullable=False)
 
-    quiz = relationship("Quiz")
+    quiz = relationship("Quiz", back_populates="statistics")

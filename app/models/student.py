@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, ForeignKey
 from app.models import Base 
 
@@ -10,4 +10,11 @@ class Student(Base):
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False, index=True)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
     level: Mapped[str] = mapped_column(String(6), nullable=False)
-    groupe_id: Mapped[str] = mapped_column(String(8), ForeignKey("groupes.id"), nullable=False)  # ✅ Correction ici
+
+    groupe_id: Mapped[str] = mapped_column(
+        String(8),
+        ForeignKey("groupes.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    groupe_rel = relationship("Groupe", back_populates="etudiants")

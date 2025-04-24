@@ -15,6 +15,12 @@ class QuizOut(BaseModel):
     class Config:
         from_attributes = True 
 
+class QuizChange(BaseModel):
+    title: str
+    date: date
+    module_code: str
+    duree: int
+
 class QuizCreate(BaseModel):
     title: str
     date: date
@@ -22,6 +28,7 @@ class QuizCreate(BaseModel):
     duree: int
     description: Optional[str] = None
     groupes: GroupAssignment 
+    type: str
 
 class AnswerSubmission(BaseModel):
     answers: dict[int, int]  # question_id: choice_id

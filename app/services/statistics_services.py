@@ -2,12 +2,14 @@ from fastapi import Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.future import select
+from sqlalchemy import func
 from app.models.student import Student
 from app.models.module import Module
 from app.models.feedback import Feedback
 from app.models.statistics import Statistic
 from app.models.results import Result
 from app.models.choice import Choice
+from app.models.question import Question
 from app.schemas.student import StudentCreate
 from database import get_db
 from collections import defaultdict
@@ -84,6 +86,7 @@ async def update_statistic(quizz_id: int, db: AsyncSession):
     return {"message": "Statistics updated successfully"}
 
 
+
 def generate_chart_data(stats, group_by="month"):
     data = defaultdict(list)
 
@@ -110,3 +113,40 @@ def generate_chart_data(stats, group_by="month"):
     y = [sum(data[k]) / len(data[k]) for k in sorted_keys]  # Moyenne des pourcentages
 
     return x, y
+
+async def survey_statistics(survey_id: int, db: AsyncSession):
+    # Sélectionner toutes les questions pour un quiz spécifique (survey_id)
+    query = select(Question).where(Question.quiz_id == survey_id)
+    result = await db.execute(query)
+    questions = result.scalars().all()
+
+    if not questions:
+        raise HTTPException(status_code=404, detail="Empty Survey")
+
+    statQ = []  # Pour stocker les statistiques des questions
+
+    for question in questions:
+        # Sélectionner toutes les réponses (choices) pour la question spécifique
+        query = select(Choice).where(Choice.question_id == question.id)
+        result = await db.execute(query)
+        answers = result.scalars().all()
+
+        # Si aucune réponse n'est trouvée pour la question, on passe à la suivante
+        if not answers:
+            continue
+
+        statC = []  # Pour stocker les statistiques des choix pour une question
+        for answer in answers:
+            # Compter le nombre de fois que chaque choix a été sélectionné
+            count_query = select(func.count()).where(Result.choice_id == answer.id)
+            count_result = await db.execute(count_query)
+            count = count_result.scalar()
+
+            # Ajouter la statistique du choix
+            statC.append({ "choice": answer.answer, "count": count })
+
+        # Ajouter les statistiques de la question à la liste des statistiques
+        statQ.append({"question": question.statement, "choices": statC})
+
+    return statQ
+

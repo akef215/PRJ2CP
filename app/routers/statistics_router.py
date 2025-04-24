@@ -5,16 +5,21 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from database import get_db
-from app.services.statistics_services import update_statistic,generate_chart_data
+
+from app.services.statistics_services import update_statistic,generate_chart_data,survey_statistics
 from app.models.statistics import Statistic
 from app.models.quiz import Quiz
-from sqlalchemy.orm import selectinload
+
+
+
+
 
 router = APIRouter()
 
-@router.get("/test/{quiz_id}")
+@router.get("/quiz/{quiz_id}")
 async def get_stat_by_quiz(quiz_id: int, db: AsyncSession = Depends(get_db)):
     return await update_statistic(quiz_id, db)
+
 
 @router.get("/stats/basic/{quiz_id}")
 async def get_statistics(quiz_id: int, db: AsyncSession = Depends(get_db)):
@@ -74,3 +79,8 @@ async def get_chart_data(
         "x": x,  # les pourcentages (progress)
         "y": y   # les périodes (mois ou semaines)
     }
+
+@router.get("/surveys/{survey_id}")
+async def get_stat_survey(survey_id: int, db: AsyncSession = Depends(get_db)):
+    return await survey_statistics(survey_id, db)
+

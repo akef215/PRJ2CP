@@ -2,7 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
 from database import get_db
+
 from app.services.feedback_service import create_feedback, get_feedbacks_by_group, get_feedbacks_by_module, get_all_feedbacks
+
+
+from app.models.feedback import Feedback
+from app.services.feedback_service import (
+    create_feedback, get_all_feedbacks, get_feedbacks_by_group, get_feedbacks_by_module, get_feedbacks_by_id, delete_feedback
+)
+
+router = APIRouter(tags=["Feedback"])
 
 
 router = APIRouter(tags=["Feedback"])
@@ -44,6 +53,18 @@ async def fetch_feedbacks_by_group(groupe: str, db: AsyncSession = Depends(get_d
     if not feedbacks:
         raise HTTPException(status_code=404, detail="No feedback found for this group")
     return feedbacks
+
+# Get feedbacks by Id
+@router.get("/{id}")
+async def fetch_feedbacks_by_id(id: int, db: AsyncSession = Depends(get_db)):
+    feedbacks = await get_feedbacks_by_id(id, db)
+    if not feedbacks:
+        raise HTTPException(status_code=404, detail="No feedback found for this id")
+    return feedbacks
+
+@router.delete("/{id}")
+async def delete_feedback_by_id(id: int, db: AsyncSession = Depends(get_db)):
+    return await delete_feedback(id, db)
 
 # Get feedbacks by module
 @router.get("/module/{module}")
