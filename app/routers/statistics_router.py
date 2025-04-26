@@ -6,9 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from database import get_db
 
-from app.services.statistics_services import update_statistic,generate_chart_data,survey_statistics
+from app.services.statistics_services import update_statistic,generate_chart_data,survey_statistics,get_chapter_statistics_by_student,get_chapter_statistics
 from app.models.statistics import Statistic
 from app.models.quiz import Quiz
+from app.models.chapter import Chapter
 
 
 
@@ -83,4 +84,13 @@ async def get_chart_data(
 @router.get("/surveys/{survey_id}")
 async def get_stat_survey(survey_id: int, db: AsyncSession = Depends(get_db)):
     return await survey_statistics(survey_id, db)
+
+
+
+@router.get("/chapters/{student_id}")
+async def chapter_stats( db: AsyncSession = Depends(get_db)):
+    #return await get_chapter_statistics_by_student(student_id, db)
+      return await get_chapter_statistics(db)
+
+
 

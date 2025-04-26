@@ -215,3 +215,26 @@ async def add_result(
     await db.commit()
     await db.refresh(new_result)
     return new_result
+
+
+
+
+
+
+async def get_student_full_info(db: AsyncSession, student_id: str):
+    # Chercher l'étudiant par son code
+    result = await db.execute(select(Student).filter(Student.id == student_id))
+    student = result.scalars().first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    # Retourner uniquement les infos de l'étudiant
+    return {
+        "student": {
+            "id": student.id,
+            "name": student.name,
+            "email": student.email,
+            "level": student.level,
+            "groupe_id": student.groupe_id
+        }
+    }

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas.student import StudentCreate, StudentBase, StudentResponse, StudentUpdate  # Add StudentResponse and StudentUpdate here
+from app.schemas.student import StudentCreate, StudentBase, StudentResponse, StudentUpdate,StudentProfile  # Add StudentResponse and StudentUpdate here
 from database import get_db
 from app.services.student_service import (
     create_student_service,
@@ -11,7 +11,7 @@ from app.services.student_service import (
     update_student_profile,
     get_current_student  # Add get_current_student here
 )
-from app.services.student_service import create_student_service, add_result, delete_current_student, get_student_modules, get_student_group, update_student_profile
+from app.services.student_service import create_student_service, add_result, delete_current_student, get_student_modules, get_student_group, update_student_profile,get_student_full_info
 
 router = APIRouter()
 
@@ -51,3 +51,21 @@ async def update_profile(updated_data: StudentUpdate, db: AsyncSession = Depends
 @router.post("/answer_quiz/{quiz_id}/question/{question_id}")
 async def submit_result(question_id: int, quiz_id: int, choice_id: int, db: AsyncSession = Depends(get_db), current_student: dict = Depends(get_current_student)):
     return await add_result(question_id, quiz_id, choice_id, db, current_student)
+
+
+@router.get("/me/profile", response_model=StudentProfile)
+async def get_profile(current_student: dict = Depends(get_current_student), db: AsyncSession = Depends(get_db)):
+    # Assuming current_student["sub"] contains the student code
+    student_code = current_student["sub"]
+    
+    # Call your service function to get the full student info
+    student_info = await get_student_full_info(db, student_code)
+
+    # Return the student profile data using the StudentProfile model
+    return StudentProfile(
+        id=student_info["student"]["id"],
+        name=student_info["student"]["name"],
+        email=student_info["student"]["email"],
+        level=student_info["student"]["level"],
+        groupe_id=student_info["student"]["groupe_id"]  # Ensure the field name matches
+    )

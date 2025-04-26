@@ -33,3 +33,14 @@ class StudentResponse(BaseModel):
     groupe_id: str  # Ajout de groupe_id
 
     model_config = {"from_attributes": True}
+
+
+class StudentProfile(BaseModel):
+    id: str
+    name: str
+    email: EmailStr
+    level: str
+    groupe_id: str
+
+    class Config:
+        orm_mode = True  # Allow mapping from ORM models
