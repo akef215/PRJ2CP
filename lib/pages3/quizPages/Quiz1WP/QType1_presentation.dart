@@ -1,4 +1,3 @@
-
 /*-----------------------PAGE TO START THE QUIZ WP------------------*/
 import 'package:esi_quiz/widgets/appbar.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +15,11 @@ class QuizT1_presentation extends StatefulWidget {
 }
 
 class _QuizT1_presentationState extends State<QuizT1_presentation> {
-
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
+    print("CURRENT PAGE :Quiz Type1 with pers");
     return Scaffold(
       backgroundColor: Color(0xffDFF0FF),
 
@@ -34,65 +31,63 @@ class _QuizT1_presentationState extends State<QuizT1_presentation> {
           Padding(
             /*------------------QUIZ IMAGE----------------------*/
             padding: EdgeInsets.only(left: 71, top: 130, right: 71, bottom: 15),
-            child:
-            Stack(
-              alignment: Alignment.center ,
+            child: Stack(
+              alignment: Alignment.center,
               children: [
                 Container(
                   padding: EdgeInsets.all(8.0),
-                  height: screenHeight * 0.3 ,
-                  width: screenWidth * 0.65 ,
+                  height: screenHeight * 0.3,
+                  width: screenWidth * 0.65,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(22) ,
+                    borderRadius: BorderRadius.circular(22),
                     image: DecorationImage(
-                      image : AssetImage("images/quizimg.png"),
-                      fit: BoxFit.cover ,
+                      image: AssetImage("images/quizimg.png"),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
 
                 Image.asset(
-                  "images/quizgirl.png" ,
+                  "images/quizgirl.png",
                   height: screenHeight * 0.3,
-                  width: screenWidth * 0.4 ,
+                  width: screenWidth * 0.4,
                   fit: BoxFit.contain,
                 ),
               ],
             ),
           ),
 
-          SizedBox(height: 30) ,
+          SizedBox(height: 30),
           /*------------------START QUIZ BUTTON-------------------*/
           ElevatedButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => QuizWPPage1()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => QuizWPPage1()),
+              );
             },
 
             style: ElevatedButton.styleFrom(
               elevation: 0.05,
-              backgroundColor: Color(0xffFFFDFD) ,
+              backgroundColor: Color(0xffFFFDFD),
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
               minimumSize: Size(180, 80),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40),
-                side: BorderSide(
-                  color: Color(0xff0F3D64) ,
-                  width: 5 ,
-                ),
+                side: BorderSide(color: Color(0xff0F3D64), width: 5),
               ),
             ),
             child: Text(
               "Start the Quiz",
               style: TextStyle(
-                  color: Color(0xff21334E),
-                  fontFamily: "RammettoOne",
-                  fontSize: 16 ,
-                  fontWeight: FontWeight.w400
+                color: Color(0xff21334E),
+                fontFamily: "RammettoOne",
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),
-
 
           /*-----------------BACK ARROW----------------------*/
           Expanded(
@@ -107,9 +102,12 @@ class _QuizT1_presentationState extends State<QuizT1_presentation> {
                   child: Row(
                     children: [
                       SizedBox(
-                          height: 37,
-                          width: 37 ,
-                          child: Image.asset("images/left-arrow (1).png" ,fit: BoxFit.contain,)
+                        height: 37,
+                        width: 37,
+                        child: Image.asset(
+                          "images/left-arrow (1).png",
+                          fit: BoxFit.contain,
+                        ),
                       ),
 
                       SizedBox(width: 7),
@@ -117,8 +115,8 @@ class _QuizT1_presentationState extends State<QuizT1_presentation> {
                         'Back',
                         style: TextStyle(
                           fontFamily: "MontserratSemi",
-                          color : Colors.grey[400] ,
-                          fontSize: 18 ,
+                          color: Colors.grey[400],
+                          fontSize: 18,
                         ),
                       ),
                     ],
@@ -132,4 +130,3 @@ class _QuizT1_presentationState extends State<QuizT1_presentation> {
     );
   }
 }
-

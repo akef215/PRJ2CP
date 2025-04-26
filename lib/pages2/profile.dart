@@ -183,7 +183,7 @@ class _ProfileState extends State<Profile> {
             );
           }), //////////////////////// Need to send somthing to the backend ?
 
-          SizedBox(height: screenHeight * 0.073),
+          Spacer(),
 
           /*-----------------BACK ARROW----------------------*/
           Align(

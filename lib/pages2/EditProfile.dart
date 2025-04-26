@@ -63,7 +63,7 @@ class _EditProfileState extends State<EditProfile> {
       appBar: Custom_appBar().buildAppBar(context, "Edit Profile", false),
 
       body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
         child: Column(
           children: [
             Container(
@@ -185,6 +185,7 @@ class _EditProfileState extends State<EditProfile> {
             _buildMenuButton("Done", () {}),
 
             /*-----------------BACK ARROW----------------------*/
+            //Spacer(),
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -276,7 +277,7 @@ class _EditProfileState extends State<EditProfile> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: screenWidth * 0.09,
+        horizontal: screenWidth * 0.2,
         vertical: screenHeight * 0.015,
       ),
       child: InkWell(

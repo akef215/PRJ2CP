@@ -53,6 +53,8 @@ class _ProjectCardState extends State<ProjectCard> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTapDown: (_) => _changeColor(true),
       onTapUp: (_) => _changeColor(false),
@@ -77,8 +79,8 @@ class _ProjectCardState extends State<ProjectCard> {
         child: Column(
           children: [
             SizedBox(
-              height: 120,
-              width: 120,
+              height: screenWidth*0.25,
+              width: screenWidth*0.25,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
                 child: Image.asset(widget.imagePath, fit: BoxFit.contain),

@@ -12,7 +12,7 @@ import '../../../widgets/appbar.dart';
 
 //correct one is this
 Future<Map<String, dynamic>> fetchQuizData() async {
-  final response = await http.get(Uri.parse('http://192.168.151.146:8000/quizzes/quizzes/2/details'));
+  final response = await http.get(Uri.parse('http://192.168.43.147:8000/quizzes/quizzes/2/details'));
 
   if (response.statusCode == 200) {
     print('Response Body: ${response.body}');

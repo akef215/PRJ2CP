@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color(0xffFFFDFD),
 
         /*-----------------APPBAR------------------*/
-        appBar: Custom_appBar().buildAppBar(context, "Home", false),
+        appBar: Custom_appBar().buildAppBar(context, "Home", true),
 
         /*----------------------MAIN-----------------------*/
         body: Padding(

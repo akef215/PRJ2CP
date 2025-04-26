@@ -69,7 +69,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       appBar: Custom_appBar().buildAppBar(context, "Change Password", true),
 
       body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        //physics: NeverScrollableScrollPhysics(),
         child: Column(
           children: [
             Container(

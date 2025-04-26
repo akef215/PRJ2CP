@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../pages2/agenda.dart';
 import '../pages2/profile.dart';
 
+String path='http://192.168.43.147:8000';
+
 class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
   // building appBar Function
   AppBar buildAppBar(
@@ -47,14 +49,17 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
                     MaterialPageRoute(builder: (context) => Profile()),
                   );
                 } else if (value == 'Home') {
-                  Navigator.push(context, 
-                  MaterialPageRoute(builder: (context)=>HomePage()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
                 } else if (value == 'agenda') {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Agenda()),
                   );
-                } else if (value == 'help') {/////////////////////////////////////////////////////needs to be added
+                } else if (value == 'help') {
+                  /////////////////////////////////////////////////////needs to be added
                   Navigator.pushNamed(context, '/settings');
                 }
               },
@@ -76,15 +81,16 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
                           ),
                           SizedBox(width: 15),
                           Text(
-                            "Hame Page",
+                            "Home Page",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
+                              color: Color(0xff21334E),
+                              fontFamily: "MontserratSemi",
                             ),
                           ),
                         ],
                       ),
-
                     ),
                     PopupMenuItem(
                       value: 'profile',
@@ -105,6 +111,8 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
+                              color: Color(0xff21334E),
+                              fontFamily: "MontserratSemi",
                             ),
                           ),
                         ],
@@ -129,6 +137,8 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
+                              color: Color(0xff21334E),
+                              fontFamily: "MontserratSemi",
                             ),
                           ),
                         ],
@@ -153,12 +163,13 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
+                              color: Color(0xff21334E),
+                              fontFamily: "MontserratSemi",
                             ),
                           ),
                         ],
                       ),
                     ),
-                    
                   ],
             ),
           ),
