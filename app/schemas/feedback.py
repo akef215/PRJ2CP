@@ -4,7 +4,7 @@ from datetime import datetime
 # Schema for creating feedback
 class FeedbackCreate(BaseModel):
     groupe: str
-    module: str
+    
     description: str
 
     class Config:

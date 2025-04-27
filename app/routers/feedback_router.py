@@ -3,12 +3,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
 from database import get_db
 
-from app.services.feedback_service import create_feedback, get_feedbacks_by_group, get_feedbacks_by_module, get_all_feedbacks
+from app.services.feedback_service import create_feedback, get_feedbacks_by_group,  get_all_feedbacks
 
 
 from app.models.feedback import Feedback
 from app.services.feedback_service import (
-    create_feedback, get_all_feedbacks, get_feedbacks_by_group, get_feedbacks_by_module, get_feedbacks_by_id, delete_feedback
+    create_feedback, get_all_feedbacks, get_feedbacks_by_group, get_feedbacks_by_id, delete_feedback
 )
 
 router = APIRouter(tags=["Feedback"])
@@ -19,7 +19,7 @@ router = APIRouter(tags=["Feedback"])
 class FeedbackRequest(BaseModel):
     description: str
     groupe: str
-    module: str
+    
 
 @router.post("/")
 async def submit_feedback(
@@ -34,7 +34,7 @@ async def submit_feedback(
     feedback_entry = await create_feedback(
         description=feedback.description,
         groupe=feedback.groupe,
-        module=feedback.module,
+        
         db=db
     )
 
@@ -66,10 +66,3 @@ async def fetch_feedbacks_by_id(id: int, db: AsyncSession = Depends(get_db)):
 async def delete_feedback_by_id(id: int, db: AsyncSession = Depends(get_db)):
     return await delete_feedback(id, db)
 
-# Get feedbacks by module
-@router.get("/module/{module}")
-async def fetch_feedbacks_by_module(module: str, db: AsyncSession = Depends(get_db)):
-    feedbacks = await get_feedbacks_by_module(module, db)
-    if not feedbacks:
-        raise HTTPException(status_code=404, detail="No feedback found for this module")
-    return feedbacks
