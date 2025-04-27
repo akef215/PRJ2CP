@@ -323,4 +323,41 @@ async def get_available_choices_service(quiz_id: int, qstn_id: int, db: AsyncSes
     choices = result.scalars().all()
 
     return choices or []
+async def get_quiz_with_question_id(quiz_id: int, db: AsyncSession):
+    # Vérifier que le quiz existe
+    result = await db.execute(
+        select(Quiz)
+        .where(Quiz.id == quiz_id)
+        .options(selectinload(Quiz.questions).selectinload(Question.choices))
+    )
+    quiz = result.scalars().first()
 
+    if not quiz:
+        raise HTTPException(status_code=404, detail="Quiz non trouvé")
+
+    quiz_data = {
+        "quiz_id": quiz.id,
+        "quiz_title": quiz.title,
+        "time_limit_minutes": quiz.duree,
+        "total_questions": len(quiz.questions),
+        "questions": []
+    }
+
+    for question in quiz.questions:
+        choices = [
+            {
+                "choice_id": choice.id,
+                "answer": choice.answer,
+                "points": choice.score
+            } 
+            for choice in question.choices
+        ]
+
+        quiz_data["questions"].append({
+            "question_id": question.id,
+            "statement": question.statement,
+            "time_limit_seconds": question.duree,   # <-- temps spécifique pour cette question
+            "choices": choices,
+        })
+
+    return quiz_data
