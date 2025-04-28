@@ -95,7 +95,7 @@ class _QuizPage1State extends State<QuizPage1> {
         timeLimit = data['timeLimitMinutes'];
         quizId = data['quizId'];
         totalQuestions = data['totalQuestions'];
-
+        
         questions = List<Questioninfo>.from(data['questions']);
 
         userAnswers = List.generate(totalQuestions, (index) => []);

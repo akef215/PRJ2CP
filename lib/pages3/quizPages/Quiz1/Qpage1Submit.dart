@@ -241,10 +241,39 @@ class _SubmitQuizWithPersState extends State<SubmitQuizWithPers> {
     sendResponseToBackend(questions, userAnswers);
   }
 
+  Future<Map<String, dynamic>> fetchStudentInfo() async {
+    // print("something again?");
+    final response = await http.get(
+      Uri.parse(path + '/students/me/profile'),
+      headers: {
+        'Authorization': 'Bearer $bearerToken',
+      },
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      print(
+        'Response Body--------------------------------------: ${response.body}',
+      );
+
+      return {
+        'StudentId': data['id'],
+        'name': data['name'], // Keep this as it is (already an integer)
+        'email': data['email'],
+        'level': data['level'],
+        'goupe_id': data['groupe_id'],
+      };
+    } else {
+      print("error respose Fetching Student info ${response.statusCode}");
+      throw Exception('Failed to load quiz');
+    }
+  }
+
   Future<void> sendResponseToBackend(
     List<Questioninfo> questions,
     List<List<int>> userAnswers,
   ) async {
+    final data = await fetchStudentInfo();
+    String studentId = data['StudentId'];
     for (int i = 0; i < widget.totalQuestions; i++) {
       final userChoices = userAnswers[i];
       for (int choiceId in userChoices) {
@@ -281,7 +310,7 @@ class _SubmitQuizWithPersState extends State<SubmitQuizWithPers> {
             'quizz_id': widget.quizId,
             'choice_id': choiceId,
             'question_id': questions[i].questionId,
-            'student_id': '24/0006', //change into a variable when lina answers
+            'student_id': studentId, //change into a variable when lina answers
           }),
         );
 

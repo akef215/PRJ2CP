@@ -241,10 +241,35 @@ class _SubmitSuvey extends State<SubmitSurvey> {
     sendResponseToBackend(questions, userAnswers);
   }
 
+
+   Future<Map<String, dynamic>> fetchStudentInfo() async {
+    // print("something again?");
+    final response = await http.get(Uri.parse(path + '/students/me/profile'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      print(
+        'Response Body--------------------------------------: ${response.body}',
+      );
+
+      return {
+        'StudentId': data['id'],
+        'name': data['name'], // Keep this as it is (already an integer)
+        'email': data['email'],
+        'level': data['level'],
+        'goupe_id': data['groupe_id'],
+      };
+    } else {
+      print("error respose ");
+      throw Exception('Failed to load quiz');
+    }
+  }
+
   Future<void> sendResponseToBackend(
     List<Questioninfo> questions,
     List<List<int>> userAnswers,
   ) async {
+     final data = await fetchStudentInfo();
+    String studentId = data['StudentId'];
     for (int i = 0; i < widget.totalQuestions; i++) {
       final userChoices = userAnswers[i];
       for (int choiceId in userChoices) {
@@ -263,10 +288,6 @@ class _SubmitSuvey extends State<SubmitSurvey> {
               '?choice_id=' +
               choiceId.toString(),
         );
-        //final urlInfo = Uri.parse(path +'/students/me/profile');
-        // final responseInfo =await http.get(
-
-        //);
 
         // For a POST request with JSON data
         final response = await http.post(
@@ -280,7 +301,7 @@ class _SubmitSuvey extends State<SubmitSurvey> {
             'quizz_id': widget.quizId,
             'choice_id': choiceId,
             'question_id': questions[i].questionId,
-            'student_id': '24/0006', //change into a variable when lina answers
+            'student_id': studentId, //change into a variable when lina answers
           }),
         );
 

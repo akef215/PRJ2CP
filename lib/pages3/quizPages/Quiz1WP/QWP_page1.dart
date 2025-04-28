@@ -102,6 +102,7 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
   int _remainingTime = 0;
 
   bool isLoading = true;
+  bool error = false;
 
   Future<Map<String, dynamic>> fetchQuizData() async {
     // print("something again?");
@@ -146,6 +147,9 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
         print("Inside setState");
         quizId = data['quizId'];
         totalQuestions = data['totalQuestions'];
+        if (totalQuestions == 0) {
+          error = true;
+        }
 
         // No need to parse again — already Questioninfo objects
         questions = List<Questioninfo>.from(data['questions']);
@@ -275,7 +279,36 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
     sendResponseToBackend();
   }
 
+  Future<Map<String, dynamic>> fetchStudentInfo() async {
+    // print("something again?");
+    final response = await http.get(
+      Uri.parse(path + '/students/me/profile'),
+      headers: {
+        'Authorization': 'Bearer $bearerToken',
+      },
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      print(
+        'Response Body--------------------------------------: ${response.body}',
+      );
+
+      return {
+        'StudentId': data['id'],
+        'name': data['name'], // Keep this as it is (already an integer)
+        'email': data['email'],
+        'level': data['level'],
+        'goupe_id': data['groupe_id'],
+      };
+    } else {
+      print("error respose Fetching Student info ${response.statusCode}");
+      throw Exception('Failed to load quiz');
+    }
+  }
+
   Future<void> sendResponseToBackend() async {
+    final data = await fetchStudentInfo();
+    String studentId = data['StudentId'];
     for (int i = 0; i < totalQuestions; i++) {
       final userChoices = userAnswers[i];
       for (int choiceId in userChoices) {
@@ -311,7 +344,7 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
             'quizz_id': quizId,
             'choice_id': choiceId,
             'question_id': questions[i].questionId,
-            'student_id': '24/0006', //change into a variable when lina answers////////////////////////////////////////////////////////////////
+            'student_id': studentId,
           }),
         );
 
@@ -398,6 +431,34 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
                       "Loading quiz...",
                       style: TextStyle(
                         fontSize: 14,
+                        color: Color(0xff21334E),
+                        fontFamily: "MontserratSemi",
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              : error
+              ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: screenHeight * 0.23,
+                      height: screenHeight * 0.23,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(200.0),
+                        child: Image.asset(
+                          "images/NotWrokingBlue.png",
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Text(
+                      "Unknown Error has accorred ",
+                      style: TextStyle(
+                        fontSize: 18,
                         color: Color(0xff21334E),
                         fontFamily: "MontserratSemi",
                       ),
