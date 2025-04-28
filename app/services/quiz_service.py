@@ -361,3 +361,28 @@ async def get_quiz_with_question_id(quiz_id: int, db: AsyncSession):
         })
 
     return quiz_data
+
+
+
+async def get_all_quizzes_service(db: AsyncSession) -> List[Quiz]:
+    """Fetch all quizzes, without any date or type filter."""
+    stmt = select(Quiz)
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
+
+
+async def get_available_quizzes_today(db: AsyncSession) -> List[int]:
+    """Fetch IDs of quizzes that are available """
+    today = date.today()
+    stmt = select(Quiz.id).where(Quiz.date >= today, Quiz.type_quizz != 'S')
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
+
+async def get_available_surveys_today(db: AsyncSession) -> List[int]:
+    """Fetch IDs of surveys that are available """
+    today = date.today()
+    stmt = select(Quiz.id).where(Quiz.date >= today, Quiz.type_quizz == 'S')
+    result = await db.execute(stmt)
+    return result.scalars().all()

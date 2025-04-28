@@ -6,7 +6,8 @@ from app.services.quiz_service import (
     get_available_quizzes_service, add_quiz, add_question, add_choice,
     delete_quiz_service, delete_question_service, delete_choice_service,
     update_quiz, update_question, update_choice, get_students_within_score_range,
-    get_students_who_did_quiz, answer_quiz, get_quiz_details_service,get_quiz_with_question_id
+    get_students_who_did_quiz, answer_quiz, get_quiz_details_service, get_quiz_with_question_id,
+    get_all_quizzes_service, get_available_quizzes_today,get_available_surveys_today
 )
 from app.schemas.quiz import QuizOut, QuizCreate, AnswerSubmission
 
@@ -19,6 +20,7 @@ from app.schemas.quiz import QuizCreate
 from app.schemas.question import QuestionModel
 from app.schemas.choice import ChoiceModel
 from typing import List
+from pydantic import BaseModel
 
 router = APIRouter()
 
@@ -188,3 +190,36 @@ async def get_quiz_details(quiz_id: int, db: AsyncSession = Depends(get_db)):
 @router.get("/quizzes/{quiz_id}/details_more")
 async def get_quiz_details_with_question(quiz_id: int, db: AsyncSession = Depends(get_db)):
     return await get_quiz_with_question_id(quiz_id, db)
+
+
+
+@router.get("/quizzes/all", response_model=List[QuizOut])
+async def get_all_quizzes(db: AsyncSession = Depends(get_db)):
+    quizzes = await get_all_quizzes_service(db)
+    return quizzes
+
+
+# Modèle de réponse structuré avec un 'id' explicite
+class QuizIDResponse(BaseModel):
+    id: int
+
+
+
+@router.get("/available_quizzes_today", response_model=List[QuizIDResponse])
+async def available_quizzes(db: AsyncSession = Depends(get_db)) -> List[QuizIDResponse]:
+    """
+    Endpoint to fetch the IDs of quizzes available today or in the future.
+    """
+    quiz_ids = await get_available_quizzes_today(db)
+    return [QuizIDResponse(id=quiz_id) for quiz_id in quiz_ids]
+
+
+
+ 
+@router.get("/available_surveys_today", response_model=List[QuizIDResponse])
+async def available_surveys(db: AsyncSession = Depends(get_db)) -> List[QuizIDResponse]:
+    """
+    Endpoint to fetch the IDs of surveys available today or in the future.
+    """
+    quiz_ids = await get_available_surveys_today(db)
+    return [QuizIDResponse(id=quiz_id) for quiz_id in quiz_ids]   
