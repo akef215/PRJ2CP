@@ -11,19 +11,19 @@ import 'package:esi_quiz/pages3/quizPages/Quiz1WP/QWP_page1.dart';
 import 'package:esi_quiz/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import '../../../pages1/logMobile.dart';
-import './QuestionInfo.dart';
+import '../Quiz1/QuestionInfo.dart';
 
 import 'dart:convert';
 import 'dart:async';
 
-class SubmitQuizWithPers extends StatefulWidget {
-  //const SubmitQuizWithPers({super.key});
+class SubmitSurvey extends StatefulWidget {
+  //const SubmitSurvey({super.key});
   final int totalQuestions;
   final List<int> answeredQuestions;
   final List<Questioninfo> questions;
   final List<List<int>> userAnswers;
   final String quizId;
-  const SubmitQuizWithPers({
+  const SubmitSurvey({
     required this.totalQuestions,
     required this.answeredQuestions,
     super.key,
@@ -33,10 +33,10 @@ class SubmitQuizWithPers extends StatefulWidget {
   });
 
   @override
-  State<SubmitQuizWithPers> createState() => _SubmitQuizWithPersState();
+  State<SubmitSurvey> createState() => _SubmitSuvey();
 }
 
-class _SubmitQuizWithPersState extends State<SubmitQuizWithPers> {
+class _SubmitSuvey extends State<SubmitSurvey> {
   int totalQuestions = 0;
   List<int> answeredQuestions = []; // To simulate the question indexes
   void initState() {
@@ -45,7 +45,7 @@ class _SubmitQuizWithPersState extends State<SubmitQuizWithPers> {
     answeredQuestions = widget.answeredQuestions;
   }
 
-  //_SubmitQuizWithPersState(this.totalQuestions, this.answeredQuestions);
+  //_SubmitSuvey(this.totalQuestions, this.answeredQuestions);
 
   bool isAnswered(int index) {
     return answeredQuestions.contains(index);
@@ -186,7 +186,7 @@ class _SubmitQuizWithPersState extends State<SubmitQuizWithPers> {
     );
   }
 
-  double calculateScore(
+ /* double calculateScore(
     List<Questioninfo> questions,
     List<List<int>> userAnswers,
   ) {
@@ -206,15 +206,15 @@ class _SubmitQuizWithPersState extends State<SubmitQuizWithPers> {
       }
     }
     return score;
-  }
+  }*/
 
   void handleSubmit(
     List<Questioninfo> questions,
     List<List<int>> userAnswers,
   ) async {
-    double score = calculateScore(questions, userAnswers);
+   // double score = calculateScore(questions, userAnswers);
 
-    print("Final Score: $score");
+    //print("Final Score: $score");
 
     // Optionally send data to backend here
 
@@ -264,10 +264,9 @@ class _SubmitQuizWithPersState extends State<SubmitQuizWithPers> {
               choiceId.toString(),
         );
         //final urlInfo = Uri.parse(path +'/students/me/profile');
-        final responseInfo = await http.get(
-          Uri.parse(path + '/students/me/profile'),
-        );
-        //////////////////////////////////////////////////////////////////////////////countinue from here (tired)
+        // final responseInfo =await http.get(
+
+        //);
 
         // For a POST request with JSON data
         final response = await http.post(

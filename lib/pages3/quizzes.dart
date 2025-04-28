@@ -3,11 +3,23 @@ import 'package:flutter/material.dart';
 
 import '../pages2/agenda.dart';
 import '../pages2/profile.dart';
+import 'dart:convert';
+
+
+import '../pages3/quizPages/Quiz1/Qpage1.dart';
+import '../pages3/quizPages/Quiz1WP/QWP_page1.dart';
+import '../pages3/quizPages/surveyNew/surveyPage.dart';
+
 
 import '../widgets/appbar.dart';
+import '../pages3/quizPages/QuizzesStructure.dart';
+
+///// redirection page Decribed as part2 in my to do list
 
 class Quizzes extends StatefulWidget {
-  const Quizzes({super.key});
+  final Quizzesstructure ques;
+
+  const Quizzes({super.key, required this.ques});
 
   @override
   State<Quizzes> createState() => _QuizzesState();
@@ -18,7 +30,9 @@ class _QuizzesState extends State<Quizzes> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print("Quizzes");
+    print("current Page quizzes , builder name quizzesSatate ");// 1 quiz, 2 persnatation
+
+    print("Redirection Page for quizzes ");
     return Scaffold(
       backgroundColor: Color(0xffDFF0FF),
 
@@ -61,10 +75,34 @@ class _QuizzesState extends State<Quizzes> {
           /*------------------START QUIZ BUTTON-------------------*/
           ElevatedButton(
             onPressed: () {
-              Navigator.push(
+              if(widget.ques.type_quizz=="1"){
+                  Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Quiz1()),
-              );
+                MaterialPageRoute(
+                  builder: (context) => QuizPage1(quizIdString: widget.ques.id.toString()),
+                ), 
+                );
+
+              }else if(widget.ques.type_quizz=="2"){
+                 Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizWPPage1(quizIdString: widget.ques.id.toString()),
+                ), 
+                );
+
+              }else if(widget.ques.type_quizz=="s"){
+                   Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SurveyPage(quizIdString: widget.ques.id.toString()),
+                ), 
+                );
+                
+              }else{
+                print("error determining Type");
+              }
+              
             },
             style: ElevatedButton.styleFrom(
               elevation: 0.05,

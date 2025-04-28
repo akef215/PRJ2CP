@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:esi_quiz/pages3/statsPages/progress_point.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:http/http.dart' as http;
 
 class ProgressStats extends StatefulWidget {
   const ProgressStats({super.key});
@@ -13,41 +17,85 @@ class _ProgressStatsState extends State<ProgressStats> {
   String selectedTimePeriod = 'yearly'; // Default time period
   List<FlSpot> dataPoints = []; // Data points for the chart
 
-  Future<List<FlSpot>> fetchChartData(String timePeriod) async {
-    await Future.delayed(Duration(seconds: 1)); // Simulate backend delay
-    return timePeriodData[timePeriod] ?? []; // Return corresponding data
+
+  Map<String, List<FlSpot>> allChartData = {};
+
+
+  Future<Map<String, List<FlSpot>>> loadChartDataFromJson() async {
+    await Future.delayed(Duration(seconds: 1)); // Simulate delay
+
+    // Simulated raw JSON (replace this with real API or local asset later)
+    const String rawJson = '''{
+    "yearly": [
+      { "x": 0, "y": 0 },
+      { "x": 1, "y": 25 },
+      { "x": 2, "y": 50 },
+      { "x": 3, "y": 75 },
+      { "x": 4, "y": 90 },
+      { "x": 5, "y": 75 },
+      { "x": 6, "y": 50 },
+      { "x": 7, "y": 85 },
+      { "x": 8, "y": 25 }
+    ],
+    "monthly": [
+      { "x": 0, "y": 0 },
+      { "x": 1, "y": 10 },
+      { "x": 2, "y": 30 },
+      { "x": 3, "y": 60 },
+      { "x": 4, "y": 90 }
+    ]
+  }''';
+
+
+    final Map<String, dynamic> jsonMap = Map<String, dynamic>.from(
+        json.decode(rawJson)
+    );
+
+    return jsonMap.map((key, value) {
+      final List<ProgressPoint> points = (value as List)
+          .map((item) => ProgressPoint.fromJson(item))
+          .toList();
+      return MapEntry(key, points.map((e) => e.toFlSpot()).toList());
+    });
   }
 
+  //TODO : UNCOMMENT
 
-  // Sample data for yearly, monthly (4 weeks), etc.
-  final Map<String, List<FlSpot>> timePeriodData = {
-    'yearly': [ // BASED ON MONTHS
-      FlSpot(0, 0),
-      FlSpot(1, 25),
-      FlSpot(2, 50),
-      FlSpot(3, 75),
-      FlSpot(4, 100),
-      FlSpot(5, 75),
-      FlSpot(6, 50),
-      FlSpot(7, 25),
-      FlSpot(8, 25),
-    ],
-    'monthly': [ // BASED ON WEEKS
-      FlSpot(0, 0),
-      FlSpot(1, 10), // Week 1
-      FlSpot(2, 30), // Week 2
-      FlSpot(3, 60), // Week 3
-      FlSpot(4, 90), // Week 4
-    ],
-    // Add more data for other time periods
-  };
+  // Future<Map<String, List<FlSpot>>> fetchChartDataFromApi() async {
+  //   final response = await http.get(Uri.parse('https://'));
+  //
+  //   if (response.statusCode == 200) {
+  //     final Map<String, dynamic> jsonMap = json.decode(response.body);
+  //
+  //     return jsonMap.map((key, value) {
+  //       final List<FlSpot> points = (value as List).map((item) {
+  //         double x = (item['x'] as num).toDouble();
+  //         double y = (item['y'] as num).toDouble();
+  //         return FlSpot(x, y);
+  //       }).toList();
+  //
+  //       return MapEntry(key, points);
+  //     });
+  //   } else {
+  //     throw Exception('Failed to load chart data');
+  //   }
+  // }
 
+  // late Future<Map<String, List<FlSpot>>> futureChartData;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   futureChartData = fetchChartDataFromApi();
+  // }
+
+  //TODO COMMENT
   @override
   void initState() {
     super.initState();
-    fetchChartData(selectedTimePeriod).then((data) {
+    loadChartDataFromJson().then((data) {
       setState(() {
-        dataPoints = data;
+        allChartData = data;
+        dataPoints = allChartData[selectedTimePeriod] ?? [];
       });
     });
   }
@@ -80,7 +128,7 @@ class _ProgressStatsState extends State<ProgressStats> {
                   onChanged: (String? newValue) {
                     setState(() {
                       selectedTimePeriod = newValue!; // yearly or weekly
-                      dataPoints = timePeriodData[selectedTimePeriod]!; // Update data points
+                      dataPoints = allChartData[selectedTimePeriod] ?? [];
                     });
                   },
                   dropdownColor: Colors.white,
@@ -107,8 +155,8 @@ class _ProgressStatsState extends State<ProgressStats> {
           SizedBox(height: 30),
 
           // Progress Chart
-          FutureBuilder<List<FlSpot>>(
-              future: fetchChartData(selectedTimePeriod),
+          FutureBuilder<Map<String, List<FlSpot>>>(
+              future: loadChartDataFromJson(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Column(
@@ -125,7 +173,8 @@ class _ProgressStatsState extends State<ProgressStats> {
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return Center(child: Text('No data available'));
               } else {
-                dataPoints = snapshot.data!; // Update data points
+                dataPoints = snapshot.data![selectedTimePeriod] ?? [];
+
 
                 return Column(
                   children: [

@@ -6,8 +6,9 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import '../../../pages2/homePage.dart';
-import './Qpage1Submit.dart';
-import './QuestionInfo.dart';
+
+import '../Quiz1/QuestionInfo.dart';
+import './submitSurvey.dart';
 
 //import 'package:esi_quiz/pages3/quizPages/Quiz1WP/Questioninfo.dart';
 
@@ -16,15 +17,15 @@ import './QuestionInfo.dart';
 
 //String quizIdString ='2'; //in this case only ( need to get it from availibale Quizzes / entery on the constructor )
 
-class QuizPage1 extends StatefulWidget {
+class SurveyPage extends StatefulWidget {
   final String quizIdString;
-  const QuizPage1({super.key, required this.quizIdString});
+  const SurveyPage({super.key, required this.quizIdString});
 
   @override
-  State<QuizPage1> createState() => _QuizPage1State();
+  State<SurveyPage> createState() => _SurveyPageState();
 }
 
-class _QuizPage1State extends State<QuizPage1> {
+class _SurveyPageState extends State<SurveyPage> {
   late List<Questioninfo> questions;
   late int timeLimit;
   late int quizId;
@@ -37,10 +38,11 @@ class _QuizPage1State extends State<QuizPage1> {
 
   List<int> answeredQuestions = [];
 
-  late Timer _timer;
-  int _remainingTime = 0;
+  // late Timer _timer;
+  // int _remainingTime = 0;
 
   bool isLoading = true;
+  bool error = false;
 
   // Dynamic data (will be fetched from the API)
   String quizTimeText = "Loading..."; // Placeholder for "Quiz Time"
@@ -65,8 +67,8 @@ class _QuizPage1State extends State<QuizPage1> {
 
       return {
         'quizId': data['quiz_id'],
-        'timeLimitMinutes':
-            data['time_limit_minutes'], // Keep this as it is (already an integer)
+        // 'timeLimitMinutes':
+        // data['time_limit_minutes'], // Keep this as it is (already an integer)
         'totalQuestions': data['total_questions'],
         'questions':
             (data['questions'] as List)
@@ -92,10 +94,11 @@ class _QuizPage1State extends State<QuizPage1> {
       setState(() {
         print("state is being set");
         // print("${data['questions']}");
-        timeLimit = data['timeLimitMinutes'];
         quizId = data['quizId'];
         totalQuestions = data['totalQuestions'];
-
+        if (totalQuestions == 0) {
+          error = true;
+        }
         questions = List<Questioninfo>.from(data['questions']);
 
         userAnswers = List.generate(totalQuestions, (index) => []);
@@ -103,7 +106,6 @@ class _QuizPage1State extends State<QuizPage1> {
 
         questionMarkText =
             "${choices.fold(0.0, (sum, c) => sum + c.points)} points";
-        _remainingTime = timeLimit;
         isLoading = false;
       });
     } catch (e) {
@@ -112,10 +114,10 @@ class _QuizPage1State extends State<QuizPage1> {
         isLoading = false;
       });
     }
-    startTimer();
+    //startTimer();
   }
 
-  void startTimer() {
+  /* void startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_remainingTime > 0) {
         setState(() => _remainingTime--);
@@ -129,7 +131,7 @@ class _QuizPage1State extends State<QuizPage1> {
         /////////////////////////////////////////////////////////////////QUIZ ENDED
       }
     });
-  }
+  }*/
 
   void nextPage() async {
     if (currentPage < totalQuestions - 1) {
@@ -156,7 +158,7 @@ class _QuizPage1State extends State<QuizPage1> {
       context,
       MaterialPageRoute(
         builder:
-            (context) => SubmitQuizWithPers(
+            (context) => SubmitSurvey(
               totalQuestions: totalQuestions,
               answeredQuestions: answeredQuestions,
               questions: questions,
@@ -175,7 +177,7 @@ class _QuizPage1State extends State<QuizPage1> {
         choices = questions[currentPage].choices;
         questionMarkText =
             "${questions[currentPage].choices.fold<double>(0, (sum, c) => sum + c.points)} points";
-        _remainingTime = timeLimit;
+        // _remainingTime = timeLimit;
       });
     } else {
       print("No going back");
@@ -203,12 +205,12 @@ class _QuizPage1State extends State<QuizPage1> {
   }
 
   // Check if the user selected the correct answer for the current question
-  bool isAnswerCorrect(int choiceId) {
+  /*bool isAnswerCorrect(int choiceId) {
     // Check if the selected choice_id(s) match the correct answer(s) for the current question
     return questions[currentPage].choices.any(
       (choice) => choice.choicesId == choiceId && choice.points > 0,
     );
-  }
+  }*/
 
   double calculateScore() {
     double score = 0;
@@ -350,6 +352,35 @@ class _QuizPage1State extends State<QuizPage1> {
                   ],
                 ),
               )
+              : error
+              ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: screenHeight*0.23,
+                      height: screenHeight*0.23,
+                      child:
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(200.0),
+                        child: Image.asset(
+                          "images/NotWrokingBlue.png",
+                          fit: BoxFit.contain,
+                        ),
+                      ), 
+                    ),
+                    SizedBox(height: 30),
+                    Text(
+                      "Unknown Error has accorred ",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Color(0xff21334E),
+                        fontFamily: "MontserratSemi",
+                      ),
+                    ),
+                  ],
+                ),
+              )
               : Column(
                 children: [
                   /*--------------------QUIZ TIME BOX-----------------*/
@@ -367,16 +398,6 @@ class _QuizPage1State extends State<QuizPage1> {
                       color: Color(0xffFFFDFD),
                       borderRadius: BorderRadius.circular(40),
                       border: Border.all(color: Color(0xff0F3D64), width: 1),
-                    ),
-                    child: Center(
-                      child: Text(
-                        _remainingTime.toString() + ' s', //quizTimeText,
-                        style: TextStyle(
-                          color: Color(0xff21334E),
-                          fontFamily: "MontserratSemi",
-                          fontSize: 20,
-                        ),
-                      ),
                     ),
                   ),
 

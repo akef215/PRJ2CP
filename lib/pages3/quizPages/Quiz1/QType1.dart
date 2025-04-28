@@ -6,6 +6,9 @@ import '../../../pages2/agenda.dart';
 import '../../../pages2/profile.dart';
 import 'Qpage1.dart';
 
+
+
+/// rediretion page
 ////START THE QUIZ
 class QuizT1 extends StatefulWidget {
   const QuizT1({super.key});
@@ -65,7 +68,7 @@ class _QuizT1State extends State<QuizT1> {
           /*------------------START QUIZ BUTTON-------------------*/
           ElevatedButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => QuizPage1()));
+             // Navigator.push(context, MaterialPageRoute(builder: (context) => QuizPage1()));
             },
             style: ElevatedButton.styleFrom(
               elevation: 0.05,

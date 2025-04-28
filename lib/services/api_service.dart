@@ -31,9 +31,10 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../widgets/appbar.dart';
 
 class ApiService {
-  static const String baseUrl = "http://192.168.1.3:8000";
+  static  String baseUrl = path; //"http://192.168.6.154:8000";
 
   static Future<bool> sendFeedback(String feedback) async {
     final url = Uri.parse('$baseUrl/feedback/');
@@ -47,7 +48,7 @@ class ApiService {
         body: jsonEncode({
           "description": feedback,
           "groupe": "1CP1",
-          "module": "ALG1"
+          "module": "ALG1",
         }),
       );
 

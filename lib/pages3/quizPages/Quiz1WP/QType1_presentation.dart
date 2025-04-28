@@ -61,12 +61,12 @@ class _QuizT1_presentationState extends State<QuizT1_presentation> {
           SizedBox(height: 30),
           /*------------------START QUIZ BUTTON-------------------*/
           ElevatedButton(
-            onPressed: () {
-              Navigator.push(
+            onPressed:(){} ,
+             /* Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => QuizWPPage1()),
+              //  MaterialPageRoute(builder: (context) => QuizWPPage1()),
               );
-            },
+            },*/
 
             style: ElevatedButton.styleFrom(
               elevation: 0.05,

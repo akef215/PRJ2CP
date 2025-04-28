@@ -4,7 +4,10 @@ import 'package:http/http.dart' as http;
 import '../pages2/homePage.dart';
 import 'createAcc2_1.dart';
 import 'recover.dart';
+import '../../../widgets/appbar.dart';
 
+
+String bearerToken = '';
 class LogMobile extends StatefulWidget {
   const LogMobile({super.key});
 
@@ -49,7 +52,7 @@ class _LogMobileState extends State<LogMobile> {
     String password = passwordController.text.trim();
 
     final url = Uri.parse(
-      'http://192.168.43.147:8000/auth/students/login',
+      path + '/auth/students/login',
     ); // For Android emulator we use 'http://10.0.2.2:8000/auth/students/login'
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({'email': email, 'password': password});
@@ -63,7 +66,9 @@ class _LogMobileState extends State<LogMobile> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        bearerToken = data['access_token'];
         print("✅ Login successful! User data: $data");
+        print("Bearer Token : $bearerToken");
 
         setState(() {
           loginMessage = "Login successful!";
@@ -166,7 +171,7 @@ class _LogMobileState extends State<LogMobile> {
                       'Log into your account',
                       style: TextStyle(
                         fontFamily: "RammettoOne",
-                        fontSize: 16,
+                        fontSize: 19,
                         fontWeight: FontWeight.w500,
                         color: Colors.white,
                       ),

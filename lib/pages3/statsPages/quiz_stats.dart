@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../results.dart';
 
@@ -10,13 +13,38 @@ class QuizStats extends StatefulWidget {
 }
 
 class _QuizStatsState extends State<QuizStats> {
-  // Simulate fetching data from backend with a Future
+
+
   Future<List<Map<String, dynamic>>> fetchQuizData() async {
-    await Future.delayed(Duration(seconds: 1)); // Simulate delay
+    final response = await http.get(Uri.parse('http://'));// TODO
+
+    if (response.statusCode == 200) { // Parse the JSON response
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((item) => item as Map<String, dynamic>).toList();
+    } else {
+      throw Exception('Failed to load quiz data');
+    }
+  }
+
+  //Mock data function
+  Future<List<Map<String, dynamic>>> getMockQuizStats() async {
+    await Future.delayed(Duration(seconds: 1)); // Simulate network delay
     return [
-      {'date': '23/02/2025', 'quizNumber': '07', 'progress': 0.68, 'color': Color(0xffFFFFFF)},
-      {'date': '15/02/2025', 'quizNumber': '06', 'progress': 0.95, 'color': Color(0xffFFFFFF)},
-      {'date': '02/02/2025', 'quizNumber': '05', 'progress': 0.40, 'color': Color(0xff0F3D64)},
+      {
+        "date": "23/02/2025",
+        "quizNumber": "07",
+        "progress": 0.68,
+      },
+      {
+        "date": "15/02/2025",
+        "quizNumber": "06",
+        "progress": 0.95,
+      },
+      {
+        "date": "02/02/2025",
+        "quizNumber": "05",
+        "progress": 0.40,
+      },
     ];
   }
 
@@ -28,7 +56,7 @@ class _QuizStatsState extends State<QuizStats> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: fetchQuizData(), // Call the fetchQuizData method
+        future: getMockQuizStats(), // TODO :  Call the actual fetchQuizData method
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Show a loading spinner while data is being fetched
@@ -105,7 +133,6 @@ class _QuizStatsState extends State<QuizStats> {
                     quizData['date'],
                     quizData['quizNumber'],
                     quizData['progress'],
-                    quizData['color'],
                   );
                 }).toList(),
 
@@ -151,7 +178,8 @@ class _QuizStatsState extends State<QuizStats> {
 }
 
 // Helper method to build a quiz card with a progress line
-Widget _buildQuizCard(String date, String quizNumber, double progress, Color color) {
+Widget _buildQuizCard(String date, String quizNumber, double progress) {
+  Color textColor = progress > 0.5 ? Colors.white : Color(0xff0F3D64);
   return Container(
     height: 120,
     padding: EdgeInsets.all(15),
@@ -234,7 +262,7 @@ Widget _buildQuizCard(String date, String quizNumber, double progress, Color col
             ClipRRect(
               borderRadius: BorderRadius.circular(16), // Rounded corners
               child: LinearProgressIndicator(
-                value: progress, // Progress value (e.g., 0.68 for 68%)
+                value: progress, // Progress value (exp 0.68 for 68%)
                 backgroundColor: Color(0xffB2DBFF).withOpacity(0.7), // Background color of the progress bar
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xff21334E)), // Progress color
                 minHeight: 26, // Increased height (thicker progress bar)
@@ -249,7 +277,7 @@ Widget _buildQuizCard(String date, String quizNumber, double progress, Color col
                     fontSize: 15,
                     fontFamily: "MontserratSemi",
                     fontWeight: FontWeight.w500,
-                    color: color, // Text color (white on progress bar)
+                    color: textColor, // Text color (white on progress bar)
                   ),
                 ),
               ),

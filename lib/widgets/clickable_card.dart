@@ -42,10 +42,13 @@ class _ClickableCardState extends State<ClickableCard> {
         });
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 100),
+        duration: Duration(milliseconds: 300),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isPressed ? Color(0xffaff0ff) : Color(0xffEEF7FF),
+          color:
+              isPressed
+                  ? Color.fromARGB(255, 139, 185, 196)
+                  : Color(0xffEEF7FF),
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
@@ -64,7 +67,7 @@ class _ClickableCardState extends State<ClickableCard> {
                 widget.mainText,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 13,
                   color: Color(0xff21334E),
                   fontFamily: "RammettoOne",
                   letterSpacing: 1.5,
