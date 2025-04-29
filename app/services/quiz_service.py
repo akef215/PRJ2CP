@@ -1,6 +1,7 @@
 from fastapi import Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import distinct
 from sqlalchemy.orm import selectinload
 from datetime import date
 from typing import List
@@ -11,11 +12,14 @@ from app.models.choice import Choice
 from app.models.question import Question
 from app.models.quiz_groupe import quiz_groupe
 from app.models.results import Result
+from app.models.choice import Choice  # Import the Answer model
 from app.schemas.quiz import QuizCreate, AnswerSubmission
 from app.schemas.question import QuestionModel
 from app.schemas.choice import ChoiceModel
 from app.schemas.quiz import QuizOut
 from app.schemas.quiz import QuizChange
+from app.schemas.notif import NotificationCreate  # Import NotificationCreate
+from app.models.notifs import Notif  # Import Notification model
 
 async def get_available_quizzes_service(db: AsyncSession) -> List[Quiz]:
     """Fetch quizzes that are available (i.e., their date is today or in the future)."""
@@ -196,23 +200,26 @@ async def update_choice(choice_id: int, choice_data: ChoiceModel, db: AsyncSessi
 
     return choice
 
-async def answer_quiz(quiz_id: int, answers: List[AnswerSubmission], db: AsyncSession):
+async def answer_quiz(quiz_id: int, answers: dict[int, int], db: AsyncSession):
     total_score = 0
-    for answer in answers:
-        question_result = await db.execute(select(Question).where(Question.id == answer.question_id, Question.quiz_id == quiz_id))
+    for question_id, choice_id in answers.items():
+        question_result = await db.execute(
+            select(Question).where(Question.id == question_id, Question.quiz_id == quiz_id)
+        )
         question = question_result.scalars().first()
         if not question:
-            raise HTTPException(status_code=404, detail=f"Question {answer.question_id} not found in quiz {quiz_id}")
+            raise HTTPException(status_code=404, detail=f"Question {question_id} not found in quiz {quiz_id}")
 
-        choice_result = await db.execute(select(Choice).where(Choice.id == answer.choice_id, Choice.question_id == question.id))
+        choice_result = await db.execute(
+            select(Choice).where(Choice.id == choice_id, Choice.question_id == question.id)
+        )
         choice = choice_result.scalars().first()
         if not choice:
-            raise HTTPException(status_code=404, detail=f"Choice {answer.choice_id} not found for question {answer.question_id}")
-        
+            raise HTTPException(status_code=404, detail=f"Choice {choice_id} not found for question {question_id}")
+
         total_score += choice.score
 
     return {"message": "Quiz answered successfully", "total_score": total_score}
-
 
 
 # Function to get students who did the quiz
@@ -386,3 +393,67 @@ async def get_available_surveys_today(db: AsyncSession) -> List[int]:
     stmt = select(Quiz.id).where(Quiz.date >= today, Quiz.type_quizz == 'S')
     result = await db.execute(stmt)
     return result.scalars().all()
+
+
+
+async def create_notification(notification_data: NotificationCreate, db: AsyncSession):
+    notification = Notif(**notification_data.dict())
+    db.add(notification)
+    await db.commit()
+    await db.refresh(notification)
+    return notification
+
+async def launch_quiz_service(quiz_id: int, db: AsyncSession):
+    # Fetch the quiz with eager loading of groups and students
+    result = await db.execute(
+        select(Quiz)
+        .where(Quiz.id == quiz_id)
+        .options(
+            selectinload(Quiz.groupes)
+            .selectinload(Groupe.etudiants)
+        )
+    )
+    quiz = result.scalar_one_or_none()
+
+    if not quiz:
+        raise HTTPException(status_code=404, detail="Quiz not found")
+
+    if quiz.launch:
+        raise HTTPException(status_code=400, detail="Quiz already launched")
+
+    # Update quiz status
+    quiz.launch = True
+    await db.commit()
+
+    # Notify students in all associated groups
+    notification_count = 0
+    if quiz.groupes:  # Check if there are any groups
+        for group in quiz.groupes:
+            for student in group.etudiants:
+                notif = NotificationCreate(
+                    content=f"The quiz '{quiz.title}' has been launched!",
+                    recipient_id=student.id
+                )
+                await create_notification(notif, db)
+                notification_count += 1
+
+        return {
+            "message": "Quiz launched successfully",
+            "notifications_sent": notification_count,
+            "groups_affected": len(quiz.groupes)
+        }
+
+    return {"message": "Quiz launched "}
+
+
+
+async def get_submitted_quizzes(student_id: str, db: AsyncSession) -> List[Quiz]:
+    stmt = (
+        select(Quiz)
+        .distinct(Quiz.id)
+        .join(Result)
+        .where(Result.student_id == student_id)
+    )
+    result = await db.execute(stmt)
+    quizzes = result.scalars().all()
+    return quizzes

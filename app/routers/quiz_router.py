@@ -7,7 +7,8 @@ from app.services.quiz_service import (
     delete_quiz_service, delete_question_service, delete_choice_service,
     update_quiz, update_question, update_choice, get_students_within_score_range,
     get_students_who_did_quiz, answer_quiz, get_quiz_details_service, get_quiz_with_question_id,
-    get_all_quizzes_service, get_available_quizzes_today,get_available_surveys_today
+    get_all_quizzes_service, get_available_quizzes_today, get_available_surveys_today, launch_quiz_service,
+    get_submitted_quizzes
 )
 from app.schemas.quiz import QuizOut, QuizCreate, AnswerSubmission
 
@@ -223,3 +224,13 @@ async def available_surveys(db: AsyncSession = Depends(get_db)) -> List[QuizIDRe
     """
     quiz_ids = await get_available_surveys_today(db)
     return [QuizIDResponse(id=quiz_id) for quiz_id in quiz_ids]   
+
+
+  
+@router.put("/quizzes/launch/{quiz_id}")
+async def launch_quiz(quiz_id: int, db: AsyncSession = Depends(get_db)):
+    return await launch_quiz_service(quiz_id, db)
+
+@router.get("/submitted/{student_id}", response_model=List[int])
+async def submitted_quizzes(student_id: str, db: AsyncSession = Depends(get_db)):
+    return await get_submitted_quizzes(student_id, db)
