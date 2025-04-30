@@ -8,6 +8,7 @@ const CreateT2Pic = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageLarge, setIsImageLarge] = useState(false);
   const [questionTitle, setQuestionTitle] = useState("quiz Question ?");
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];

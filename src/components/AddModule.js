@@ -64,8 +64,9 @@ const AddModule = () => {
   const [code, setCode] = useState("");
   const levels = ["1CP", "2CP", "1CS", "2CS"];
   const [level, setLevel] = useState("");
-  const [coef, setCoef] = useState(0);
+  const [coef, setCoef] = useState();
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
   const SelectDropdown = ({
     label,
     options = [],
@@ -101,7 +102,7 @@ const AddModule = () => {
     console.log("Payload à envoyer :", payload);
 
     // Envoi au back
-    fetch("http://localhost:8000/teachers/add_module", {
+    fetch(`${API_URL}/teachers/add_module`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

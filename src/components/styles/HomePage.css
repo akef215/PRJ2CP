@@ -172,7 +172,7 @@ vertical-align: middle;
 .menu-container {
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 40px;
     margin: 40px auto; /* centers it */
     padding: 100px;
     max-width: 1000px; /* adjust as needed */
@@ -196,6 +196,7 @@ vertical-align: middle;
     position: relative;
     top: -100px;
     cursor: pointer;
+    width: 270px;
 }
 
 .part img{
@@ -221,12 +222,14 @@ vertical-align: middle;
     transform: translateY(-10px);
 }
 
-.rectMenu {
-    height: 350px !important;
-    background-color: rgba(81, 131, 129, 1)!important;
-    border: 1px solid rgba(255, 255, 255, 1)!important;
+.rectMenuH {
+    display: flex;
+    top: -150px;
+    height: 350px;
+    background-color: rgba(81, 131, 129, 1);
+    border: 1px solid rgba(255, 255, 255, 1);
     border-radius: 64px;
     position: relative;
-    width: 85%;
+    width: 100%;
     overflow: hidden;
 }

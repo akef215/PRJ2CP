@@ -15,6 +15,7 @@ const Profile = () => {
     identifier: "",
     image: user,
   });
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ const Profile = () => {
     }
 
     // Ton fetch existant
-      customFetch('http://localhost:8000/teachers/me')
+      customFetch(`${API_URL}/teachers/me`)
         .then(res => res?.json())
         .then(data => {
           if (data) {
@@ -61,7 +62,7 @@ const Profile = () => {
       // (optionnel) upload sur backend si nécessaire
       const formData = new FormData();
       formData.append("image", file);
-      await axios.post("http://127.0.0.1:8000/profile/upload-image", formData, {
+      await axios.post(`${API_URL}/profile/upload-image`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
     } catch (err) {
@@ -72,44 +73,16 @@ const Profile = () => {
   const navigate = useNavigate();
   return (
     <div>
-      {/* Navigation */}
-      <div className="Nav">
-        <div className="Nav-Logo">
-          <img src={logo} alt="Logo" />
+      {/* Barre de navigation */}
+      <div className='Nav'>
+        <div className='Nav-Logo'>
+          <img src={logo} alt='Logo'/>
         </div>
-        <div className="Nav-Menu">
-          <p
-            onClick={() => {
-              navigate("../homepage");
-            }}
-            className={"nav-item"}
-          >
-            home
-          </p>
-          <p
-            onClick={() => {
-              navigate("../stats");
-            }}
-            className={"nav-item"}
-          >
-            stats
-          </p>
-          <p
-            onClick={() => {
-              navigate("../pageType2");
-            }}
-            className={"nav-item"}
-          >
-            Present
-          </p>
-          <p
-            onClick={() => {
-              navigate("../profile");
-            }}
-            className={"nav-item active"}
-          >
-            Profile
-          </p>
+       <div className='Nav-Menu'>
+        <p onClick={() => {navigate("../homepage")}} className={'nav-item'}>Home</p>
+        <p onClick={() => {navigate("../stats")}} className={'nav-item'}>Stats</p>
+        <p onClick={() => {navigate("../quizPage")}} className={'nav-item'}>Quizzes</p>
+        <p onClick={() => {navigate("../profile")}} className={'nav-item active'}>Profile</p>
         </div>
       </div>
       {/* Upload image */}

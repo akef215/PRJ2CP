@@ -1,21 +1,27 @@
-import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import { Link, useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import Logo from "../images/logo.png";
-import Quiz from "../images/QUIZ.png";
 import Profile from "../images/user.png";
 import "./styles/GeneralT1.css";
 
-export default function NavBarT1({ toggleSidebar }) {
+export default function NavBarT1({ toggleSidebar, type, id }) {
+  const navigate = useNavigate();
   return (
     <nav className="nav">
       {/* Logo principal */}
-      
-      <Link
-        to="/homePage"
-        className="site-title"
-      >
+
+      <Link to="/homePage" className="site-title">
         <img src={Logo} className="logo" alt="ESI Logo" />
       </Link>
-      <button className="btn-edit">Edit info</button>
+      <button
+        className="btn-edit"
+        onClick={() =>
+          navigate(
+            type === "Survey" ? `/editSurvey/${id}` : `/editQuiz/${id}`
+          )
+        }
+      >
+        Edit info
+      </button>
 
       {/*  Liens vers Notifications et Profile (NE PAS toucher au Sidebar) */}
       <ul>

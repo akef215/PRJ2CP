@@ -53,10 +53,11 @@ const CreateSurvey = () => {
   const [selectedClass, setSelectedClass] = useState(null);
   const [minutes, setMinutes] = useState("");
   const [seconds, setSeconds] = useState("");
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // Fetch des modules et classes
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/teachers/modules")
+    fetch(`${API_URL}/teachers/modules`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Modules:", data);
@@ -67,7 +68,7 @@ const CreateSurvey = () => {
         setModules([]);
       });
 
-    fetch("http://127.0.0.1:8000/teachers/groupes")
+    fetch(`${API_URL}/teachers/groupes`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Classes:", data);
@@ -97,7 +98,7 @@ const CreateSurvey = () => {
 
     try {
       // Attendre la réponse de fetch
-      const res = await fetch("http://localhost:8000/quizzes/add_quiz", {
+      const res = await fetch(`${API_URL}/quizzes/add_quiz`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

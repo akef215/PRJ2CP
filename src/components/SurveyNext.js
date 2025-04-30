@@ -12,6 +12,7 @@ const SurveyNext = () => {
     { id: 1, text: 'Option 1' },
     { id: 2, text: 'Option 2' },
   ]);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleCheckIconClick = (index) => {
     const newShowTicks = [...showTicks];

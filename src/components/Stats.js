@@ -16,9 +16,9 @@ const Stats = () => {
           <img src={logo} alt='Logo'/>
         </div>
        <div className='Nav-Menu'>
-        <p onClick={() => {navigate("../homepage")}} className={'nav-item'}>home</p>
-        <p onClick={() => {navigate("../stats")}} className={'nav-item active'}>stats</p>
-        <p onClick={() => {navigate("../pageType2")}} className={'nav-item'}>Present</p>
+        <p onClick={() => {navigate("../homepage")}} className={'nav-item'}>Home</p>
+        <p onClick={() => {navigate("../stats")}} className={'nav-item active'}>Stats</p>
+        <p onClick={() => {navigate("../quizPage")}} className={'nav-item'}>Quizzes</p>
         <p onClick={() => {navigate("../profile")}} className={'nav-item'}>Profile</p>
         </div>
       </div>

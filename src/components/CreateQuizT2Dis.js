@@ -4,6 +4,7 @@ import SidebarT1 from './SideBarT1.js';
 import './styles/GeneralT1.css';
 import Image from '../images/photo1.png' ;
 const CreateQuizT2Dis = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
   return (
     <div> 
         <NavbarT1 />

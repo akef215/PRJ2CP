@@ -1,22 +1,10 @@
 [
     {
-        "label" : "Question1",
-        "value" : 32
-    } ,
-    {
-        "label" : "Question2",
-        "value" : 45
-    } ,
-    {
-        "label" : "Question3",
-        "value" : 23
-    },
-    {
-        "label" : "Question4",
-        "value" : 65
-    } ,
-    {
-        "label" : "Question5",
+        "label" : "Anglais",
         "value" : 10
+    } ,
+    {
+        "label" : "Français",
+        "value" : 90
     } 
 ]

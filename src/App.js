@@ -6,8 +6,11 @@ import Profile from "./components/Profile";
 import Select from "./components/Select";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
-import CreateQuizT1 from "./components/addSurvey";
-import CreateQuizT2 from "./components/CreateQuizT2";
+import AddSurvey from "./components/addSurvey";
+import EditSurvey from "./components/editSurvey";
+import EditQuiz from "./components/editQuiz";
+import AddQuiz1 from "./components/addQuiz1";
+import AddQuiz2 from "./components/addQuiz2";
 import CreateQuizT2Dis from "./components/CreateQuizT2Dis";
 import HomePage from "./components/HomePage";
 import AddClass from "./components/AddClass";
@@ -23,6 +26,7 @@ import CreateT2Pic from "./components/CreateT2Pic";
 import QuizPage from "./components/QuizPage";
 //Les pages des statistiques
 import Stats from "./components/Stats";
+import StatSurvey from "./components/StatSurvey";
 import StatsPie from "./components/StatsPie";
 import StatsLine from "./components/StatsLine";
 import StatsBar from "./components/StatsBar";
@@ -38,30 +42,30 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <CreateQuiz />
-            </Layout>
+              <Layout>
+                <CreateQuiz />
+              </Layout>
             </ProtectedRoute>
           }
           path="/createQuiz"
         />
-        <Route element={<PageType2 />} path="/pageType2" />
+        <Route element={<ProtectedRoute><PageType2 /></ProtectedRoute>} path="/pageType2/:id/" />
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <Page2Completed />
-            </Layout>
+              <Layout>
+                <Page2Completed />
+              </Layout>
             </ProtectedRoute>
           }
-          path="/page2Completed"
+          path="/page2Completed/:id/"
         />
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <QuizPage />
-            </Layout>
+              <Layout>
+                <QuizPage />
+              </Layout>
             </ProtectedRoute>
           }
           path="/quizPage"
@@ -69,9 +73,9 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <CreateT2Pic />
-            </Layout>
+              <Layout>
+                <CreateT2Pic />
+              </Layout>
             </ProtectedRoute>
           }
           path="/createT2Pic"
@@ -79,9 +83,9 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <ClassesPage />
-            </Layout>
+              <Layout>
+                <ClassesPage />
+              </Layout>
             </ProtectedRoute>
           }
           path="/classesPage"
@@ -89,24 +93,32 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <Students />
-            </Layout>
+              <Layout>
+                <Students />
+              </Layout>
             </ProtectedRoute>
           }
-          path="/students"
+          path="/students/:id"
+        />
+                <Route
+          element={
+            <ProtectedRoute>
+              <StatSurvey />
+            </ProtectedRoute>
+          }
+          path="/statSurvey/:id"
         />
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <Module />
-            </Layout>
+              <Layout>
+                <Module />
+              </Layout>
             </ProtectedRoute>
           }
           path="/module"
         />
-                <Route
+        <Route
           element={
             <ProtectedRoute>
               <Profile />
@@ -117,27 +129,18 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <Select />
-            </Layout>
+              <Layout>
+                <Select />
+              </Layout>
             </ProtectedRoute>
           }
           path="/select"
         />
-        <Route
-          element={  
-              <CreateQuizT1 />
-          }
-          path="/addSurvey/:id"
-        />
-        <Route
-          element={
-            <Layout>
-              <CreateQuizT2 />
-            </Layout>
-          }
-          path="/createQuizT2"
-        />
+        <Route element={<AddSurvey />} path="/addSurvey/:id" />
+        <Route element={<EditSurvey />} path="/editSurvey/:id" />
+        <Route element={<EditQuiz />} path="/editQuiz/:id" />
+        <Route element={<AddQuiz1 />} path="/addQuiz1/:id/" />
+        <Route element={<AddQuiz2 />} path="/addQuiz2/:id/" />
         <Route
           element={
             <Layout>
@@ -158,9 +161,9 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <AddClass />
-            </Layout>
+              <Layout>
+                <AddClass />
+              </Layout>
             </ProtectedRoute>
           }
           path="/addClass"
@@ -168,9 +171,9 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <AddModule />
-            </Layout>
+              <Layout>
+                <AddModule />
+              </Layout>
             </ProtectedRoute>
           }
           path="/addModule"
@@ -178,9 +181,9 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <CreateSurvey />
-            </Layout>
+              <Layout>
+                <CreateSurvey />
+              </Layout>
             </ProtectedRoute>
           }
           path="/createSurvey"
@@ -188,9 +191,9 @@ function App() {
         <Route
           element={
             <ProtectedRoute>
-            <Layout>
-              <AddClassCSV />
-            </Layout>
+              <Layout>
+                <AddClassCSV />
+              </Layout>
             </ProtectedRoute>
           }
           path="/addClassCsv"

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'; 
-import Papa from 'papaparse';
-import './styles/CreateQuiz.css';
-import './styles/General.css';
-import BtnX from './pic/btnX.png';
-import down from './pic/down.png';
-import Illustration from '../images/photo.png';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import Papa from "papaparse";
+import "./styles/CreateQuiz.css";
+import "./styles/General.css";
+import BtnX from "./pic/btnX.png";
+import down from "./pic/down.png";
+import Illustration from "../images/photo.png";
+import { useNavigate } from "react-router-dom";
 
 // Reusable SelectButton component
 const SelectButton = ({ label, onClick }) => {
@@ -31,19 +31,20 @@ const InputField = ({ placeholder, type = "text", onChange, value }) => {
 
 const AddClassCSV = () => {
   const [classes, setClasses] = useState([]);
-  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedClass, setSelectedClass] = useState("");
   const [csvFile, setCsvFile] = React.useState(null);
   const navigate = useNavigate();
-    // Fetch data from API when component mounts
-    useEffect(() => {
-      fetch('http://localhost:8000/teachers/groupes')
-        .then(res => res.json())
-        .then(data => setClasses(data))
-        .catch(err => console.error(err));
-    }, []);
+  const API_URL = process.env.REACT_APP_API_URL;
+  // Fetch data from API when component mounts
+  useEffect(() => {
+    fetch(`${API_URL}/teachers/groupes`)
+      .then((res) => res.json())
+      .then((data) => setClasses(data))
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleCloseButtonClick = () => {
-    console.log('Close button clicked');
+    console.log("Close button clicked");
   };
 
   const handleCancelClick = () => {
@@ -55,31 +56,38 @@ const AddClassCSV = () => {
       alert("Merci de sélectionner une classe et un fichier CSV valide.");
       return;
     }
-  
+
     for (let student of parsedStudents) {
-      if (!student.id || !student.email || !student.name || !student.password || !student.level || !student.groupe) {
+      if (
+        !student.id ||
+        !student.email ||
+        !student.name ||
+        !student.password ||
+        !student.level ||
+        !student.groupe
+      ) {
         console.warn(`❌ Ligne incomplète:`, student);
         continue;
       }
-  
+
       const payload = {
         name: student.name,
         level: student.level,
-        groupe_id: student.groupe + student.level,
+        groupe_id: student.level + student.groupe,
         id: student.id,
         email: student.email,
         password: student.password,
       };
-  
+
       try {
-        const res = await fetch("http://127.0.0.1:8000/students/SignUp", {
-          method: 'POST',
+        const res = await fetch(`${API_URL}/students/SignUp`, {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
         });
-  
+
         const data = await res.json();
         if (res.ok) {
           console.log(`✅ Étudiant ${student.id} ajouté avec succès.`);
@@ -90,18 +98,17 @@ const AddClassCSV = () => {
         console.error(`❌ Échec de l'envoi pour ${student.id}:`, error);
       }
     }
-    navigate('/classesPage');
+    navigate("/classesPage");
     setMessage("📤 Importation terminée !");
   };
-  
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [parsedStudents, setParsedStudents] = useState([]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-  
+
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
@@ -110,16 +117,24 @@ const AddClassCSV = () => {
         setMessage("✅ Fichier CSV prêt à être importé.");
       },
     });
-  
+
     setCsvFile(file);
   };
-  
-  
-  const SelectDropdown = ({ label, options = [], selectedOption, onChange }) => {
+
+  const SelectDropdown = ({
+    label,
+    options = [],
+    selectedOption,
+    onChange,
+  }) => {
     const safeOptions = Array.isArray(options) ? options : [];
-  
+
     return (
-      <select className="select-elem" value={selectedOption} onChange={e => onChange(e.target.value)}>
+      <select
+        className="select-elem"
+        value={selectedOption}
+        onChange={(e) => onChange(e.target.value)}
+      >
         <option value="">{label}</option>
         {safeOptions.map((opt, index) => {
           const value = opt.code || opt.id || ""; // code pour module, id pour classe
@@ -131,15 +146,15 @@ const AddClassCSV = () => {
         })}
       </select>
     );
-  }; 
+  };
 
-  return (    
+  return (
     <div className="outerRectangle">
       <div className="innerRectangle">
         <div className="close-button-container">
           <button
             onClick={handleCloseButtonClick}
-            style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+            style={{ border: "none", background: "none", cursor: "pointer" }}
           >
             <img src={BtnX} alt="btnX" />
           </button>
@@ -149,18 +164,18 @@ const AddClassCSV = () => {
 
         <div className="content-container">
           <div className="form-container">
-          <SelectDropdown
+            <SelectDropdown
               label="Select Class"
               options={classes}
               selectedOption={selectedClass}
               onChange={setSelectedClass}
             />
-            <input 
-              type="file" 
-              accept=".csv" 
-              onChange={handleFileChange} 
-              className="quiz-name-input" 
-              style={{ marginTop: '10px' }}
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileChange}
+              className="quiz-name-input"
+              style={{ marginTop: "10px" }}
             />
           </div>
 

@@ -11,16 +11,16 @@ body {
   /* Conteneur principal - exactement comme l'image */
   .externe {
     width: 820px;
-    height: 600px;
+    height: 100%;
     margin: 0 auto;
     padding: 35px 40px;
     background: white;
     border-radius: 25px;
     border: 2px solid rgba(0, 0, 0, 0.8);
-    box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
     position: relative;
-    top:35px ;
-  }
+    top: 60px;
+}
   
   /* Barre haute - alignement parfait */
   .btn-haut {
@@ -69,8 +69,9 @@ body {
     border-radius: 34px;
     padding: 45px 60px;
     margin: 0 auto 30px;
-    height: 50%;
-  }
+    height: 100%;
+    padding-bottom: 80px;
+}
   .title{
     background-color: transparent !important;
     position: relative;
@@ -148,8 +149,8 @@ color:rgba(0, 0, 0, 1);
 
   .image{
     position: relative;
-    left: 30% !important;
-    top:-40%;
+    left: 35% !important;
+    margin-top: -130px;
   }
   .image img{
     position: relative;
@@ -219,6 +220,7 @@ vertical-align: middle;
     position: relative;
     margin-top: 120px;
     margin-left: 80px;
+    margin-bottom: 30px;
 }
   .rectangle p {
     font-family: Rammetto One;
@@ -262,9 +264,43 @@ color: rgba(79, 132, 130, 1);
    
   .btn1{
     position:relative;
-    left: 60%;
+    left: 68%;
   }
   .btn2{
     position: relative;
     left:15%;
   }
+
+/* Container principal pour l'image et les choix */
+
+
+.choices {
+  display: flex;
+  flex-direction: column; /* Aligner les boutons en colonne */
+  gap: 10px; /* Espacement entre les boutons */
+  width: 100%; /* Prendre toute la largeur disponible */
+  max-width: 600px; /* Limiter la largeur des choix */
+  justify-content: center;
+}
+
+.choice-btn {
+  background-color: rgb(136 183 175 / 20%);
+  color: rgb(0 0 0 / 70%);
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  width: 100%; /* Prendre toute la largeur de son container */
+  transition: background-color 0.3s;
+}
+
+.choice-btn:hover {
+  background-color: rgb(136 183 175 / 50%);
+}
+
+.choice-btn:active {
+  background-color: rgb(78, 134, 129); /* Change la couleur au clic */
+  color: white;
+}

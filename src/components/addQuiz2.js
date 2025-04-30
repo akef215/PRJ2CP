@@ -14,7 +14,7 @@ const initialQuestion = {
   choices: [],
 };
 
-const AddSurvey = () => {
+const AddQuiz2 = () => {
   const [questionsData, setQuestionsData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const { id: quizId } = useParams();
@@ -34,9 +34,7 @@ const AddSurvey = () => {
 
   const fetchQuestions = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/quizzes/${quizId}/questions`
-      );
+      const res = await fetch(`${API_URL}/quizzes/${quizId}/questions`);
       const questions = await res.json();
       const formatted = questions.map((q) => ({
         ...initialQuestion,
@@ -100,12 +98,12 @@ const AddSurvey = () => {
   const handleDeleteQuestion = async (qstnId) => {
     const updatedQuestions = questionsData.filter((q) => q.id !== qstnId);
     setQuestionsData(updatedQuestions);
-  
+
     // Optionnel : ajuster l’index courant
     if (currentQuestionIndex >= updatedQuestions.length) {
       setCurrentQuestionIndex(updatedQuestions.length - 1);
     }
-  
+
     try {
       await fetch(`${API_URL}/quizzes/delete_questions/${qstnId}`, {
         method: "DELETE",
@@ -114,8 +112,6 @@ const AddSurvey = () => {
       console.error("Erreur lors de la suppression de la question :", err);
     }
   };
-  
-   
 
   const addNewQuestion = async () => {
     try {
@@ -171,12 +167,9 @@ const AddSurvey = () => {
 
   const handleCancelClick = async () => {
     try {
-      const res = await fetch(
-        `${API_URL}/quizzes/delete/${quizId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`${API_URL}/quizzes/delete/${quizId}`, {
+        method: "DELETE",
+      });
       if (res.ok) navigate("/select");
       else console.error("Erreur suppression quiz :", res.status);
     } catch (err) {
@@ -188,7 +181,7 @@ const AddSurvey = () => {
 
   return (
     <div>
-      <NavbarT1 type="Survey" id={quizId} />
+      <NavbarT1 type="Quiz" id={quizId} />
       <div className="quiz-container">
         <div className="left-panel">
           <button className="add-question" onClick={addNewQuestion}>
@@ -210,32 +203,32 @@ const AddSurvey = () => {
         <div className="right-panel">
           <div className="answers-section">
             <div className="questions-section">
-            <input
-              type="text"
-              className="question-itemTest"
-              value={currentData.statement}
-              placeholder="Question Statement"
-              onChange={async (e) => {
-                const newStatement = e.target.value;
-                updateCurrentData({ statement: newStatement });
+              <input
+                type="text"
+                className="question-itemTest"
+                value={currentData.statement}
+                placeholder="Question Statement"
+                onChange={async (e) => {
+                  const newStatement = e.target.value;
+                  updateCurrentData({ statement: newStatement });
 
-                try {
-                  await fetch(
-                    `${API_URL}/quizzes/modify_questions/${currentData.id}`,
-                    {
-                      method: "PUT",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        statement: newStatement,
-                        duree: currentData.duree,
-                      }),
-                    }
-                  );
-                } catch (err) {
-                  console.error("Erreur mise à jour question :", err);
-                }
-              }}
-            />
+                  try {
+                    await fetch(
+                      `${API_URL}/quizzes/modify_questions/${currentData.id}`,
+                      {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          statement: newStatement,
+                          duree: currentData.duree,
+                        }),
+                      }
+                    );
+                  } catch (err) {
+                    console.error("Erreur mise à jour question :", err);
+                  }
+                }}
+              />
             </div>
 
             {currentData.choices.map((choice, i) => (
@@ -277,6 +270,43 @@ const AddSurvey = () => {
                   placeholder={`Réponse ${i + 1}`}
                 />
 
+                <input
+                  type="text"
+                  className="form-control-score"
+                  style={{ width: "80px" }}
+                  value={choice.score?.toString() ?? ""}
+                  onChange={async (e) => {
+                    const newScore = e.target.value;
+                    if (isNaN(Number(newScore)) && newScore !== "") return;
+
+                    const updatedChoices = [...currentData.choices];
+                    updatedChoices[i] = {
+                      ...updatedChoices[i],
+                      score: newScore,
+                    };
+                    updateCurrentData({ choices: updatedChoices });
+
+                    if (newScore !== "") {
+                      try {
+                        await fetch(
+                          `${API_URL}/quizzes/modify_choices/${choice.id}`,
+                          {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              score: parseFloat(newScore),
+                              answer: choice.answer,
+                            }),
+                          }
+                        );
+                      } catch (err) {
+                        console.error("Erreur mise à jour score :", err);
+                      }
+                    }
+                  }}
+                  placeholder="Score"
+                />
+
                 <img
                   src={Delete}
                   alt="Delete"
@@ -295,7 +325,10 @@ const AddSurvey = () => {
               Add Option
             </button>
 
-            <button className="btn-addAnswrQ2" onClick={() => handleDeleteQuestion(currentData.id)}>
+            <button
+              className="btn-addAnswrQ2"
+              onClick={() => handleDeleteQuestion(currentData.id)}
+            >
               Delete Question
             </button>
           </div>
@@ -319,4 +352,4 @@ const AddSurvey = () => {
   );
 };
 
-export default AddSurvey;
+export default AddQuiz2;

@@ -12,7 +12,7 @@ const ClassesPage = () => {
   // Fonction pour récupérer les groupes
   const fetchClasses = async () => {
     try {
-      const res = await fetch('http://localhost:8000/teachers/groupes');
+      const res = await fetch(`${API_URL}/teachers/groupes`);
       const data = await res.json();
       const formattedData = data.map((item, index) => ({
         ...item,
@@ -28,7 +28,7 @@ const ClassesPage = () => {
 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`http://localhost:8000/teachers/delete_groupe?code=${encodeURIComponent(id)}`, {
+      const res = await fetch(`${API_URL}/teachers/delete_groupe?code=${encodeURIComponent(id)}`, {
         method: 'DELETE',
       });
 
@@ -57,8 +57,9 @@ const ClassesPage = () => {
   };
 
   const handleViewStudent = (classId) => {
-    navigate(`/students`);
+    navigate(`/students/${classId}`);
   };
+  const API_URL = process.env.REACT_APP_API_URL;
 
   return (
     <div className="classes-container">

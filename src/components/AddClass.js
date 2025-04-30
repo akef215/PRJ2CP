@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import './styles/CreateQuiz.css'; // Importez votre fichier CSS
-import BtnX from './pic/btnX.png';
-import down from './pic/down.png';
-import imageIcon from '../images/image 1.png'; // Icône pour le bouton d'ajout d'image
-import Illustration from '../images/Photo2.png';
-import { useNavigate } from 'react-router-dom';
-import { customFetch } from '../customFetch';
+import React, { useState } from "react";
+import "./styles/CreateQuiz.css"; // Importez votre fichier CSS
+import BtnX from "./pic/btnX.png";
+import down from "./pic/down.png";
+import imageIcon from "../images/image 1.png"; // Icône pour le bouton d'ajout d'image
+import Illustration from "../images/Photo2.png";
+import { useNavigate } from "react-router-dom";
+import { customFetch } from "../customFetch";
 
 // Composant réutilisable SelectButton (avec flèche)
 const SelectButton = ({ label, onClick }) => {
@@ -31,13 +31,17 @@ const ImageUploadButton = ({ onChange }) => {
       <input
         type="file"
         accept="image/*"
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         id="image-upload"
         onChange={handleFileChange}
       />
       <label htmlFor="image-upload" className="image-upload-button">
         <span>Add Cover</span>
-        <img src={imageIcon} alt="Add Image" style={{ width: '24px', height: '24px' }} />
+        <img
+          src={imageIcon}
+          alt="Add Image"
+          style={{ width: "24px", height: "24px" }}
+        />
       </label>
     </div>
   );
@@ -57,45 +61,54 @@ const InputField = ({ placeholder, value, onChange }) => {
 };
 
 const AddClass = () => {
-    const levels = ["1CP", "2CP", "1CS", "2CS"];
-    const [level, setLevel] = useState("");
-    const [Nb, setNb] = useState(1);
-    const navigate = useNavigate();
-    const SelectDropdown = ({ label, options = [], selectedOption, onChange }) => {
-      const safeOptions = Array.isArray(options) ? options : [];
-    
-      return (
-        <select className="select-elem" value={selectedOption} onChange={e => onChange(e.target.value)}>
-          <option value="">{label}</option>
-          {safeOptions.map((opt, index) => (
-            <option key={index} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      );
-    };
-    
+  const levels = ["1CP", "2CP", "1CS", "2CS"];
+  const [level, setLevel] = useState("");
+  const [Nb, setNb] = useState(1);
+  const API_URL = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
+  const SelectDropdown = ({
+    label,
+    options = [],
+    selectedOption,
+    onChange,
+  }) => {
+    const safeOptions = Array.isArray(options) ? options : [];
 
-    const handleNextClick = () => {
-      const url = `http://localhost:8000/teachers/add_groupe?level=${level}&numero=${Nb}`;
-    
-      customFetch(url, {
-        method: 'POST',
+    return (
+      <select
+        className="select-elem"
+        value={selectedOption}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        <option value="">{label}</option>
+        {safeOptions.map((opt, index) => (
+          <option key={index} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    );
+  };
+
+  const handleNextClick = () => {
+    const url = `${API_URL}/teachers/add_groupe?level=${level}&numero=${Nb}`;
+
+    customFetch(url, {
+      method: "POST",
+    })
+      .then((res) => {
+        if (res && res.status === 200) {
+          console.log("Groupe ajouté avec succès !");
+          navigate("../classesPage");
+        } else if (res) {
+          console.error("Erreur lors de la création :", res.status);
+        }
       })
-        .then(res => {
-          if (res && res.status === 200) {
-            console.log("Groupe ajouté avec succès !");
-            navigate('../classesPage');
-          } else if (res) {
-            console.error("Erreur lors de la création :", res.status);
-          }
-        })
-        .catch(err => console.error("Erreur d'envoi :", err));
-    };
+      .catch((err) => console.error("Erreur d'envoi :", err));
+  };
   // Gestionnaires d'événements définis
   const handleCloseButtonClick = () => {
-    console.log('Close button clicked');
+    console.log("Close button clicked");
   };
 
   const handleSelectButtonClick = (label) => {
@@ -103,12 +116,11 @@ const AddClass = () => {
   };
 
   const handleCancelClick = () => {
-    navigate("../select")
+    navigate("../select");
   };
 
-
   const handleImageUpload = (file) => {
-    console.log('Image selected:', file);
+    console.log("Image selected:", file);
     // Vous pouvez ici traiter le fichier image (par exemple, l'afficher ou l'envoyer à un serveur)
   };
 
@@ -120,7 +132,7 @@ const AddClass = () => {
           <div className="close-button-container">
             <button
               onClick={handleCloseButtonClick}
-              style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+              style={{ border: "none", background: "none", cursor: "pointer" }}
             >
               <img src={BtnX} alt="Fermer" />
             </button>
@@ -133,17 +145,16 @@ const AddClass = () => {
           <div className="content-container">
             <div className="form-container">
               <SelectDropdown
-              label="Select Level"
-              options={levels}
-              selectedOption={level}
-              onChange={setLevel}
-            />
+                label="Select Level"
+                options={levels}
+                selectedOption={level}
+                onChange={setLevel}
+              />
               <InputField
-  placeholder="Numero du groupe"
-  value={Nb}
-  onChange={(e) => setNb(Number(e.target.value))}
-/>
-
+                placeholder="Numero du groupe"
+                value={Nb}
+                onChange={(e) => setNb(Number(e.target.value))}
+              />
             </div>
 
             {/* Section Image */}

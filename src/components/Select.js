@@ -25,7 +25,6 @@ const Select = () => {
     { id: 4, image: Frame4, text: 'Create survey', link: 'createSurvey' },
     { id: 5, image: Frame5, text: 'Add Students', link: 'addClassCSV' },
   ];
-
   return (
     <div className="outerRectangle">
       <div className="innerRectangle">

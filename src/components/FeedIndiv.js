@@ -9,13 +9,14 @@ const FeedIndiv = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const {id} = useParams();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const abortController = new AbortController();
 
     const fetchFeedback = async () => {
       try {
-        const res = await fetch(`http://127.0.0.1:8000/feedback/${id}`, {
+        const res = await fetch(`${API_URL}/feedback/${id}`, {
           signal: abortController.signal,
         });
 
@@ -50,7 +51,7 @@ const FeedIndiv = () => {
 
   const handleMarkAsRead = async () => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/feedback/${id}`, {
+      const res = await fetch(`${API_URL}/feedback/${id}`, {
         method: "DELETE",
       });
   
@@ -75,9 +76,9 @@ const FeedIndiv = () => {
           <img src={logo} alt="Logo" />
         </div>
         <div className="Nav-Menu">
-          <p onClick={() => navigate("../homepage")}>home</p>
-          <p onClick={() => navigate("../stats")}>stats</p>
-          <p onClick={() => navigate("../module")}>Modules</p>
+          <p onClick={() => navigate("../homepage")}>Home</p>
+          <p onClick={() => navigate("../stats")}>Stats</p>
+          <p onClick={() => navigate("../quizPage")}>Quizzes</p>
           <p onClick={() => navigate("../profile")}>Profile</p>
         </div>
       </div>

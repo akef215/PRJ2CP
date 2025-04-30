@@ -40,13 +40,14 @@ ModuleCard.propTypes = {
 };
 
 const Module = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
   const [modules, setModules] = useState([]); // Initialisation de l'état des modules
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const handleDelete = async (code) => {
     try {
-      const res = await fetch(`http://localhost:8000/teachers/delete_module?code=${encodeURIComponent(code)}`, {
+      const res = await fetch(`${API_URL}/teachers/delete_module?code=${encodeURIComponent(code)}`, {
         method: 'DELETE',
       });
   
@@ -66,7 +67,7 @@ const Module = () => {
   // Récupérer les modules depuis le backend
   const fetchModules = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/teachers/modules'); // Assurez-vous que cette URL correspond à votre backend
+      const response = await fetch(`${API_URL}/teachers/modules`); // Assurez-vous que cette URL correspond à votre backend
       if (response.status != 200) {
         throw new Error('Erreur lors de la récupération des modules');
       }

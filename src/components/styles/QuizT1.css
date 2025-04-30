@@ -45,6 +45,12 @@ body {
     justify-content: center;
   }
 
+  .questions-section {
+    display: flex;
+    flex-direction: row;
+    gap: 3rem;
+  }
+
   .question-item:hover {
     border: 1px solid black;
     background-color: #88B7AF33;
@@ -73,7 +79,8 @@ body {
     align-items: center;
     text-align: center;
     gap: 1rem;
-    margin-left: 50px;
+    margin-left: 200px;
+    border-radius: 10px;
   }
 
   .question-itemTest {
@@ -88,7 +95,18 @@ body {
     font-weight: 600;
     margin-top: 30px;
     font-family: 'Montserrat';
-    margin-bottom: 25px;
+  }
+
+  .time-itemTest {
+    border-radius: 34px;
+    background-color: rgba(33, 51, 78, 1);
+    color: white;
+    width: 80px;
+    padding: 10px;
+    display: flex;
+    font-weight: 600;
+    margin-top: 30px;
+    font-family: 'Montserrat';
   }
   
   .rectangle-itemQ1 {
@@ -105,6 +123,7 @@ body {
     color: white;
     padding: 8px;
     border-radius: 8px;
+    flex-direction: row;
   }
 
   .form-control {
@@ -125,6 +144,31 @@ body {
     font-family: 'Montserrat';
     font-weight: 600;
   }
+
+  .form-control-score {
+    height: 150%;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    gap: 1rem;
+    background-color: rgb(255, 255, 255);
+    border-radius: 20px;
+    color: rgba(33, 51, 78, 1);
+    padding: 8px;
+    border-radius: 8px;
+    border: none !important;
+    font-family: 'Montserrat';
+    font-weight: 600;
+  }
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: green; /* for supported browsers */
+  }
   
   .active-border {
     border: 2px solid #5a9e94;
@@ -135,7 +179,8 @@ body {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
-    margin-left: 600px;
+    margin-left: 900px;
+    position: fixed;
   }
   
   .left-btns,
@@ -175,7 +220,21 @@ body {
     cursor: pointer;
     font-family: Rammetto One;
     font-size: 16px;
-    margin-top: 20px;
+    margin-top: 30px;
     width: 200px;
+}
+
+.btn-addAnswrQ2 {
+  background-color: rgba(78, 134, 129, 1);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: Rammetto One;
+  font-size: 16px;
+  margin-bottom: 20px;
+  margin-top: 0;
+  width: 200px;
 }
   

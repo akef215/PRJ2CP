@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
-import loginImage from './pic/logpic.png';
-import eyeIcon from './pic/show.png';
-import './styles/Login.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import loginImage from "./pic/logpic.png";
+import eyeIcon from "./pic/show.png";
+import "./styles/Login.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
-
+  const API_URL = process.env.REACT_APP_API_URL;
+  console.log(API_URL);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMsg('');
+    setErrorMsg("");
 
     try {
-      const response = await fetch('http://localhost:8000/auth/teachers/login', {
-        method: 'POST',
+      const response = await fetch(`${API_URL}/auth/teachers/login`, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
@@ -28,23 +29,27 @@ function Login() {
 
       if (response.status === 200) {
         // Succès : stocker le token, rediriger...
-        localStorage.setItem('token', data.access_token);
-        navigate('/homePage');
+        localStorage.setItem("token", data.access_token);
+        navigate("/homePage");
       } else {
         // Erreur : afficher message
-        setErrorMsg(data.detail || 'Erreur de connexion');
+        setErrorMsg(data.detail || "Erreur de connexion");
         console.log(errorMsg);
       }
     } catch (error) {
-      setErrorMsg('Erreur réseau');
+      setErrorMsg("Erreur réseau");
     }
   };
 
   return (
-    <div className="login-page" style={{ backgroundColor: '#e2f8fb' }}>
+    <div className="login-page" style={{ backgroundColor: "#e2f8fb" }}>
       {/* Section gauche - l'image */}
       <div className="image-section">
-        <img src={loginImage} alt="Login Illustration" className="login-image" />
+        <img
+          src={loginImage}
+          alt="Login Illustration"
+          className="login-image"
+        />
       </div>
 
       {/* Section droite - Formulaire */}

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import './styles/QuizPage.css';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import "./styles/QuizPage.css";
+import { useNavigate } from "react-router-dom";
 
 const QuizzesSurveysPage = () => {
   const navigate = useNavigate();
@@ -9,14 +9,14 @@ const QuizzesSurveysPage = () => {
   const [surveys, setSurveys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const API_URL = process.env.REACT_APP_API_URL;
   // States for add forms
   const [newQuiz, setNewQuiz] = useState({
-    name: '',
-    chapter: '',
-    subject: ''
+    name: "",
+    chapter: "",
+    subject: "",
   });
-  const [newSurvey, setNewSurvey] = useState('');
+  const [newSurvey, setNewSurvey] = useState("");
   const [addingQuiz, setAddingQuiz] = useState(false);
   const [addingSurvey, setAddingSurvey] = useState(false);
 
@@ -27,15 +27,19 @@ const QuizzesSurveysPage = () => {
         setLoading(true);
         setError(null);
 
-        const quizzesResponse = await fetch('http://127.0.0.1:8000/quizzes/quizzes');
+        const quizzesResponse = await fetch(
+          `${API_URL}/quizzes/quizzes`
+        );
         if (!quizzesResponse.ok) {
-          throw new Error('Failed to fetch quizzes');
+          throw new Error("Failed to fetch quizzes");
         }
         const quizzesData = await quizzesResponse.json();
 
-        const surveysResponse = await fetch('http://127.0.0.1:8000/quizzes/surveys');
+        const surveysResponse = await fetch(
+          `${API_URL}/quizzes/surveys`
+        );
         if (!surveysResponse.ok) {
-          throw new Error('Failed to fetch surveys');
+          throw new Error("Failed to fetch surveys");
         }
         const surveysData = await surveysResponse.json();
 
@@ -56,13 +60,16 @@ const QuizzesSurveysPage = () => {
   const handleDeleteQuiz = async (quizId) => {
     try {
       setError(null);
-      const response = await fetch(`http://127.0.0.1:8000/quizzes/delete/${quizId}`, {
-        method: 'DELETE'
-      });
+      const response = await fetch(
+        `${API_URL}/quizzes/delete/${quizId}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (!response.ok) {
-        throw new Error('Échec de la suppression du quiz');
+        throw new Error("Échec de la suppression du quiz");
       }
-      setQuizzes(quizzes.filter(quiz => quiz.id !== quizId));
+      setQuizzes(quizzes.filter((quiz) => quiz.id !== quizId));
     } catch (err) {
       setError(err.message);
     }
@@ -72,14 +79,19 @@ const QuizzesSurveysPage = () => {
   const handleDeleteQuestion = async (quizId, questionId) => {
     try {
       setError(null);
-      const response = await fetch(`http://127.0.0.1:8000/quizzes/${quizId}/delete_questions/${questionId}`, {
-        method: 'DELETE'
-      });
+      const response = await fetch(
+        `${API_URL}/quizzes/${quizId}/delete_questions/${questionId}`,
+        {
+          method: "DELETE",
+        }
+      );
       if (!response.ok) {
-        throw new Error('Échec de la suppression de la question');
+        throw new Error("Échec de la suppression de la question");
       }
       // Option 1: Refetch all quizzes
-      const quizzesResponse = await fetch('http://127.0.0.1:8000/quizzes/available');
+      const quizzesResponse = await fetch(
+        `${API_URL}/quizzes/available`
+      );
       const quizzesData = await quizzesResponse.json();
       setQuizzes(quizzesData);
 
@@ -94,14 +106,16 @@ const QuizzesSurveysPage = () => {
     try {
       setError(null);
       const response = await fetch(
-        `http://127.0.0.1:8000/quizzes/${quizId}/delete_questions/${questionId}/delete_choices/${choiceId}`,
-        { method: 'DELETE' }
+        `${API_URL}/quizzes/${quizId}/delete_questions/${questionId}/delete_choices/${choiceId}`,
+        { method: "DELETE" }
       );
       if (!response.ok) {
-        throw new Error('Échec de la suppression du choix');
+        throw new Error("Échec de la suppression du choix");
       }
       // Refetch quizzes to update data
-      const quizzesResponse = await fetch('http://127.0.0.1:8000/quizzes/available');
+      const quizzesResponse = await fetch(
+        `${API_URL}/quizzes/available`
+      );
       const quizzesData = await quizzesResponse.json();
       setQuizzes(quizzesData);
     } catch (err) {
@@ -113,15 +127,18 @@ const QuizzesSurveysPage = () => {
   if (error) return <div className="error">Error: {error}</div>;
   return (
     <div className="app-container">
-      <div className='titre'>
+      <div className="titre">
         <p>Quizzes and Surveys</p>
       </div>
       {/* Quizzes Section */}
       <section className="section-container">
         <div className="section-header">
           <h2 className="section-title">Quizzes</h2>
-          <button onClick={() => setAddingQuiz(!addingQuiz)} className="view-results-button">
-            {addingQuiz ? 'Cancel' : 'View Statistics'}
+          <button
+            onClick={() => setAddingQuiz(!addingQuiz)}
+            className="view-results-button"
+          >
+            {addingQuiz ? "Cancel" : "View Statistics"}
           </button>
         </div>
 
@@ -148,12 +165,17 @@ const QuizzesSurveysPage = () => {
               type="text"
               placeholder="Subject"
               value={newQuiz.subject}
-              onChange={(e) => setNewQuiz({ ...newQuiz, subject: e.target.value })}
+              onChange={(e) =>
+                setNewQuiz({ ...newQuiz, subject: e.target.value })
+              }
               className="form-input"
               required
             />
             <div className="form-buttons">
-              <button onClick={() => navigate("/quizPage")} className="save-button">
+              <button
+                onClick={() => navigate("/quizPage")}
+                className="save-button"
+              >
                 Save Quiz
               </button>
             </div>
@@ -176,34 +198,54 @@ const QuizzesSurveysPage = () => {
                   <td>{quiz.name}</td>
                   <td>Chapter {quiz.chapter}</td>
                   <td>{quiz.type}</td>
-                  <td className={`state ${quiz.state?.replace(' ', '-') || ''}`}>{quiz.state || 'Unknown'}</td>
+                  <td
+                    className={`state ${quiz.state?.replace(" ", "-") || ""}`}
+                  >
+                    {quiz.state || "Unknown"}
+                  </td>
                   <td>{quiz.subject}</td>
                   <td>
-                    <button onClick={() => handleDeleteQuiz(quiz.id)} className="delete-button">
+                    <button
+                      onClick={() => handleDeleteQuiz(quiz.id)}
+                      className="delete-button"
+                    >
                       Delete Quiz
                     </button>
 
                     {/* If quiz has questions, render them */}
-                    {quiz.questions && quiz.questions.map((question) => (
-                      <div key={question.id}>
-                        <span>{question.text}</span>
-                        <button onClick={() => handleDeleteQuestion(quiz.id, question.id)} className="delete-button">
-                          Delete Question
-                        </button>
-                        {/* Render choices for each question */}
-                        {question.choices && question.choices.map((choice) => (
-                          <div key={choice.id}>
-                            <span>{choice.text}</span>
-                            <button
-                              onClick={() => handleDeleteChoice(quiz.id, question.id, choice.id)}
-                              className="delete-button"
-                            >
-                              Delete Choice
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    ))}
+                    {quiz.questions &&
+                      quiz.questions.map((question) => (
+                        <div key={question.id}>
+                          <span>{question.text}</span>
+                          <button
+                            onClick={() =>
+                              handleDeleteQuestion(quiz.id, question.id)
+                            }
+                            className="delete-button"
+                          >
+                            Delete Question
+                          </button>
+                          {/* Render choices for each question */}
+                          {question.choices &&
+                            question.choices.map((choice) => (
+                              <div key={choice.id}>
+                                <span>{choice.text}</span>
+                                <button
+                                  onClick={() =>
+                                    handleDeleteChoice(
+                                      quiz.id,
+                                      question.id,
+                                      choice.id
+                                    )
+                                  }
+                                  className="delete-button"
+                                >
+                                  Delete Choice
+                                </button>
+                              </div>
+                            ))}
+                        </div>
+                      ))}
                   </td>
                 </tr>
               ))}
@@ -216,8 +258,11 @@ const QuizzesSurveysPage = () => {
       <section className="section-container">
         <div className="section-header">
           <h2 className="section-title">Surveys</h2>
-          <button onClick={() => setAddingSurvey(!addingSurvey)} className="view-results-button">
-            {addingSurvey ? 'Cancel' : 'Add Survey'}
+          <button
+            onClick={() => setAddingSurvey(!addingSurvey)}
+            className="view-results-button"
+          >
+            {addingSurvey ? "Cancel" : "Add Survey"}
           </button>
         </div>
 
@@ -232,7 +277,10 @@ const QuizzesSurveysPage = () => {
               required
             />
             <div className="form-buttons">
-              <button onClick={() => console.log('add survey')} className="save-button">
+              <button
+                onClick={() => console.log("add survey")}
+                className="save-button"
+              >
                 Save Survey
               </button>
             </div>
@@ -256,7 +304,9 @@ const QuizzesSurveysPage = () => {
                   <td>
                     <button
                       className="view-results-button"
-                      onClick={() => console.log(`View results for survey ${survey.id}`)}
+                      onClick={() =>
+                        console.log(`View results for survey ${survey.id}`)
+                      }
                     >
                       View results
                     </button>

@@ -1,27 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import DataTable from 'react-data-table-component';
+import React, { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
 import "./styles/Students.css";
 import S from "../images/S.png";
 import A from "../images/A.png";
-import photo from '../images/photo.png'
+import photo from "../images/photo.png";
+import { useParams } from "react-router-dom";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
   const [records, setRecords] = useState([]);
+  const { id } = useParams();
   const [newStudent, setNewStudent] = useState({
-    name: '',
-    level: '',
-    groupe_id: '',
-    id: '',
-    email: '',
-    password: ''
+    name: "",
+    level: "1CP",
+    groupe_id: id,
+    id: "",
+    email: "",
+    password: "",
   });
   const [showForm, setShowForm] = useState(false);
-
+  const API_URL = process.env.REACT_APP_API_URL;
   // Fonction pour récupérer les étudiants depuis le backend
   const fetchStudents = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/teachers/students"); // Vérifiez cette URL
+      const response = await fetch(`${API_URL}/teachers/${id}/students`); // Vérifiez cette URL
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -50,18 +52,18 @@ const Students = () => {
   // Ajouter un nouvel étudiant
   const handleAddStudent = async (e) => {
     e.preventDefault();
-    if (!newStudent.id || !newStudent.name || !newStudent.email || !newStudent.groupe_id || !newStudent.level) {
-      alert('Veuillez remplir tous les champs obligatoires');
+    if (!newStudent.id || !newStudent.name || !newStudent.email) {
+      alert("Veuillez remplir tous les champs obligatoires");
       return;
     }
-    
+
     try {
-      const response = await fetch("http://127.0.0.1:8000/students/SignUp", {
+      const response = await fetch(`${API_URL}/students/SignUp`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(newStudent)
+        body: JSON.stringify(newStudent),
       });
       console.log(response.body);
       const data = await response.json();
@@ -70,13 +72,13 @@ const Students = () => {
       // On s'assure que l'objet retourné contienne bien "matricule"
       const studentAdded = {
         ...data,
-        id: data.id || newStudent.id  // Si le backend renvoie "id" au lieu de "id", on utilise la valeur saisie
+        id: data.id || newStudent.id, // Si le backend renvoie "id" au lieu de "id", on utilise la valeur saisie
       };
 
       // Mettez à jour la liste des étudiants
       setStudents([...students, studentAdded]);
       setRecords([...records, studentAdded]);
-      setNewStudent({ id: '', name: '', email: '', photo: '' });
+      setNewStudent({ id: "", name: "", email: "", photo: "" });
       setShowForm(false);
     } catch (error) {
       console.error("Erreur lors de l'ajout de l'étudiant :", error);
@@ -86,40 +88,46 @@ const Students = () => {
   // Configuration des colonnes du tableau
   const columns = [
     {
-      selector: row => row.photo,
-      cell: row => (
-        <img 
-          src={row.photo || photo} 
-          alt="Student" 
-          style={{ width: '50px', height: '50px', borderRadius: '50%',   display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center' }} 
+      selector: (row) => row.photo,
+      cell: (row) => (
+        <img
+          src={row.photo || photo}
+          alt="Student"
+          style={{
+            width: "50px",
+            height: "50px",
+            borderRadius: "50%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         />
       ),
-      sortable: false
+      sortable: false,
     },
-    { 
-      name: 'Matricule', 
+    {
+      name: "Matricule",
       // On affiche row.matricule si disponible, sinon on essaye row.id
-      selector: row => row.matricule || row.id, 
-      sortable: true 
+      selector: (row) => row.matricule || row.id,
+      sortable: true,
     },
-    { name: 'Nom complet', selector: row => row.name, sortable: true },
-    { name: 'Email', selector: row => row.email, sortable: true }
+    { name: "Nom complet", selector: (row) => row.name, sortable: true },
+    { name: "Email", selector: (row) => row.email, sortable: true },
   ];
 
   return (
-    <div className='container'>
-      <div className='header-controls'>
-        <div className='search'>
-          <input type='text' onChange={handleFilter} placeholder='Search'/>
+    <div className="container">
+      <div className="header-controls">
+        <div className="search">
+          <input type="text" onChange={handleFilter} placeholder="Search" />
         </div>
-        <div className='ajouter'>
-          <button 
-            className={`toggle-form-btn ${showForm ? 'cancel' : ''}`}
-            onClick={() => setShowForm(!showForm)}>
-            {showForm ? 'Annuler' : 'Ajouter un étudiant'}
-            {!showForm && <img src={A} alt="add"/>}
+        <div className="ajouter">
+          <button
+            className={`toggle-form-btn ${showForm ? "cancel" : ""}`}
+            onClick={() => setShowForm(!showForm)}
+          >
+            {showForm ? "Annuler" : "Ajouter un étudiant"}
+            {!showForm && <img src={A} alt="add" />}
           </button>
         </div>
       </div>
@@ -132,35 +140,31 @@ const Students = () => {
               type="text"
               placeholder="Matricule *"
               value={newStudent.id}
-              onChange={(e) => setNewStudent({...newStudent, id: e.target.value, password: e.target.value,})}
+              onChange={(e) =>
+                setNewStudent({
+                  ...newStudent,
+                  id: e.target.value,
+                  password: e.target.value,
+                })
+              }
               required
             />
             <input
               type="text"
               placeholder="Nom complet *"
               value={newStudent.name}
-              onChange={(e) => setNewStudent({...newStudent, name: e.target.value})}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, name: e.target.value })
+              }
               required
             />
             <input
               type="email"
               placeholder="Email *"
               value={newStudent.email}
-              onChange={(e) => setNewStudent({...newStudent, email: e.target.value})}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Level *"
-              value={newStudent.level}
-              onChange={(e) => setNewStudent({...newStudent, level: e.target.value.toUpperCase()})}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Groupe *"
-              value={newStudent.groupe_id}
-              onChange={(e) => setNewStudent({...newStudent, groupe_id: newStudent.level + e.target.value})}
+              onChange={(e) =>
+                setNewStudent({ ...newStudent, email: e.target.value })
+              }
               required
             />
             <button type="submit" className="add-button">
@@ -170,11 +174,11 @@ const Students = () => {
         </div>
       )}
 
-      <DataTable 
-        columns={columns} 
-        data={records} 
-        fixedHeader 
-        noDataComponent="Aucun étudiant trouvé" 
+      <DataTable
+        columns={columns}
+        data={records}
+        fixedHeader
+        noDataComponent="Aucun étudiant trouvé"
       />
       <footer></footer>
     </div>

@@ -14,7 +14,7 @@ const initialQuestion = {
   choices: [],
 };
 
-const AddSurvey = () => {
+const AddQuiz1 = () => {
   const [questionsData, setQuestionsData] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const { id: quizId } = useParams();
@@ -188,7 +188,7 @@ const AddSurvey = () => {
 
   return (
     <div>
-      <NavbarT1 type="Survey" id={quizId} />
+      <NavbarT1 type="Quiz" id={quizId} />
       <div className="quiz-container">
         <div className="left-panel">
           <button className="add-question" onClick={addNewQuestion}>
@@ -228,6 +228,33 @@ const AddSurvey = () => {
                       body: JSON.stringify({
                         statement: newStatement,
                         duree: currentData.duree,
+                      }),
+                    }
+                  );
+                } catch (err) {
+                  console.error("Erreur mise à jour question :", err);
+                }
+              }}
+            />
+
+            <input
+              type="text"
+              className="time-itemTest"
+              value={currentData.duree}
+              placeholder="Time"
+              onChange={async (e) => {
+                const newDuree = e.target.value;
+                updateCurrentData({ duree: newDuree });
+
+                try {
+                  await fetch(
+                    `${API_URL}/quizzes/modify_questions/${currentData.id}`,
+                    {
+                      method: "PUT",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        statement: currentData.statement,
+                        duree: newDuree,
                       }),
                     }
                   );
@@ -277,6 +304,43 @@ const AddSurvey = () => {
                   placeholder={`Réponse ${i + 1}`}
                 />
 
+                <input
+                  type="text"
+                  className="form-control-score"
+                  style={{ width: "80px" }}
+                  value={choice.score?.toString() ?? ""}
+                  onChange={async (e) => {
+                    const newScore = e.target.value;
+                    if (isNaN(Number(newScore)) && newScore !== "") return;
+
+                    const updatedChoices = [...currentData.choices];
+                    updatedChoices[i] = {
+                      ...updatedChoices[i],
+                      score: newScore,
+                    };
+                    updateCurrentData({ choices: updatedChoices });
+
+                    if (newScore !== "") {
+                      try {
+                        await fetch(
+                          `${API_URL}/quizzes/modify_choices/${choice.id}`,
+                          {
+                            method: "PUT",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              score: parseFloat(newScore),
+                              answer: choice.answer,
+                            }),
+                          }
+                        );
+                      } catch (err) {
+                        console.error("Erreur mise à jour score :", err);
+                      }
+                    }
+                  }}
+                  placeholder="Score"
+                />
+
                 <img
                   src={Delete}
                   alt="Delete"
@@ -319,4 +383,4 @@ const AddSurvey = () => {
   );
 };
 
-export default AddSurvey;
+export default AddQuiz1;

@@ -2,20 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./styles/CreateQuiz.css";
 import "./styles/General.css";
 import BtnX from "./pic/btnX.png";
-import down from "./pic/down.png";
 import Illustration from "../images/photo1.png";
 import { useNavigate } from "react-router-dom";
-
-// Reusable SelectButton component
-const SelectButton = ({ label, onClick }) => {
-  return (
-    <button className="select-elem" onClick={onClick}>
-      <span>{label}</span>
-      <img src={down} alt="dropdown" className="dropdown-icon" />
-    </button>
-  );
-};
-const API_URL = process.env.REACT_APP_API_URL;
+import { useParams } from "react-router-dom";
 
 const InputField = ({ placeholder, value, onChange }) => {
   return (
@@ -29,7 +18,7 @@ const InputField = ({ placeholder, value, onChange }) => {
   );
 };
 
-const CreateQuiz = () => {
+const EditQuiz = () => {
   const [quizName, setQuizName] = useState("");
   const [duree, setDuree] = useState();
   const [modules, setModules] = useState([]);
@@ -38,7 +27,8 @@ const CreateQuiz = () => {
   const [selectedModule, setSelectedModule] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedType, setSelectedType] = useState("");
-
+  const { id } = useParams();
+  const API_URL = process.env.REACT_APP_API_URL;
   // Fetch data from API when component mounts
   useEffect(() => {
     fetch(`${API_URL}/teachers/modules`) // Mets ton vrai endpoint ici
@@ -51,6 +41,30 @@ const CreateQuiz = () => {
       .then((data) => setClasses(data))
       .catch((err) => console.error(err));
   }, []);
+
+  // Récupérer les données du quiz pour l'édition
+  useEffect(() => {
+    if (!id) return; // Si l'ID est non défini, on ne fait rien
+
+    fetch(`${API_URL}/quizzes/quiz/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Quiz à éditer :", data);
+        setQuizName(data.title || "");
+
+        // Initialisation des valeurs sélectionnées pour les modules et classes
+        setSelectedModule(data.module_code ? { code: data.module_code } : null); // Module sélectionné
+        setSelectedClass(data.groupe ? { id: data.groupe } : null); // Classe sélectionnée
+
+        // Initialisation de la durée en minutes et secondes
+        if (data.duree) {
+          setDuree(data.duree);
+        }
+      })
+      .catch((err) => {
+        console.error("Erreur fetch quiz :", err);
+      });
+  }, [id]);
   // Gestionnaires d'événements définis
 
   const SelectDropdown = ({
@@ -80,26 +94,22 @@ const CreateQuiz = () => {
     );
   };
 
+  // Gérer la soumission du formulaire
   const handleNextClick = async () => {
     const today = new Date().toISOString().split("T")[0];
+    const durationInMinutes = parseFloat(duree);
     const payload = {
       title: quizName,
       date: today,
-      module: selectedModule,
-      duree: parseInt(duree),
-      description: "",
-      groupe: selectedClass,
-      type: selectedType,
-      launch: false
+      module_code: selectedModule?.code,
+      duree: durationInMinutes,
     };
 
     console.log("Payload à envoyer :", payload);
 
-    // Envoi au back
     try {
-      // Attendre la réponse de fetch
-      const res = await fetch(`${API_URL}/quizzes/add_quiz`, {
-        method: "POST",
+      const res = await fetch(`${API_URL}/quizzes/modify/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -107,13 +117,11 @@ const CreateQuiz = () => {
       });
 
       if (res.status === 200) {
-        // Attendre que la réponse JSON soit traitée
         const data = await res.json();
-        console.log("Réponse du serveur :", data); // Log pour la réponse
-
+        console.log("Réponse du serveur :", data);
         if (data.id) {
-          console.log("Quiz créé avec succès !");
-          navigate(`/addQuiz${selectedType}/${data.id}`);
+          console.log("Survey créé avec succès !");
+          navigate(`/addSurvey/${data.id}`);
         } else {
           console.error("ID manquant dans la réponse du serveur.");
         }
@@ -131,7 +139,7 @@ const CreateQuiz = () => {
     navigate("../Select"); // Redirection correcte
   };
   const handleCancelClick = () => {
-    navigate("../Select"); // Redirection correcte
+    navigate(`/addQuiz/${id}`); // Redirection correcte
   };
   return (
     <div className="outerRectangle">
@@ -147,7 +155,7 @@ const CreateQuiz = () => {
         </div>
 
         {/* Title */}
-        <h1>Create Quiz</h1>
+        <h1>Edit Quiz</h1>
 
         {/* Content container */}
         <div className="content-container">
@@ -160,8 +168,11 @@ const CreateQuiz = () => {
             <SelectDropdown
               label="Select Module"
               options={modules}
-              selectedOption={selectedModule}
-              onChange={setSelectedModule}
+              selectedOption={selectedModule?.code || ""}
+              onChange={(code) => {
+                const selected = modules.find((m) => m.code === code);
+                setSelectedModule(selected || null);
+              }}
             />
             <SelectDropdown
               label="Select Class"
@@ -169,19 +180,6 @@ const CreateQuiz = () => {
               selectedOption={selectedClass}
               onChange={setSelectedClass}
             />
-            {/*<SelectButton
-              label="Select Chapter"
-              onClick={() => handleSelectButtonClick('Select Chapter')}
-            />*/}
-            <select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="select-elem"
-            >
-              <option value="">Select Type</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-            </select>
             <InputField
               placeholder="Duree"
               value={duree}
@@ -201,7 +199,7 @@ const CreateQuiz = () => {
             Cancel
           </button>
           <button className="next-button" onClick={handleNextClick}>
-            Next
+            Edit
           </button>
         </div>
       </div>
@@ -209,4 +207,4 @@ const CreateQuiz = () => {
   );
 };
 
-export default CreateQuiz;
+export default EditQuiz;
