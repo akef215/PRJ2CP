@@ -11,7 +11,7 @@ from .quiz import Quiz
 from .question import Question
 from .choice import Choice
 from .results import Result
-from .quiz_groupe import quiz_groupe
 from .feedback import Feedback
 from .statistics import Statistic
-from .chapter import Chapter
+from .notifs import Notif
+from .password_reset import PasswordReset

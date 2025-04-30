@@ -15,4 +15,5 @@ alembic/
 work.txt
 
 .env
-
+Dockerfile
+docker-compose.yml

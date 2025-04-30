@@ -2,5 +2,5 @@
 from pydantic import BaseModel
 
 class NotificationCreate(BaseModel):
-    content: str
-    recipient_id: int
+    description: str
+    recipient_id: str

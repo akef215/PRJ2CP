@@ -132,7 +132,7 @@ async def get_students_by_groupe(db : AsyncSession, group_id: str):
     if not groupe:
         raise HTTPException(status_code=404, detail=f"The teacher has not acces to the groupe {group_id}")
     
-    result = await db.execute(select(Student).options(defer(Student.password)).where(Student.groupe == group_id))
+    result = await db.execute(select(Student).options(defer(Student.password)).where(Student.groupe_id == group_id))
     students = result.scalars().all()
     return students
 

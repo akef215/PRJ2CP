@@ -28,7 +28,7 @@ class QuizCreate(BaseModel):
     module: str
     duree: int
     description: Optional[str] = None
-    groupes: GroupAssignment 
+    groupe: str 
     type: str
     launch: bool
 

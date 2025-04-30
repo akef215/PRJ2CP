@@ -8,9 +8,9 @@ from typing import List
 from app.models.groupe import Groupe
 from app.models.module import Module
 from app.models.quiz import Quiz
+from app.models.student import Student
 from app.models.choice import Choice
 from app.models.question import Question
-from app.models.quiz_groupe import quiz_groupe
 from app.models.results import Result
 from app.models.choice import Choice  # Import the Answer model
 from app.schemas.quiz import QuizCreate, AnswerSubmission
@@ -40,15 +40,9 @@ async def get_surveys(db: AsyncSession) -> List[Quiz]:
     result = await db.execute(stmt)
     return result.scalars().all()
 
-async def add_quiz_to_groups(db: AsyncSession, quiz_id: int, group_ids: list[str]):
-    for group_id in group_ids:
-        association = quiz_groupe(quiz_id=quiz_id, groupe_id=group_id)
-        db.add(association)
-    await db.commit()
-
 async def add_quiz(quizz: QuizCreate, db: AsyncSession):
     # Instanciation d'un quiz
-    quiz = Quiz(title=quizz.title, date=quizz.date, description=quizz.description, module_code=quizz.module, duree=quizz.duree, type_quizz=quizz.type)
+    quiz = Quiz(title=quizz.title, date=quizz.date, description=quizz.description, module_code=quizz.module, duree=quizz.duree, type_quizz=quizz.type, groupe_id=quizz.groupe)
 
     # La recherche du module
     result = await db.execute(select(Module).where(Module.code == quizz.module))
@@ -58,8 +52,8 @@ async def add_quiz(quizz: QuizCreate, db: AsyncSession):
         raise HTTPException(status_code=404, detail="Le module n'existe pas")
 
     # La recherche des groupes
-    result = await db.execute(select(Groupe).where(Groupe.id.in_(tuple(quizz.groupes.group_ids))))
-    groups = result.scalars().all()
+    result = await db.execute(select(Groupe).where(Groupe.id == quizz.groupe))
+    groups = result.scalars().first()
 
     if not groups:
         raise HTTPException(status_code=404, detail="No group found")
@@ -67,15 +61,6 @@ async def add_quiz(quizz: QuizCreate, db: AsyncSession):
     # L'ajout du quiz dans la base de donnée
     db.add(quiz)
     await db.commit()
-
-    # Associer les groupes au quiz
-    await db.refresh(quiz)
-    result = await db.execute(select(Quiz).where(Quiz.id == quiz.id).options(selectinload(Quiz.groupes)))
-    quiz = result.scalars().first()
-    quiz.groupes.extend(groups)
-    await db.commit()
-    await db.refresh(quiz, ["groupes"])
-
     return quiz
 
 async def add_question(quiz_id: int, question: QuestionModel, db: AsyncSession):
@@ -397,22 +382,18 @@ async def get_available_surveys_today(db: AsyncSession) -> List[int]:
 
 
 async def create_notification(notification_data: NotificationCreate, db: AsyncSession):
-    notification = Notif(**notification_data.dict())
+    notification_data_dict = notification_data.dict()
+    notification_data_dict["description"] = notification_data_dict.pop("content")  # Renomme le champ
+    notification = Notif(**notification_data_dict)
+
     db.add(notification)
     await db.commit()
     await db.refresh(notification)
     return notification
 
 async def launch_quiz_service(quiz_id: int, db: AsyncSession):
-    # Fetch the quiz with eager loading of groups and students
-    result = await db.execute(
-        select(Quiz)
-        .where(Quiz.id == quiz_id)
-        .options(
-            selectinload(Quiz.groupes)
-            .selectinload(Groupe.etudiants)
-        )
-    )
+    # Récupérer le quiz
+    result = await db.execute(select(Quiz).where(Quiz.id == quiz_id))
     quiz = result.scalar_one_or_none()
 
     if not quiz:
@@ -421,29 +402,34 @@ async def launch_quiz_service(quiz_id: int, db: AsyncSession):
     if quiz.launch:
         raise HTTPException(status_code=400, detail="Quiz already launched")
 
-    # Update quiz status
+    # Lancer le quiz
     quiz.launch = True
     await db.commit()
 
-    # Notify students in all associated groups
+    # Récupérer les étudiants du groupe lié
+    if not quiz.groupe_id:
+        return {"message": "Quiz launched but no group assigned"}
+
+    students_result = await db.execute(
+        select(Student).where(Student.groupe_id == quiz.groupe_id)
+    )
+    students = students_result.scalars().all()
+
+    # Envoyer les notifications
     notification_count = 0
-    if quiz.groupes:  # Check if there are any groups
-        for group in quiz.groupes:
-            for student in group.etudiants:
-                notif = NotificationCreate(
-                    content=f"The quiz '{quiz.title}' has been launched!",
-                    recipient_id=student.id
-                )
-                await create_notification(notif, db)
-                notification_count += 1
+    for student in students:
+        notif = NotificationCreate(
+            content=f"The quiz '{quiz.title}' has been launched!",
+            recipient_id=student.id
+        )
+        await create_notification(notif, db)
+        notification_count += 1
 
-        return {
-            "message": "Quiz launched successfully",
-            "notifications_sent": notification_count,
-            "groups_affected": len(quiz.groupes)
-        }
-
-    return {"message": "Quiz launched "}
+    return {
+        "message": "Quiz launched successfully",
+        "notifications_sent": notification_count,
+        "group_id": quiz.groupe_id
+    }
 
 
 
