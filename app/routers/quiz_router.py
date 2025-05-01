@@ -13,7 +13,7 @@ from app.services.quiz_service import (
 from app.schemas.quiz import QuizOut, QuizCreate, AnswerSubmission
 
 from app.services.quiz_service import get_available_quizzes_service
-from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice, get_students_within_score_range, get_students_who_did_quiz, get_available_questions_service, get_available_choices_service, get_surveys, get_quiz
+from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice, get_students_within_score_range, get_students_who_did_quiz, get_available_questions_service, get_available_choices_service, get_surveys, get_quiz, get_quizzes_service, get_surveys_service
 from app.schemas.quiz import QuizOut
 from app.schemas.quiz import QuizChange
 from app.schemas.quiz import QuizCreate
@@ -34,8 +34,12 @@ async def get_available_quizzes(db: AsyncSession = Depends(get_db)):
 # Ajouter un quiz
 
 @router.get("/quizzes", response_model=List[QuizOut])
-async def get_available_quizzes(db: AsyncSession = Depends(get_db)):
-    return await get_available_quizzes_service(db)
+async def get_quizzes(db: AsyncSession = Depends(get_db)):
+    return await get_quizzes_service(db)
+
+@router.get("/surveysAll", response_model=List[QuizOut])
+async def get_surveys(db: AsyncSession = Depends(get_db)):
+    return await get_surveys_service(db)
 
 @router.get("/quiz/{quiz_id}", response_model=QuizOut)
 async def get_quiz_byId(quiz_id : int, db: AsyncSession = Depends(get_db)):

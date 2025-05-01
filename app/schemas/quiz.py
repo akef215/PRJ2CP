@@ -9,6 +9,7 @@ class QuizOut(BaseModel):
     date: date
     description: str
     module_code: str
+    groupe_id: str 
     type_quizz: str
     duree: int
     launch: bool
@@ -20,6 +21,7 @@ class QuizChange(BaseModel):
     title: str
     date: date
     module_code: str
+
     duree: int
 
 class QuizCreate(BaseModel):
