@@ -34,6 +34,8 @@ const CreateQuiz = () => {
   const [duree, setDuree] = useState();
   const [modules, setModules] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [minutes, setMinutes] = useState();
+  const [seconds, setSeconds] = useState();
 
   const [selectedModule, setSelectedModule] = useState("");
   const [selectedClass, setSelectedClass] = useState("");
@@ -86,7 +88,7 @@ const CreateQuiz = () => {
       title: quizName,
       date: today,
       module: selectedModule,
-      duree: parseInt(duree),
+      duree: parseInt(minutes * 60) + parseInt(seconds),
       description: "",
       groupe: selectedClass,
       type: selectedType,
@@ -169,10 +171,6 @@ const CreateQuiz = () => {
               selectedOption={selectedClass}
               onChange={setSelectedClass}
             />
-            {/*<SelectButton
-              label="Select Chapter"
-              onClick={() => handleSelectButtonClick('Select Chapter')}
-            />*/}
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
@@ -182,11 +180,26 @@ const CreateQuiz = () => {
               <option value="1">1</option>
               <option value="2">2</option>
             </select>
-            <InputField
-              placeholder="Duree"
-              value={duree}
-              onChange={(e) => setDuree(e.target.value)}
-            />
+            {/* Temps */}
+            <div className="dropdown-container">
+              <label className="select-label">Select Time</label>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <input
+                  type="number"
+                  placeholder="Min"
+                  className="time-input"
+                  value={minutes}
+                  onChange={(e) => setMinutes(e.target.value)}
+                />
+                <input
+                  type="number"
+                  placeholder="Sec"
+                  className="time-input"
+                  value={seconds}
+                  onChange={(e) => setSeconds(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Image section */}

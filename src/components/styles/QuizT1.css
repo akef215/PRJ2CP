@@ -180,7 +180,6 @@ body {
     justify-content: space-between;
     margin-top: 1rem;
     margin-left: 900px;
-    position: fixed;
   }
   
   .left-btns,
@@ -201,6 +200,7 @@ body {
   .btn-sec {
     background-color: #5a9e94;
     color: white;
+    width: 150%;
   }
 
   

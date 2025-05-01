@@ -98,7 +98,7 @@ const EditSurvey = () => {
   
           // Initialisation de la durée en minutes et secondes
           if (data.duree) {
-            const totalSeconds = data.duree * 60;
+            const totalSeconds = data.duree;
             setMinutes(Math.floor(totalSeconds / 60));
             setSeconds(totalSeconds % 60);
           }
@@ -111,12 +111,12 @@ const EditSurvey = () => {
     // Gérer la soumission du formulaire
     const handleSubmit = async () => {
       const today = new Date().toISOString().split("T")[0];
-      const durationInMinutes = parseInt(minutes) + parseInt(seconds)/60; // Durée en secondes
+      const duration = parseInt(minutes) * 60 + parseInt(seconds); // Durée en secondes
       const payload = {
         title: surveyName,
         date: today,
         module_code: selectedModule?.code,
-        duree: durationInMinutes
+        duree: duration
       };
   
       console.log("Payload à envoyer :", payload);

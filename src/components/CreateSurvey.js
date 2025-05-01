@@ -51,8 +51,8 @@ const CreateSurvey = () => {
   const [surveyName, setSurveyName] = useState("");
   const [selectedModule, setSelectedModule] = useState(null);
   const [selectedClass, setSelectedClass] = useState(null);
-  const [minutes, setMinutes] = useState("");
-  const [seconds, setSeconds] = useState("");
+  const [minutes, setMinutes] = useState();
+  const [seconds, setSeconds] = useState();
   const API_URL = process.env.REACT_APP_API_URL;
 
   // Fetch des modules et classes

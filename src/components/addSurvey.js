@@ -307,7 +307,7 @@ const AddSurvey = () => {
               </button>
               <button
                 className="btn-sec"
-                onClick={() => navigate("../pageType2")}
+                onClick={() => navigate("../quizPage")}
               >
                 Complete
               </button>

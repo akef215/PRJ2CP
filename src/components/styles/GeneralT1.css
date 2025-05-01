@@ -22,7 +22,7 @@ body {
   width: auto; /* Garde les proportions */
   position: relative;
   right: -999px;
-  left: 700px;
+  left: 30px;
 }
 .logo img {
   display: block;
@@ -73,23 +73,18 @@ body {
 }
 
 .Sidebar {
-  position: absolute;
+  position: fixed;
+  top: 79px;
   left: 0;
-  top: 79px; /* Sous la Navbar */
   width: 250px;
-  height: calc(100vh - 79px); /* Toute la hauteur de la fenêtre moins la Navbar */
+  height: calc(100vh - 79px); 
   background-color: rgba(255, 255, 255, 1);
   border-right: 2px solid rgba(0, 0, 0, 0.8);
   box-shadow: 4px 0px 7.1px 0px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   z-index: 10;
-  overflow: hidden; /* Empêche le scroll interne */
+  overflow-y: auto; 
 }
-
-
-
 
 .SidebarList {
   width: 100%; /* Remplir la largeur du Sidebar */
@@ -213,6 +208,8 @@ body {
   height: 50px;
   border-radius: 20px;
   background-color: rgba(78, 134, 129, 1);
+  font-family: 'Rammetto One';
+  font-weight: 400;
 }
 
 /* Le rectangle blanc */

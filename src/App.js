@@ -11,18 +11,15 @@ import EditSurvey from "./components/editSurvey";
 import EditQuiz from "./components/editQuiz";
 import AddQuiz1 from "./components/addQuiz1";
 import AddQuiz2 from "./components/addQuiz2";
-import CreateQuizT2Dis from "./components/CreateQuizT2Dis";
 import HomePage from "./components/HomePage";
 import AddClass from "./components/AddClass";
 import AddModule from "./components/AddModule";
 import CreateSurvey from "./components/CreateSurvey";
 import AddClassCSV from "./components/AddClassCSV";
-import SurveyNext from "./components/SurveyNext";
 import ClassesPage from "./components/ClassesPage";
 import Students from "./components/Students";
 import PageType2 from "./components/PageType2";
 import Page2Completed from "./components/Page2Completed";
-import CreateT2Pic from "./components/CreateT2Pic";
 import QuizPage from "./components/QuizPage";
 //Les pages des statistiques
 import StatSurvey from "./components/StatSurvey";
@@ -68,16 +65,6 @@ function App() {
             </ProtectedRoute>
           }
           path="/quizPage"
-        />
-        <Route
-          element={
-            <ProtectedRoute>
-              <Layout>
-                <CreateT2Pic />
-              </Layout>
-            </ProtectedRoute>
-          }
-          path="/createT2Pic"
         />
         <Route
           element={
@@ -142,14 +129,6 @@ function App() {
         <Route element={<AddQuiz2 />} path="/addQuiz2/:id/" />
         <Route
           element={
-            <Layout>
-              <CreateQuizT2Dis />
-            </Layout>
-          }
-          path="/createQuizT2Dis"
-        />
-        <Route
-          element={
             <ProtectedRoute>
               <HomePage />
             </ProtectedRoute>
@@ -196,14 +175,13 @@ function App() {
           }
           path="/addClassCsv"
         />
-        <Route element={<SurveyNext />} path="/surveyNext" />
         <Route element={<StatsPie />} path="/statsPie" />
         <Route element={<StatsLine />} path="/statsLine" />
         <Route element={<StatsBar />} path="/statsBar" />
         <Route element={<FeedBackView />} path="/feedbacks" />
         <Route element={<FeedIndiv />} path="/feedbacks" />
         <Route path="/feedback/:id" element={<FeedIndiv />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<HomePage />} />
       </Routes>
     </Router>
   );

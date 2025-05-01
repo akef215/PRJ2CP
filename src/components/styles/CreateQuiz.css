@@ -18,6 +18,7 @@ body {
 }
 .innerRectangle h1 {
   border-bottom: none;
+  margin-bottom: 20px;
 }
 
 

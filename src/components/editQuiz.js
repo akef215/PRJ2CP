@@ -49,12 +49,11 @@ const EditQuiz = () => {
     fetch(`${API_URL}/quizzes/quiz/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("Quiz à éditer :", data);
         setQuizName(data.title || "");
 
         // Initialisation des valeurs sélectionnées pour les modules et classes
         setSelectedModule(data.module_code ? { code: data.module_code } : null); // Module sélectionné
-        setSelectedClass(data.groupe ? { id: data.groupe } : null); // Classe sélectionnée
+        setSelectedClass(data.groupe_id ? { id: data.groupe_id } : null); // Classe sélectionnée
 
         // Initialisation de la durée en minutes et secondes
         if (data.duree) {
@@ -177,7 +176,7 @@ const EditQuiz = () => {
             <SelectDropdown
               label="Select Class"
               options={classes}
-              selectedOption={selectedClass}
+              selectedOption={selectedClass?.id || ""}
               onChange={setSelectedClass}
             />
             <InputField
