@@ -16,28 +16,57 @@ import '../quizzes.dart';
 //availible Quizzes page
 //decribed as part 1 in my To do list
 
+// Future<Map<String, dynamic>> fetchQuizzes() async {
+//   final response = await http.get(Uri.parse(path + '/quizzes/available'));
+//   if (response.statusCode == 200) {
+//     final data = json.decode(response.body);
+//     print(
+//       'Response Body------------------------------------: ${response.body}',
+//     );
+//
+//     if (data is List && data.isEmpty) {
+//       // If the list is empty, return an empty list of quizzes
+//       return {'Quizzes': <Quizzesstructure>[]};
+//     }
+//
+//     return {
+//       'Quizzes':
+//           (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
+//     };
+//   } else {
+//     print("Error response");
+//     throw Exception('Failed to load quiz');
+//   }
+// }
+String path = 'http://192.168.136.146:8000';
 Future<Map<String, dynamic>> fetchQuizzes() async {
-  final response = await http.get(Uri.parse(path + '/quizzes/available'));
-  if (response.statusCode == 200) {
-    final data = json.decode(response.body);
-    print(
-      'Response Body--------------------------------------: ${response.body}',
-    );
+  try {
+    print("Current path: $path");
 
-    if (data is List && data.isEmpty) {
-      // If the list is empty, return an empty list of quizzes
-      return {'Quizzes': <Quizzesstructure>[]};
+    final response = await http.get(Uri.parse(path + '/quizzes/available'));
+    print("Response status: ${response.statusCode}"); // Check status code
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      print('Response Body: ${response.body}');
+
+      if (data is List && data.isEmpty) {
+        return {'Quizzes': <Quizzesstructure>[]};
+      }
+
+      return {
+        'Quizzes': (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
+      };
+    } else {
+      print("Error: Received status code ${response.statusCode}");
+      throw Exception('Failed to load quiz');
     }
-
-    return {
-      'Quizzes':
-          (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
-    };
-  } else {
-    print("Error response");
-    throw Exception('Failed to load quiz');
+  } catch (e) {
+    print("Error occurred while fetching quizzes: $e");
+    rethrow; // Rethrow the error so it can be handled by the calling code
   }
 }
+
 
 Future<Map<String, dynamic>> fetchSurveys() async {
   print("something again?");
@@ -87,8 +116,11 @@ class _QuizChoiceState extends State<QuizChoice> {
 
   void loadPageData() async {
     try {
+      print("✅ LOADING STARTED ✅");
       final quizzesData = await fetchQuizzes();
+      print("🎯 quizzesData: $quizzesData");
       final surveysData = await fetchSurveys();
+      print("🎯 surveysData: $surveysData");
 
       setState(() {
         quizzes = quizzesData['Quizzes'];

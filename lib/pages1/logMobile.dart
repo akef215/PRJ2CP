@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../pages2/homePage.dart';
 import 'createAcc2_1.dart';
 import 'recover.dart';
@@ -43,6 +44,69 @@ class _LogMobileState extends State<LogMobile> {
   String loginMessage = "";
   bool _isLoading = false;
 
+  // Future<String> login() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //
+  //   String email = emailController.text.trim();
+  //   String password = passwordController.text.trim();
+  //
+  //   final url = Uri.parse(
+  //     path + '/auth/students/login',
+  //   ); // For Android emulator we use 'http://10.0.2.2:8000/auth/students/login'
+  //   final headers = {'Content-Type': 'application/json'};
+  //   final body = jsonEncode({'email': email, 'password': password});
+  //
+  //   print("🔧 Attempting to log in with email: $email");
+  //
+  //   try {
+  //     final response = await http.post(url, headers: headers, body: body);
+  //
+  //     print('API Response: ${response.statusCode} - ${response.body}');
+  //
+  //     if (response.statusCode == 200) {
+  //       final data = jsonDecode(response.body);
+  //       bearerToken = data['access_token'];
+  //       print("✅ Login successful! User data: $data");
+  //       print("Bearer Token : $bearerToken");
+  //
+  //       setState(() {
+  //         loginMessage = "Login successful!";
+  //         _isLoading = false;
+  //       });
+  //
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => HomePage()),
+  //       );
+  //     } else if (response.statusCode == 401) {
+  //       print("❌ Invalid email or password.");
+  //       setState(() {
+  //         loginMessage = "Invalid email or password.";
+  //         _isLoading = false;
+  //       });
+  //     } else {
+  //       print("⚠️ Unexpected error: ${response.statusCode} - ${response.body}");
+  //       setState(() {
+  //         loginMessage = "Error: ${response.statusCode} - ${response.body}";
+  //         _isLoading = false;
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print("🚨 Network error: $e");
+  //     setState(() {
+  //       loginMessage =
+  //           e.toString().contains('Connection failed')
+  //               ? "Server unreachable. Is the backend running?"
+  //               : "Network error: $e";
+  //       _isLoading = false;
+  //     });
+  //   }
+  //   print("🛑 Login process complete.");
+  //   return loginMessage;
+  // }
+
   Future<String> login() async {
     setState(() {
       _isLoading = true;
@@ -51,58 +115,66 @@ class _LogMobileState extends State<LogMobile> {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    final url = Uri.parse(
-      path + '/auth/students/login',
-    ); // For Android emulator we use 'http://10.0.2.2:8000/auth/students/login'
+    final url = Uri.parse('http://192.168.136.146:8000/auth/students/login');
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({'email': email, 'password': password});
 
-    print("🔧 Attempting to log in with email: $email");
-
     try {
       final response = await http.post(url, headers: headers, body: body);
-
-      print('API Response: ${response.statusCode} - ${response.body}');
+      print('🔐 Login response: ${response.statusCode} - ${response.body}');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        bearerToken = data['access_token'];
-        print("✅ Login successful! User data: $data");
-        print("Bearer Token : $bearerToken");
+        final token = data['access_token'];
+        final tokenType = data['token_type'];
 
-        setState(() {
-          loginMessage = "Login successful!";
-          _isLoading = false;
-        });
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+        // ✅ Use token to fetch profile
+        final profileResponse = await http.get(
+          Uri.parse('http://192.168.136.146:8000/students/me/profile'),
+          headers: {
+            'Authorization': '$tokenType $token', // "Bearer <token>"
+            'Content-Type': 'application/json',
+          },
         );
-      } else if (response.statusCode == 401) {
-        print("❌ Invalid email or password.");
-        setState(() {
-          loginMessage = "Invalid email or password.";
-          _isLoading = false;
-        });
+
+        if (profileResponse.statusCode == 200) {
+          final profileData = jsonDecode(profileResponse.body);
+          final studentId = profileData['id'];
+
+          // ✅ Save token & studentId in shared preferences
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('authToken', '$tokenType $token');
+          await prefs.setString('studentId', studentId.toString());
+
+          setState(() {
+            loginMessage = "Login successful!";
+            _isLoading = false;
+          });
+
+          // ✅ Navigate to home
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        } else {
+          setState(() {
+            loginMessage = "Failed to fetch profile.";
+            _isLoading = false;
+          });
+        }
       } else {
-        print("⚠️ Unexpected error: ${response.statusCode} - ${response.body}");
         setState(() {
-          loginMessage = "Error: ${response.statusCode} - ${response.body}";
+          loginMessage = "Invalid credentials.";
           _isLoading = false;
         });
       }
     } catch (e) {
-      print("🚨 Network error: $e");
       setState(() {
-        loginMessage =
-            e.toString().contains('Connection failed')
-                ? "Server unreachable. Is the backend running?"
-                : "Network error: $e";
+        loginMessage = "Network error: $e";
         _isLoading = false;
       });
     }
-    print("🛑 Login process complete.");
+
     return loginMessage;
   }
 

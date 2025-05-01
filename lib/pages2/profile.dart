@@ -1,3 +1,4 @@
+import 'package:esi_quiz/pages2/help.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -170,10 +171,10 @@ class _ProfileState extends State<Profile> {
               MaterialPageRoute(builder: (context) => EditProfile()),
             );
           }),
-          _buildMenuButton("images/padlock.png", "Change Password ", () {
+          _buildMenuButton("images/padlock.png", "Help", () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ChangePassword()),
+              MaterialPageRoute(builder: (context) => HelpPage()),
             );
           }), //////////////////////// Need to send somthing to the backend ?
           _buildMenuButton("images/log-out.png", "Log out", () {

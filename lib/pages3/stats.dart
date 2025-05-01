@@ -23,7 +23,6 @@ class _StatisticsState extends State<Statistics> {
     //Center(child: Text("Survey Page", style: TextStyle(fontSize: 24))),
     SurveyStats(),
     QuizStats(),
-    ModulesStats(),
     ProgressStats(),
   ];
 
@@ -80,8 +79,7 @@ class _StatisticsState extends State<Statistics> {
               children: [
                 buildTabItem(0, 'Survey'),
                 buildTabItem(1, 'Quiz'),
-                buildTabItem(2, 'Modules'),
-                buildTabItem(3, 'Progress'),
+                buildTabItem(2, 'Progress'),
               ],
             ),
           ),

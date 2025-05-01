@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../pages2/homePage.dart';
 import '../../../widgets/appbar.dart';
 import '../Quiz1/QuestionInfo.dart';
@@ -306,6 +307,44 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
       throw Exception('Failed to load quiz');
     }
   }
+
+  // Future<String> fetchAuthToken() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString('authToken') ?? '';
+  // }
+  //
+  // Future<Map<String, dynamic>> fetchStudentInfo() async {
+  //   String bearerToken = await fetchAuthToken();
+  //
+  //   if (bearerToken.isEmpty) {
+  //     print("Token is missing or expired");
+  //     throw Exception('Token is missing or expired');
+  //   }
+  //
+  //   print('Bearer Token: $bearerToken'); // Log the token for debugging
+  //
+  //   final response = await http.get(
+  //     Uri.parse(path + '/students/me/profile'),
+  //     headers: {'Authorization': 'Bearer $bearerToken'},
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     final data = json.decode(response.body);
+  //     print('Response Body: ${response.body}');
+  //
+  //     return {
+  //       'StudentId': data['id'],
+  //       'name': data['name'],
+  //       'email': data['email'],
+  //       'level': data['level'],
+  //       'goupe_id': data['groupe_id'],
+  //     };
+  //   } else {
+  //     print("Error fetching student info ${response.statusCode}");
+  //     throw Exception('Failed to load quiz');
+  //   }
+  // }
+
 
   Future<void> sendResponseToBackend() async {
     final data = await fetchStudentInfo();
