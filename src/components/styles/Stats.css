@@ -145,7 +145,6 @@ vertical-align: middle;
     border-bottom: 2px solid rgba(170, 207, 215, 0.8);
     padding-bottom: 5px; /* Ajoute un peu d'espace sous la bordure */
     position: relative;
-    top : -45%;
 }
 
 .first-nav {
@@ -155,7 +154,7 @@ vertical-align: middle;
 .second-nav {
     justify-content: flex-end; /* Aligner le second groupe à droite */
     position: relative;
-    left: 45%;
+    margin-top: 30px;
 }
 .first-nav p, .second-nav p {
     font-family: Montserrat;
@@ -246,9 +245,7 @@ vertical-align: middle;
     padding: 20px;
     margin: 0 auto; /* Centre horizontalement */
     position: relative;
-     right: 35%;
     border-radius: 37px;
-    top: 50px; 
 }
 /*Cote BAR*/
 .Bar-container {
@@ -260,7 +257,6 @@ vertical-align: middle;
     border-radius: 15px;
    
     position: relative;
-    right : 30% ;
     top: 5%;
 }
 /* Modification des bars */

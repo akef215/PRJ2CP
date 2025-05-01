@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/Stats.css";
 import logo from "../images/logo _final.png";
-import user from "../images/user.png";
+import user from "../images/Frame_5.png";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import LineData from "./data/LineData.json";
 // Importation de Chart.js et du plugin d'annotation
@@ -32,15 +32,11 @@ const StatsLine = () => {
         <img src={user} alt="User" />
       </div>
       <div className="msg-welcome">
-        <p>"name" stats</p>
+        <p>General statistics</p>
       </div>
 
       <div className="rectMenu">
         <div className="nav-second">
-          <div className="first-nav">
-            <p>By Quiz</p>
-            <p>By chapter</p>
-          </div>
           <div className="second-nav">
             <p onClick={() => navigate("/StatsLine")}>Line graph</p>
             <p onClick={() => navigate("/StatsBar")}>Bar chart</p>

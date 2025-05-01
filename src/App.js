@@ -25,7 +25,6 @@ import Page2Completed from "./components/Page2Completed";
 import CreateT2Pic from "./components/CreateT2Pic";
 import QuizPage from "./components/QuizPage";
 //Les pages des statistiques
-import Stats from "./components/Stats";
 import StatSurvey from "./components/StatSurvey";
 import StatsPie from "./components/StatsPie";
 import StatsLine from "./components/StatsLine";
@@ -157,7 +156,6 @@ function App() {
           }
           path="/homepage"
         />
-        <Route element={<Stats />} path="/stats" />
         <Route
           element={
             <ProtectedRoute>

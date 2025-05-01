@@ -86,12 +86,11 @@ const CreateSurvey = () => {
       title: surveyName,
       date: today,
       module: selectedModule?.code,
-      duree: parseInt(minutes + seconds / 60),
+      duree: parseInt(minutes * 60) + parseInt(seconds),
       description: "", // Tu peux rendre ça dynamique
-      groupes: {
-        group_ids: [selectedClass?.id],
-      },
+      groupe: selectedClass?.id,
       type: "S",
+      launch: false,
     };
 
     console.log("Payload à envoyer :", payload);

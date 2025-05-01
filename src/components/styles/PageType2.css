@@ -219,7 +219,6 @@ vertical-align: middle;
     align-items: center;
     position: relative;
     margin-top: 120px;
-    margin-left: 80px;
     margin-bottom: 30px;
 }
   .rectangle p {
@@ -264,11 +263,11 @@ color: rgba(79, 132, 130, 1);
    
   .btn1{
     position:relative;
-    left: 68%;
+    left: 63%;
   }
   .btn2{
     position: relative;
-    left:15%;
+    left:10%;
   }
 
 /* Container principal pour l'image et les choix */

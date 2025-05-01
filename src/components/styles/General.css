@@ -55,7 +55,7 @@ body {
   width: auto;
   position: relative;
   cursor: pointer;
-  margin-left: -1120px;
+  margin-left: -600px;
 }
 
 .quiz-logo {
@@ -133,11 +133,11 @@ body {
   position: relative; /* Fixe le Sidebar sans déplacer le contenu */
   left: 0;
   top: 76px; /* Ajuste la position sous la Navbar */
-  width: 100px !important; /* Largeur réduite */
-  height: calc(100vh - 80px); /* S'assure que le sidebar prend tout l'espace restant */
+  width: 250 !important; /* Largeur réduite */
+  height: 100%; /* S'assure que le sidebar prend tout l'espace restant */
   overflow-y: scroll; /* Activation du scroll */
   overflow-x: hidden; /* Éviter le défilement horizontal */
-  background-color: rgba(243, 249, 255, 1);
+  background-color: #F3F9FF !important;
   border-right: 1px solid rgba(0, 0, 0, 0.5);
   box-shadow: 4px 0px 7.1px 0px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
@@ -154,7 +154,7 @@ body {
   list-style: none;
   overflow-y: auto;
   max-height: calc(100vh - 80px); 
-   scrollbar-width: none;
+  scrollbar-width: none;
 }
   
 .SidebarList .row {
@@ -162,11 +162,14 @@ body {
   height: 90px ;
   display: flex;
   align-items: center;
-  color: black;
-  font-family: 'Times New Roman', Times, serif;
+  color: #242C3FA6;
   padding-left: 15px; /* Padding réduit */
   box-sizing: border-box;
   transition: all 0.3s ease;
+  gap: 1rem;
+  font-family: 'Montserrat';
+  font-weight: 500;
+  font-weight: 32px;
 }
 
 .SidebarList .row:hover {
@@ -202,7 +205,7 @@ body {
     margin-left: 20px;
     transition: all 0.3s ease;
     font-family: Montserrat;
-font-weight: 500;
+    font-weight: 500;
 font-size: 22px;
 line-height: 100%;
 letter-spacing: 0%;

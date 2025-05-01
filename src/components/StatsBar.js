@@ -32,15 +32,11 @@ const StatsBar = () => {
         <img src={user} alt="User" />
       </div>
       <div className="msg-welcome">
-        <p>"name" stats</p>
+        <p>Lastest Statistics</p>
       </div>
 
       <div className="rectMenu">
         <div className="nav-second">
-          <div className="first-nav">
-            <p>By Quiz</p>
-            <p>By chapter</p>
-          </div>
           <div className="second-nav">
             <p onClick={() => navigate("/StatsLine")}>Line graph</p>
             <p onClick={() => navigate("/StatsBar")}>Bar chart</p>

@@ -46,7 +46,7 @@ const HomePage = () => {
           </p>
           <p
             onClick={() => {
-              navigate("../statsPie");
+              navigate("../statsLine");
             }}
             className={"nav-item"}
           >
@@ -104,7 +104,7 @@ const HomePage = () => {
             <p>FeedBack</p>
           </div>
           <div className="part">
-            <img src={Image4} onClick={() => navigate("../statsPie")} />
+            <img src={Image4} onClick={() => navigate("../statsLine")} />
             <p>Statistics</p>
           </div>
         </div>

@@ -371,7 +371,7 @@ const AddQuiz1 = () => {
               </button>
               <button
                 className="btn-sec"
-                onClick={() => navigate("../pageType2")}
+                onClick={() => navigate(`../pageType2/${quizId}`)}
               >
                 Complete
               </button>

@@ -4,40 +4,25 @@ import { useNavigate } from "react-router-dom";
 
 const QuizzesSurveysPage = () => {
   const navigate = useNavigate();
-  // State for data
   const [quizzes, setQuizzes] = useState([]);
   const [surveys, setSurveys] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const API_URL = process.env.REACT_APP_API_URL;
-  // States for add forms
-  const [newQuiz, setNewQuiz] = useState({
-    name: "",
-    chapter: "",
-    subject: "",
-  });
-  const [newSurvey, setNewSurvey] = useState("");
-  const [addingQuiz, setAddingQuiz] = useState(false);
-  const [addingSurvey, setAddingSurvey] = useState(false);
 
-  // Initial data fetch
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const quizzesResponse = await fetch(
-          `${API_URL}/quizzes/quizzes`
-        );
+        const quizzesResponse = await fetch(`${API_URL}/quizzes/quizzes`);
         if (!quizzesResponse.ok) {
           throw new Error("Failed to fetch quizzes");
         }
         const quizzesData = await quizzesResponse.json();
 
-        const surveysResponse = await fetch(
-          `${API_URL}/quizzes/surveys`
-        );
+        const surveysResponse = await fetch(`${API_URL}/quizzes/surveysAll`);
         if (!surveysResponse.ok) {
           throw new Error("Failed to fetch surveys");
         }
@@ -45,7 +30,6 @@ const QuizzesSurveysPage = () => {
 
         setQuizzes(quizzesData);
         setSurveys(surveysData);
-        console.log(surveysData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -56,267 +40,56 @@ const QuizzesSurveysPage = () => {
     fetchData();
   }, []);
 
-  // Delete a whole quiz
-  const handleDeleteQuiz = async (quizId) => {
-    try {
-      setError(null);
-      const response = await fetch(
-        `${API_URL}/quizzes/delete/${quizId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Échec de la suppression du quiz");
-      }
-      setQuizzes(quizzes.filter((quiz) => quiz.id !== quizId));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  // Delete a question using quizId and questionId
-  const handleDeleteQuestion = async (quizId, questionId) => {
-    try {
-      setError(null);
-      const response = await fetch(
-        `${API_URL}/quizzes/${quizId}/delete_questions/${questionId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Échec de la suppression de la question");
-      }
-      // Option 1: Refetch all quizzes
-      const quizzesResponse = await fetch(
-        `${API_URL}/quizzes/available`
-      );
-      const quizzesData = await quizzesResponse.json();
-      setQuizzes(quizzesData);
-
-      // Option 2: If you prefer, update the state locally.
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  // Delete a choice using quizId, questionId, and choiceId
-  const handleDeleteChoice = async (quizId, questionId, choiceId) => {
-    try {
-      setError(null);
-      const response = await fetch(
-        `${API_URL}/quizzes/${quizId}/delete_questions/${questionId}/delete_choices/${choiceId}`,
-        { method: "DELETE" }
-      );
-      if (!response.ok) {
-        throw new Error("Échec de la suppression du choix");
-      }
-      // Refetch quizzes to update data
-      const quizzesResponse = await fetch(
-        `${API_URL}/quizzes/available`
-      );
-      const quizzesData = await quizzesResponse.json();
-      setQuizzes(quizzesData);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">Error: {error}</div>;
+
   return (
     <div className="app-container">
       <div className="titre">
         <p>Quizzes and Surveys</p>
       </div>
-      {/* Quizzes Section */}
-      <section className="section-container">
-        <div className="section-header">
-          <h2 className="section-title">Quizzes</h2>
-          <button
-            onClick={() => setAddingQuiz(!addingQuiz)}
-            className="view-results-button"
-          >
-            {addingQuiz ? "Cancel" : "View Statistics"}
-          </button>
-        </div>
 
-        {addingQuiz && (
-          <div className="add-form">
-            <input
-              type="text"
-              placeholder="Quiz name"
-              value={newQuiz.name}
-              onChange={(e) => setNewQuiz({ ...newQuiz, name: e.target.value })}
-              className="form-input"
-              required
-            />
-            {/*<input
-              type="number"
-              placeholder="Chapter number"
-              value={newQuiz.chapter}
-              onChange={(e) => setNewQuiz({ ...newQuiz, chapter: e.target.value })}
-              className="form-input"
-              required
-              min="1"
-            />*/}
-            <input
-              type="text"
-              placeholder="Subject"
-              value={newQuiz.subject}
-              onChange={(e) =>
-                setNewQuiz({ ...newQuiz, subject: e.target.value })
-              }
-              className="form-input"
-              required
-            />
-            <div className="form-buttons">
+      <div className="QuizSection">
+        {quizzes.length === 0 ? (
+          <p>No quizzes available.</p>
+        ) : (
+          quizzes.map((quiz) => (
+            <div key={quiz.id} className="Quiz">
+              <h2 className="QuizTitle">{quiz.title}</h2>
+              <p>{quiz.module_code}</p>
+              <p>{quiz.launch ? "Completed" : "Not completed"}</p>
+              <p>{quiz.groupe_id}</p>
               <button
-                onClick={() => navigate("/quizPage")}
-                className="save-button"
+                className="Launch"
+                onClick={() => navigate(quiz.launch
+                  ? `/statSurvey/${quiz.id}`
+                  : `/addQuiz${quiz.type_quizz}/${quiz.id}`)}
               >
-                Save Quiz
+                {quiz.launch ? "Statistics" : "Launch"}
               </button>
             </div>
-          </div>
+          ))
         )}
+      </div>
 
-        <div className="table-container">
-          <table className="quizzes-table">
-            <thead>
-              <tr>
-                <th>Quiz name</th>
-                <th>Type</th>
-                <th>Module</th>
-                <th>Class</th>
-              </tr>
-            </thead>
-            <tbody>
-              {quizzes.map((quiz) => (
-                <tr key={quiz.id}>
-                  <td>{quiz.name}</td>
-                  <td>Chapter {quiz.chapter}</td>
-                  <td>{quiz.type}</td>
-                  <td
-                    className={`state ${quiz.state?.replace(" ", "-") || ""}`}
-                  >
-                    {quiz.state || "Unknown"}
-                  </td>
-                  <td>{quiz.subject}</td>
-                  <td>
-                    <button
-                      onClick={() => handleDeleteQuiz(quiz.id)}
-                      className="delete-button"
-                    >
-                      Delete Quiz
-                    </button>
-
-                    {/* If quiz has questions, render them */}
-                    {quiz.questions &&
-                      quiz.questions.map((question) => (
-                        <div key={question.id}>
-                          <span>{question.text}</span>
-                          <button
-                            onClick={() =>
-                              handleDeleteQuestion(quiz.id, question.id)
-                            }
-                            className="delete-button"
-                          >
-                            Delete Question
-                          </button>
-                          {/* Render choices for each question */}
-                          {question.choices &&
-                            question.choices.map((choice) => (
-                              <div key={choice.id}>
-                                <span>{choice.text}</span>
-                                <button
-                                  onClick={() =>
-                                    handleDeleteChoice(
-                                      quiz.id,
-                                      question.id,
-                                      choice.id
-                                    )
-                                  }
-                                  className="delete-button"
-                                >
-                                  Delete Choice
-                                </button>
-                              </div>
-                            ))}
-                        </div>
-                      ))}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* Surveys Section */}
-      <section className="section-container">
-        <div className="section-header">
-          <h2 className="section-title">Surveys</h2>
-          <button
-            onClick={() => setAddingSurvey(!addingSurvey)}
-            className="view-results-button"
-          >
-            {addingSurvey ? "Cancel" : "Add Survey"}
-          </button>
-        </div>
-
-        {addingSurvey && (
-          <div className="add-form">
-            <input
-              type="text"
-              placeholder="Survey name"
-              value={newSurvey}
-              onChange={(e) => setNewSurvey(e.target.value)}
-              className="form-input"
-              required
-            />
-            <div className="form-buttons">
+      <div className="SurveySection">
+        {surveys.length === 0 ? (
+          <p>No surveys available.</p>
+        ) : (
+          surveys.map((survey) => (
+            <div key={survey.id} className="Survey">
+              <h2 className="SurveyTitle">{survey.title}</h2>
+              <p>{survey.groupe_id || "N/A"}</p>
               <button
-                onClick={() => console.log("add survey")}
-                className="save-button"
+                className="LaunchS"
+                onClick={() => navigate(`/Statsurvey/${survey.id}`)}
               >
-                Save Survey
+                Statistics
               </button>
             </div>
-          </div>
+          ))
         )}
-
-        <div className="table-container">
-          <table className="surveys-table">
-            <thead>
-              <tr>
-                <th>Survey name</th>
-                <th>Module</th>
-                <th>Class</th>
-              </tr>
-            </thead>
-            <tbody>
-              {surveys.map((survey) => (
-                <tr key={survey.id}>
-                  <td>{survey.title}</td>
-                  <td>{survey.module_code}</td>
-                  <td>
-                    <button
-                      className="view-results-button"
-                      onClick={() =>
-                        console.log(`View results for survey ${survey.id}`)
-                      }
-                    >
-                      View results
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };

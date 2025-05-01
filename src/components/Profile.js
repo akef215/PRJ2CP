@@ -80,7 +80,7 @@ const Profile = () => {
         </div>
        <div className='Nav-Menu'>
         <p onClick={() => {navigate("../homepage")}} className={'nav-item'}>Home</p>
-        <p onClick={() => {navigate("../stats")}} className={'nav-item'}>Stats</p>
+        <p onClick={() => {navigate("../statsLine")}} className={'nav-item'}>Stats</p>
         <p onClick={() => {navigate("../quizPage")}} className={'nav-item'}>Quizzes</p>
         <p onClick={() => {navigate("../profile")}} className={'nav-item active'}>Profile</p>
         </div>
