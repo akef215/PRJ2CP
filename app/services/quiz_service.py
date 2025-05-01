@@ -28,6 +28,11 @@ async def get_available_quizzes_service(db: AsyncSession) -> List[Quiz]:
     result = await db.execute(stmt)
     return result.scalars().all()
 
+async def get_day_quizzes_service(date: date, db: AsyncSession) -> List[Quiz]:
+    stmt = select(Quiz).where(Quiz.date == date, Quiz.launch == True)
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
 async def get_quizzes_service(db: AsyncSession) -> List[Quiz]:
     """Fetch quizzes"""
     stmt = select(Quiz).where(Quiz.type_quizz != 'S')
@@ -392,18 +397,6 @@ async def get_available_surveys_today(db: AsyncSession) -> List[int]:
     result = await db.execute(stmt)
     return result.scalars().all()
 
-
-
-async def create_notification(notification_data: NotificationCreate, db: AsyncSession):
-    notification_data_dict = notification_data.dict()
-    notification_data_dict["description"] = notification_data_dict.pop("content")  # Renomme le champ
-    notification = Notif(**notification_data_dict)
-
-    db.add(notification)
-    await db.commit()
-    await db.refresh(notification)
-    return notification
-
 async def launch_quiz_service(quiz_id: int, db: AsyncSession):
     # Récupérer le quiz
     result = await db.execute(select(Quiz).where(Quiz.id == quiz_id))
@@ -418,41 +411,46 @@ async def launch_quiz_service(quiz_id: int, db: AsyncSession):
     # Lancer le quiz
     quiz.launch = True
     await db.commit()
-
+    today = date.today()
     # Récupérer les étudiants du groupe lié
     if not quiz.groupe_id:
         return {"message": "Quiz launched but no group assigned"}
 
-    students_result = await db.execute(
-        select(Student).where(Student.groupe_id == quiz.groupe_id)
-    )
-    students = students_result.scalars().all()
-
-    # Envoyer les notifications
-    notification_count = 0
-    for student in students:
-        notif = NotificationCreate(
-            content=f"The quiz '{quiz.title}' has been launched!",
-            recipient_id=student.id
-        )
-        await create_notification(notif, db)
-        notification_count += 1
+    notif = Notif(description = f"The quiz '{quiz.title}' has been launched!", date = today, quizz_id=quiz.id, groupe_id=quiz.groupe_id)
+    db.add(notif)
+    await db.commit()
 
     return {
         "message": "Quiz launched successfully",
-        "notifications_sent": notification_count,
         "group_id": quiz.groupe_id
     }
-
-
 
 async def get_submitted_quizzes(student_id: str, db: AsyncSession) -> List[Quiz]:
     stmt = (
         select(Quiz)
-        .distinct(Quiz.id)
-        .join(Result)
+        .join(Result, Result.quizz_id == Quiz.id)
         .where(Result.student_id == student_id)
+        .where(Quiz.type_quizz != "S")
+        .distinct()
     )
     result = await db.execute(stmt)
     quizzes = result.scalars().all()
     return quizzes
+
+async def get_submitted_surveys(student_id: str, db: AsyncSession) -> List[Quiz]:
+    stmt = (
+        select(Quiz)
+        .join(Result, Result.quizz_id == Quiz.id)
+        .where(Result.student_id == student_id)
+        .where(Quiz.type_quizz == "S")
+        .distinct()
+    )
+    result = await db.execute(stmt)
+    quizzes = result.scalars().all()
+    return quizzes
+
+async def get_correct_answers(quiz_id: int, db: AsyncSession):
+    stmt = select(Choice).where(Choice.score > 0, Choice.quiz_id == quiz_id)
+    result = await db.execute(stmt)
+    correction = result.scalars().all()
+    return correction

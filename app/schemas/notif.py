@@ -3,4 +3,4 @@ from pydantic import BaseModel
 
 class NotificationCreate(BaseModel):
     description: str
-    recipient_id: str
+    groupe_id: str

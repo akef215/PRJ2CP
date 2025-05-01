@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from datetime import date
 
 from database import get_db
 from app.services.quiz_service import (
@@ -8,12 +9,12 @@ from app.services.quiz_service import (
     update_quiz, update_question, update_choice, get_students_within_score_range,
     get_students_who_did_quiz, answer_quiz, get_quiz_details_service, get_quiz_with_question_id,
     get_all_quizzes_service, get_available_quizzes_today, get_available_surveys_today, launch_quiz_service,
-    get_submitted_quizzes
+    get_submitted_quizzes, get_submitted_surveys, get_correct_answers
 )
 from app.schemas.quiz import QuizOut, QuizCreate, AnswerSubmission
 
 from app.services.quiz_service import get_available_quizzes_service
-from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice, get_students_within_score_range, get_students_who_did_quiz, get_available_questions_service, get_available_choices_service, get_surveys, get_quiz, get_quizzes_service, get_surveys_service
+from app.services.quiz_service import add_quiz, add_question, add_choice, delete_quiz_service, delete_question_service, delete_choice_service, update_quiz, update_question, update_choice, get_students_within_score_range, get_students_who_did_quiz, get_available_questions_service, get_available_choices_service, get_surveys, get_quiz, get_quizzes_service, get_surveys_service, get_day_quizzes_service
 from app.schemas.quiz import QuizOut
 from app.schemas.quiz import QuizChange
 from app.schemas.quiz import QuizCreate
@@ -30,6 +31,10 @@ router = APIRouter()
 @router.get("/available", response_model=List[QuizOut])
 async def get_available_quizzes(db: AsyncSession = Depends(get_db)):
     return await get_available_quizzes_service(db)
+
+@router.get("/day", response_model=List[QuizOut])
+async def get_day_quizzes(day: date, db: AsyncSession = Depends(get_db)):
+    return await get_day_quizzes_service(day, db)
 
 # Ajouter un quiz
 
@@ -235,6 +240,14 @@ async def available_surveys(db: AsyncSession = Depends(get_db)) -> List[QuizIDRe
 async def launch_quiz(quiz_id: int, db: AsyncSession = Depends(get_db)):
     return await launch_quiz_service(quiz_id, db)
 
-@router.get("/submitted/{student_id}", response_model=List[int])
+@router.get("/submitted/quizzes/")
 async def submitted_quizzes(student_id: str, db: AsyncSession = Depends(get_db)):
     return await get_submitted_quizzes(student_id, db)
+
+@router.get("/submitted/surveys/")
+async def submitted_surveys(student_id: str, db: AsyncSession = Depends(get_db)):
+    return await get_submitted_surveys(student_id, db)
+
+@router.get("/correction/{quiz_id}")
+async def correction(quiz_id: int, db: AsyncSession = Depends(get_db)):
+    return await get_correct_answers(quiz_id, db)
