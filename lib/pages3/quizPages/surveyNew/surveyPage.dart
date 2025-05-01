@@ -50,7 +50,7 @@ class _SurveyPageState extends State<SurveyPage> {
   String question = "Loading question...";
 
   // Store the selected answers by user
-  Set<String> selectedAnswers = {};
+  Set<int> selectedAnswers = {};
 
   Future<Map<String, dynamic>> fetchQuizData() async {
     // print("something again?");
@@ -77,6 +77,7 @@ class _SurveyPageState extends State<SurveyPage> {
       };
     } else {
       print("error respose ");
+      error = true;
       throw Exception('Failed to load quiz');
     }
   }
@@ -100,6 +101,10 @@ class _SurveyPageState extends State<SurveyPage> {
           error = true;
         }
         questions = List<Questioninfo>.from(data['questions']);
+        if (questions.isEmpty){
+          error = true;
+        }
+
 
         userAnswers = List.generate(totalQuestions, (index) => []);
         choices = questions[currentPage].choices;
@@ -261,7 +266,7 @@ class _SurveyPageState extends State<SurveyPage> {
   }
 
   // doesn't contain toggle answer like the original
-  Widget buildAnswerOption(List<ChoicesNew> choices) {
+ Widget buildAnswerOption(List<ChoicesNew> choices) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -269,8 +274,8 @@ class _SurveyPageState extends State<SurveyPage> {
     return ListView.builder(
       itemCount: choices.length,
       itemBuilder: (context, index) {
-        String answer = choices[index].answer;
-        print(answer);
+        ChoicesNew answer = choices[index];
+        //print(answer);
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: Row(
@@ -279,14 +284,14 @@ class _SurveyPageState extends State<SurveyPage> {
                 // Resize the checkbox
                 scale: 1.3,
                 child: Checkbox(
-                  value: selectedAnswers.contains(answer),
+                  value: selectedAnswers.contains(answer.choicesId),
                   onChanged: (bool? value) {
                     setState(() {
                       toggleAnswer(choices[index].choicesId);
                       if (value == true) {
-                        selectedAnswers.add(answer);
+                        selectedAnswers.add(answer.choicesId);
                       } else {
-                        selectedAnswers.remove(answer);
+                        selectedAnswers.remove(answer.choicesId);
                       }
                     });
                   },
@@ -297,7 +302,7 @@ class _SurveyPageState extends State<SurveyPage> {
               SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  answer,
+                  answer.answer,
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: "MontserratSemi",
@@ -323,7 +328,7 @@ class _SurveyPageState extends State<SurveyPage> {
       backgroundColor: Color(0xffFFFDFD),
 
       /*-----------------APPBAR------------------*/
-      appBar: Custom_appBar().buildAppBar(context, "Quiz", true),
+      appBar: Custom_appBar().buildAppBar(context, "Survey", true),
 
       /*------------------------------MAIN---------------------------------------*/
       body:
@@ -358,16 +363,15 @@ class _SurveyPageState extends State<SurveyPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: screenHeight*0.23,
-                      height: screenHeight*0.23,
-                      child:
-                      ClipRRect(
+                      width: screenHeight * 0.23,
+                      height: screenHeight * 0.23,
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(200.0),
                         child: Image.asset(
                           "images/NotWrokingBlue.png",
                           fit: BoxFit.contain,
                         ),
-                      ), 
+                      ),
                     ),
                     SizedBox(height: 30),
                     Text(
@@ -384,24 +388,9 @@ class _SurveyPageState extends State<SurveyPage> {
               : Column(
                 children: [
                   /*--------------------QUIZ TIME BOX-----------------*/
-                  Container(
-                    height: screenHeight * 0.07,
-                    width: screenWidth * 0.58,
-                    margin: EdgeInsets.only(
-                      top: 20,
-                      bottom: 10,
-                      left: 80,
-                      right: 80,
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 65, vertical: 15),
-                    decoration: BoxDecoration(
-                      color: Color(0xffFFFDFD),
-                      borderRadius: BorderRadius.circular(40),
-                      border: Border.all(color: Color(0xff0F3D64), width: 1),
-                    ),
-                  ),
+                 
 
-                  SizedBox(height: 10),
+                  SizedBox(height:  screenHeight * 0.07),
 
                   /*-------------------QUESTION BOX--------------------*/
                   Container(
@@ -441,29 +430,7 @@ class _SurveyPageState extends State<SurveyPage> {
                   SizedBox(height: 15),
 
                   /*------------------QUESTION MARK BOX--------------------*/
-                  Container(
-                    height: screenHeight * 0.07,
-                    width: screenWidth * 0.58,
-                    margin: EdgeInsets.only(bottom: 10, left: 80, right: 80),
-                    padding: EdgeInsets.symmetric(horizontal: 65, vertical: 15),
-                    decoration: BoxDecoration(
-                      color: Color(0xffFFFDFD),
-                      borderRadius: BorderRadius.circular(40),
-                      border: Border.all(color: Color(0xff0F3D64), width: 1),
-                    ),
-                    child: Center(
-                      child: Text(
-                        questionMarkText,
-                        style: TextStyle(
-                          color: Color(0xff21334E),
-                          fontFamily: "MontserratSemi",
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 2),
+                  SizedBox(height: screenHeight * 0.07),
 
                   /*--------------------ANSWERS BOX-------------------*/
                   Theme(

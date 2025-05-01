@@ -124,6 +124,7 @@ class _SubmitSuvey extends State<SubmitSurvey> {
           ElevatedButton(
             onPressed: () {
               handleSubmit(widget.questions, widget.userAnswers);
+              print("Submit Perssed");
             },
 
             style: ElevatedButton.styleFrom(
@@ -186,7 +187,7 @@ class _SubmitSuvey extends State<SubmitSurvey> {
     );
   }
 
- /* double calculateScore(
+  /* double calculateScore(
     List<Questioninfo> questions,
     List<List<int>> userAnswers,
   ) {
@@ -212,7 +213,7 @@ class _SubmitSuvey extends State<SubmitSurvey> {
     List<Questioninfo> questions,
     List<List<int>> userAnswers,
   ) async {
-   // double score = calculateScore(questions, userAnswers);
+    // double score = calculateScore(questions, userAnswers);
 
     //print("Final Score: $score");
 
@@ -241,10 +242,12 @@ class _SubmitSuvey extends State<SubmitSurvey> {
     sendResponseToBackend(questions, userAnswers);
   }
 
-
-   Future<Map<String, dynamic>> fetchStudentInfo() async {
+  Future<Map<String, dynamic>> fetchStudentInfo() async {
     // print("something again?");
-    final response = await http.get(Uri.parse(path + '/students/me/profile'));
+    final response = await http.get(
+      Uri.parse(path + '/students/me/profile'),
+      headers: {'Authorization': 'Bearer $bearerToken'},
+    );
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       print(
@@ -259,7 +262,9 @@ class _SubmitSuvey extends State<SubmitSurvey> {
         'goupe_id': data['groupe_id'],
       };
     } else {
-      print("error respose ");
+      print(
+        "error respose fetch student info   response code ${response.statusCode}",
+      );
       throw Exception('Failed to load quiz');
     }
   }
@@ -268,7 +273,7 @@ class _SubmitSuvey extends State<SubmitSurvey> {
     List<Questioninfo> questions,
     List<List<int>> userAnswers,
   ) async {
-     final data = await fetchStudentInfo();
+    final data = await fetchStudentInfo();
     String studentId = data['StudentId'];
     for (int i = 0; i < widget.totalQuestions; i++) {
       final userChoices = userAnswers[i];
@@ -293,7 +298,7 @@ class _SubmitSuvey extends State<SubmitSurvey> {
         final response = await http.post(
           url,
           headers: {
-            'Content-Type': 'application/json',
+            //'Content-Type': 'application/json',
             'Authorization': 'Bearer $bearerToken',
           },
           body: jsonEncode({

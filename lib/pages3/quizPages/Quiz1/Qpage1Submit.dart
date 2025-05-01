@@ -202,7 +202,7 @@ class _SubmitQuizWithPersState extends State<SubmitQuizWithPers> {
           (choice) => choice.choicesId == choiceId,
         );
         score = score + choice.points;
-        print("///////////////////////////////////////// $score");
+        print("User's score: $score");
       }
     }
     return score;

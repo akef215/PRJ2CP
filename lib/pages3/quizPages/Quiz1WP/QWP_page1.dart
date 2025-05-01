@@ -129,6 +129,7 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
       };
     } else {
       print("error respose ");
+      error = true;
       throw Exception('Failed to load quiz');
     }
   }
@@ -153,11 +154,13 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
 
         // No need to parse again — already Questioninfo objects
         questions = List<Questioninfo>.from(data['questions']);
-
+        if (questions.isEmpty) {
+          error = true;
+        }
         userAnswers = List.generate(totalQuestions, (index) => []);
         choices = questions[currentPage].choices;
         questionMarkText =
-            "${choices.fold(0.0, (sum, c) => sum + c.points)} points";
+            "${choices.fold(0.0, (sum, c) => sum + c.points)} p";
         timeLimit = questions[currentPage].timeLimitSeconds;
 
         _remainingTime = timeLimit;
@@ -283,9 +286,7 @@ class _QuizWPPage1State extends State<QuizWPPage1> {
     // print("something again?");
     final response = await http.get(
       Uri.parse(path + '/students/me/profile'),
-      headers: {
-        'Authorization': 'Bearer $bearerToken',
-      },
+      headers: {'Authorization': 'Bearer $bearerToken'},
     );
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

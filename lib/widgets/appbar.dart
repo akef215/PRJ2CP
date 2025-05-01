@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../pages2/agenda.dart';
 import '../pages2/profile.dart';
 
-String path='http://192.168.43.147:8000';
+String path = 'http://192.168.1.22:8000';
 
 class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
   // building appBar Function

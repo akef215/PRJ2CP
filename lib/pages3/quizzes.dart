@@ -5,11 +5,9 @@ import '../pages2/agenda.dart';
 import '../pages2/profile.dart';
 import 'dart:convert';
 
-
 import '../pages3/quizPages/Quiz1/Qpage1.dart';
 import '../pages3/quizPages/Quiz1WP/QWP_page1.dart';
 import '../pages3/quizPages/surveyNew/surveyPage.dart';
-
 
 import '../widgets/appbar.dart';
 import '../pages3/quizPages/QuizzesStructure.dart';
@@ -30,14 +28,16 @@ class _QuizzesState extends State<Quizzes> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    print("current Page quizzes , builder name quizzesSatate ");// 1 quiz, 2 persnatation
+    print(
+      "current Page quizzes , builder name quizzesSatate ",
+    ); // 1 quiz, 2 persnatation
 
     print("Redirection Page for quizzes ");
     return Scaffold(
       backgroundColor: Color(0xffDFF0FF),
 
       /*-----------------APPBAR------------------*/
-      appBar: Custom_appBar().buildAppBar(context, "Quizzes", false),
+      appBar: Custom_appBar().buildAppBar(context, "Quizzes", true),
 
       body: Column(
         children: [
@@ -75,34 +75,37 @@ class _QuizzesState extends State<Quizzes> {
           /*------------------START QUIZ BUTTON-------------------*/
           ElevatedButton(
             onPressed: () {
-              if(widget.ques.type_quizz=="1"){
-                  Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => QuizPage1(quizIdString: widget.ques.id.toString()),
-                ), 
+              if (widget.ques.type_quizz == "2") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) =>
+                            QuizPage1(quizIdString: widget.ques.id.toString()),
+                  ),
                 );
-
-              }else if(widget.ques.type_quizz=="2"){
-                 Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => QuizWPPage1(quizIdString: widget.ques.id.toString()),
-                ), 
+              } else if (widget.ques.type_quizz == "1") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => QuizWPPage1(
+                          quizIdString: widget.ques.id.toString(),
+                        ),
+                  ),
                 );
-
-              }else if(widget.ques.type_quizz=="s"){
-                   Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SurveyPage(quizIdString: widget.ques.id.toString()),
-                ), 
+              } else if (widget.ques.type_quizz == "S") {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) =>
+                            SurveyPage(quizIdString: widget.ques.id.toString()),
+                  ),
                 );
-                
-              }else{
+              } else {
                 print("error determining Type");
               }
-              
             },
             style: ElevatedButton.styleFrom(
               elevation: 0.05,

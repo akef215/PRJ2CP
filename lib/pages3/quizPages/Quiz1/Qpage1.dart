@@ -41,6 +41,7 @@ class _QuizPage1State extends State<QuizPage1> {
   int _remainingTime = 0;
 
   bool isLoading = true;
+  bool error = false;
 
   // Dynamic data (will be fetched from the API)
   String quizTimeText = "Loading..."; // Placeholder for "Quiz Time"
@@ -48,7 +49,7 @@ class _QuizPage1State extends State<QuizPage1> {
   String question = "Loading question...";
 
   // Store the selected answers by user
-  Set<String> selectedAnswers = {};
+  Set<int> selectedAnswers = {};
 
   Future<Map<String, dynamic>> fetchQuizData() async {
     // print("something again?");
@@ -75,6 +76,7 @@ class _QuizPage1State extends State<QuizPage1> {
       };
     } else {
       print("error respose ");
+      error = true;
       throw Exception('Failed to load quiz');
     }
   }
@@ -95,9 +97,13 @@ class _QuizPage1State extends State<QuizPage1> {
         timeLimit = data['timeLimitMinutes'];
         quizId = data['quizId'];
         totalQuestions = data['totalQuestions'];
-        
+        if (totalQuestions == 0) {
+          error = true;
+        }
         questions = List<Questioninfo>.from(data['questions']);
-
+        if (questions.isEmpty){
+          error = true;
+        }
         userAnswers = List.generate(totalQuestions, (index) => []);
         choices = questions[currentPage].choices;
 
@@ -175,7 +181,6 @@ class _QuizPage1State extends State<QuizPage1> {
         choices = questions[currentPage].choices;
         questionMarkText =
             "${questions[currentPage].choices.fold<double>(0, (sum, c) => sum + c.points)} points";
-        _remainingTime = timeLimit;
       });
     } else {
       print("No going back");
@@ -267,8 +272,8 @@ class _QuizPage1State extends State<QuizPage1> {
     return ListView.builder(
       itemCount: choices.length,
       itemBuilder: (context, index) {
-        String answer = choices[index].answer;
-        print(answer);
+        ChoicesNew answer = choices[index];
+        //print(answer);
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: Row(
@@ -277,14 +282,14 @@ class _QuizPage1State extends State<QuizPage1> {
                 // Resize the checkbox
                 scale: 1.3,
                 child: Checkbox(
-                  value: selectedAnswers.contains(answer),
+                  value: selectedAnswers.contains(answer.choicesId),
                   onChanged: (bool? value) {
                     setState(() {
                       toggleAnswer(choices[index].choicesId);
                       if (value == true) {
-                        selectedAnswers.add(answer);
+                        selectedAnswers.add(answer.choicesId);
                       } else {
-                        selectedAnswers.remove(answer);
+                        selectedAnswers.remove(answer.choicesId);
                       }
                     });
                   },
@@ -295,7 +300,7 @@ class _QuizPage1State extends State<QuizPage1> {
               SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  answer,
+                  answer.answer,
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: "MontserratSemi",
@@ -343,6 +348,34 @@ class _QuizPage1State extends State<QuizPage1> {
                       "Loading quiz...",
                       style: TextStyle(
                         fontSize: 14,
+                        color: Color(0xff21334E),
+                        fontFamily: "MontserratSemi",
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              : error
+              ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: screenHeight * 0.23,
+                      height: screenHeight * 0.23,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(200.0),
+                        child: Image.asset(
+                          "images/NotWrokingBlue.png",
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Text(
+                      "Unknown Error has accorred ",
+                      style: TextStyle(
+                        fontSize: 18,
                         color: Color(0xff21334E),
                         fontFamily: "MontserratSemi",
                       ),

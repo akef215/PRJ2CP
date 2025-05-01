@@ -17,7 +17,7 @@ import '../quizzes.dart';
 //decribed as part 1 in my To do list
 
 Future<Map<String, dynamic>> fetchQuizzes() async {
-  final response = await http.get(Uri.parse(path + '/quizzes/quizzes'));
+  final response = await http.get(Uri.parse(path + '/quizzes/available'));
   if (response.statusCode == 200) {
     final data = json.decode(response.body);
     print(
@@ -135,27 +135,25 @@ class _QuizChoiceState extends State<QuizChoice> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     List<Quizzesstructure> Total = quizzes + surveys;
-    return 
-    GridView.count(
-                // physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 2, // 2 items per row
-                crossAxisSpacing: 40,
-                mainAxisSpacing: 30,
-                childAspectRatio: 1.1,
-                children:
-    
-    List.generate(
-      Total.length,
-          (index) => ClickableCard(
-        mainText: Total[index].type_quizz == "s"
-            ? "SURVEY"
-            : Total[index].type_quizz == "1"
-                ? "QUIZ"
-                : "QUIZ presentation",
-        page: Quizzes(ques: Total[index]),
-        subText: Total[index].title,
-      )
-    ),
+    return GridView.count(
+      // physics: NeverScrollableScrollPhysics(),
+      crossAxisCount: 2, // 2 items per row
+      crossAxisSpacing: 40,
+      mainAxisSpacing: 30,
+      childAspectRatio: 1.1,
+      children: List.generate(
+        Total.length,
+        (index) => ClickableCard(
+          mainText:
+              Total[index].type_quizz == "S"
+                  ? "SURVEY"
+                  : Total[index].type_quizz == "2"
+                  ? "QUIZ"
+                  : "QUIZ presentation",
+          page: Quizzes(ques: Total[index]),
+          subText: Total[index].title,
+        ),
+      ),
     );
   }
 
@@ -168,7 +166,7 @@ class _QuizChoiceState extends State<QuizChoice> {
       backgroundColor: Color(0xff21334E),
 
       /*-----------------APPBAR------------------*/
-      appBar: Custom_appBar().buildAppBar(context, "Quiz", false),
+      appBar: Custom_appBar().buildAppBar(context, "Available Quizzes", false),
 
       /*-----------------BODY------------------*/
       body: Column(
@@ -181,7 +179,7 @@ class _QuizChoiceState extends State<QuizChoice> {
                 right: screenWidth * 0.05,
                 top: screenHeight * 0.08,
               ),
-              child: buildQuizzesCards(context)
+              child: buildQuizzesCards(context),
             ),
           ),
 

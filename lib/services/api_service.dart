@@ -34,7 +34,7 @@ import 'package:http/http.dart' as http;
 import '../widgets/appbar.dart';
 
 class ApiService {
-  static  String baseUrl = path; //"http://192.168.6.154:8000";
+  static String baseUrl = path; //"http://192.168.6.154:8000";
 
   static Future<bool> sendFeedback(String feedback) async {
     final url = Uri.parse('$baseUrl/feedback/');
@@ -45,11 +45,7 @@ class ApiService {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "description": feedback,
-          "groupe": "1CP1",
-          "module": "ALG1",
-        }),
+        body: jsonEncode({"description": feedback, "groupe": "1CP1"}),
       );
 
       print("📡 Statut : ${response.statusCode}");
