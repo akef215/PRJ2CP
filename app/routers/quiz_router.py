@@ -9,7 +9,7 @@ from app.services.quiz_service import (
     update_quiz, update_question, update_choice, get_students_within_score_range,
     get_students_who_did_quiz, answer_quiz, get_quiz_details_service, get_quiz_with_question_id,
     get_all_quizzes_service, get_available_quizzes_today, get_available_surveys_today, launch_quiz_service,
-    get_submitted_quizzes, get_submitted_surveys, get_correct_answers
+    get_submitted_quizzes, get_submitted_surveys, get_correct_answers,get_student_answers
 )
 from app.schemas.quiz import QuizOut, QuizCreate, AnswerSubmission
 
@@ -251,3 +251,8 @@ async def submitted_surveys(student_id: str, db: AsyncSession = Depends(get_db))
 @router.get("/correction/{quiz_id}")
 async def correction(quiz_id: int, db: AsyncSession = Depends(get_db)):
     return await get_correct_answers(quiz_id, db)
+
+
+@router.get("/answers")
+async def get_student_answers_route(student_id: str,db: AsyncSession = Depends(get_db)):
+    return await get_student_answers(student_id, db)

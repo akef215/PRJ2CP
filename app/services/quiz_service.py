@@ -454,3 +454,31 @@ async def get_correct_answers(quiz_id: int, db: AsyncSession):
     result = await db.execute(stmt)
     correction = result.scalars().all()
     return correction
+
+
+
+async def get_student_answers(student_id: str, db: AsyncSession):
+    stmt = (
+        select(Result, Choice, Question, Quiz)
+        .join(Choice, Result.choice_id == Choice.id)
+        .join(Question, Choice.question_id == Question.id)
+        .join(Quiz, Result.quizz_id == Quiz.id)
+        .where(Result.student_id == student_id)
+    )
+
+    result = await db.execute(stmt)
+    rows = result.fetchall()
+
+    student_answers = []
+    for result_obj, choice, question, quiz in rows:
+        student_answers.append({
+            "quiz_id": quiz.id,
+            "quiz_title": quiz.title,
+            "question_id": question.id,
+            "question_text": question.statement,
+            "choice_id": choice.id,
+            "choice_text": choice.answer,
+            "score": choice.score,
+        })
+
+    return student_answers
