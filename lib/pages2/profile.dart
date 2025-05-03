@@ -5,11 +5,14 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pages2/EditProfile.dart';
-import '../pages1/firstPage.dart';
-import '../pages2/ChangePassWord.dart';
+import '../pages1/firstPage.dart'; // is actually profile info
+//import '../pages2/ChangePassWord.dart';
 
 import '../widgets/appbar.dart';
 //import 'agenda.dart';
+import 'package:http/http.dart' as http;
+import '../../../pages1/logMobile.dart';
+import 'dart:convert';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -19,6 +22,12 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  String studentId = '';
+  String studentName = '';
+  String studentEmail = '';
+  String studentLevel = '';
+  String studentGroupId = '';
+
   /*-------------METHODS TO SELECT PFP--------------*/
   File? _image; // Store the selected image
   final ImagePicker _picker = ImagePicker();
@@ -57,10 +66,53 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  //fetch Student Infromations
+  Future<Map<String, dynamic>> fetchStudentInfo() async {
+    // print("something again?");
+    final response = await http.get(
+      Uri.parse(path + '/students/me/profile'),
+      headers: {'Authorization': 'Bearer $bearerToken'},
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      print(
+        'Response Body--------------------------------------: ${response.body}',
+      );
+
+      return {
+        'StudentId': data['id'],
+        'name': data['name'], // Keep this as it is (already an integer)
+        'email': data['email'],
+        'level': data['level'],
+        'goupe_id': data['groupe_id'],
+      };
+    } else {
+      print("error respose Fetching Student info ${response.statusCode}");
+      throw Exception('Failed to load quiz');
+    }
+  }
+
+  bool doneLoading = false;
+  bool doneOnce = false;
+  Future<void> instailizingFucntion() async {
+    final data = await fetchStudentInfo();
+    studentId = data['StudentId'];
+    studentName = data['name'];
+    studentEmail = data['email'];
+    studentLevel = data['level'];
+    studentGroupId = data['goupe_id'];
+    doneLoading = true;
+    if (doneLoading && !doneOnce) {
+      setState(() {});
+      doneOnce = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    instailizingFucntion();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -95,24 +147,24 @@ class _ProfileState extends State<Profile> {
                     radius: 70,
                     backgroundColor: Colors.white,
                     backgroundImage:
-                        _image != null
-                            ? FileImage(
-                              _image!,
-                            ) // Show the selected image by the user
-                            : null, // else, no image yet
+                    _image != null
+                        ? FileImage(
+                      _image!,
+                    ) // Show the selected image by the user
+                        : null, // else, no image yet
 
                     child:
-                        _image == null
-                            ? const Text(
-                              "IMAGE",
-                              style: TextStyle(
-                                fontFamily: "MontserratSemi",
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                            : null,
+                    _image == null
+                        ? const Text(
+                      "IMAGE",
+                      style: TextStyle(
+                        fontFamily: "MontserratSemi",
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )
+                        : null,
                   ),
                 ),
 
@@ -144,13 +196,13 @@ class _ProfileState extends State<Profile> {
                   bottom: screenHeight * 0.001,
 
                   child: SizedBox(
-                    height: screenHeight * 0.1,
+                    height: screenHeight * 0.08,
                     child: Center(
                       child: Text(
-                        "Uername",
+                        studentName,
                         style: const TextStyle(
                           fontFamily: "MontserratSemi",
-                          fontSize: 20,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
@@ -162,16 +214,25 @@ class _ProfileState extends State<Profile> {
             ),
           ),
 
-          SizedBox(height: screenHeight * 0.05),
+          SizedBox(height: screenHeight * 0.07),
 
           /*------------------PROFILE MENU-----------------*/
-          _buildMenuButton("images/pen.png", "Edit profile", () {
+          _buildMenuButton("images/people.png", "Profile Information", () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => EditProfile()),
+              MaterialPageRoute(
+                builder:
+                    (context) => ProfileInfo(
+                  studentId: studentId,
+                  studentName: studentName,
+                  studentEmail: studentEmail,
+                  studentGroupId: studentGroupId,
+                  studentLevel: studentLevel,
+                ),
+              ),
             );
           }),
-          _buildMenuButton("images/padlock.png", "Help", () {
+          _buildMenuButton("images/help.png", "Help", () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => HelpPage()),
@@ -257,8 +318,8 @@ class _ProfileState extends State<Profile> {
                 padding: const EdgeInsets.only(left: 15),
                 child: Image.asset(
                   imagePath,
-                  height: 34,
-                  width: 34,
+                  height: 32,
+                  width: 32,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -268,7 +329,7 @@ class _ProfileState extends State<Profile> {
                 text,
                 style: const TextStyle(
                   fontFamily: "MontserratSemi",
-                  fontSize: 21,
+                  fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF21334E),
                 ),

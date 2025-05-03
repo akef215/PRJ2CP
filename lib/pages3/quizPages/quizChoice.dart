@@ -16,57 +16,28 @@ import '../quizzes.dart';
 //availible Quizzes page
 //decribed as part 1 in my To do list
 
-// Future<Map<String, dynamic>> fetchQuizzes() async {
-//   final response = await http.get(Uri.parse(path + '/quizzes/available'));
-//   if (response.statusCode == 200) {
-//     final data = json.decode(response.body);
-//     print(
-//       'Response Body------------------------------------: ${response.body}',
-//     );
-//
-//     if (data is List && data.isEmpty) {
-//       // If the list is empty, return an empty list of quizzes
-//       return {'Quizzes': <Quizzesstructure>[]};
-//     }
-//
-//     return {
-//       'Quizzes':
-//           (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
-//     };
-//   } else {
-//     print("Error response");
-//     throw Exception('Failed to load quiz');
-//   }
-// }
-String path = 'http://192.168.136.146:8000';
 Future<Map<String, dynamic>> fetchQuizzes() async {
-  try {
-    print("Current path: $path");
+  final response = await http.get(Uri.parse(path + '/quizzes/quizzes/all'));
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    print(
+      'Response Body--------------------------------------: ${response.body}',
+    );
 
-    final response = await http.get(Uri.parse(path + '/quizzes/available'));
-    print("Response status: ${response.statusCode}"); // Check status code
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      print('Response Body: ${response.body}');
-
-      if (data is List && data.isEmpty) {
-        return {'Quizzes': <Quizzesstructure>[]};
-      }
-
-      return {
-        'Quizzes': (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
-      };
-    } else {
-      print("Error: Received status code ${response.statusCode}");
-      throw Exception('Failed to load quiz');
+    if (data is List && data.isEmpty) {
+      // If the list is empty, return an empty list of quizzes
+      return {'Quizzes': <Quizzesstructure>[]};
     }
-  } catch (e) {
-    print("Error occurred while fetching quizzes: $e");
-    rethrow; // Rethrow the error so it can be handled by the calling code
+
+    return {
+      'Quizzes':
+      (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
+    };
+  } else {
+    print("Error response");
+    throw Exception('Failed to load quiz');
   }
 }
-
 
 Future<Map<String, dynamic>> fetchSurveys() async {
   print("something again?");
@@ -84,7 +55,7 @@ Future<Map<String, dynamic>> fetchSurveys() async {
 
     return {
       'Surveys':
-          (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
+      (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
     };
   } else {
     print("Error response");
@@ -116,15 +87,12 @@ class _QuizChoiceState extends State<QuizChoice> {
 
   void loadPageData() async {
     try {
-      print("✅ LOADING STARTED ✅");
       final quizzesData = await fetchQuizzes();
-      print("🎯 quizzesData: $quizzesData");
-      final surveysData = await fetchSurveys();
-      print("🎯 surveysData: $surveysData");
+      // final surveysData = await fetchSurveys();
 
       setState(() {
         quizzes = quizzesData['Quizzes'];
-        surveys = surveysData['Surveys'];
+        // surveys = surveysData['Surveys'];
 
         totalQuizzes = quizzes.length;
         totalSurveys = surveys.length;
@@ -138,10 +106,10 @@ class _QuizChoiceState extends State<QuizChoice> {
             print("Quiz Type: ${quizzes[0].type_quizz}");
           }
         } else {
-          print("📕 THE QUIZZES LIST IS EMPTY 📕");
+          print("📕 THE QUIZZES ALL LIST IS EMPTY 📕");
         }
 
-        if (surveys.isNotEmpty) {
+        /*if (surveys.isNotEmpty) {
           for (int i = 0; i < surveys.length; i++) {
             print("Survey number $i");
             print("Survey id:${surveys[i].id}");
@@ -151,7 +119,7 @@ class _QuizChoiceState extends State<QuizChoice> {
           }
         } else {
           print("📕 THE SURVEYS LIST IS EMPTY 📕");
-        }
+        }*/
 
         isLoading = false; // Set it to false AFTER loading both
       });
@@ -175,13 +143,13 @@ class _QuizChoiceState extends State<QuizChoice> {
       childAspectRatio: 1.1,
       children: List.generate(
         Total.length,
-        (index) => ClickableCard(
+            (index) => ClickableCard(
           mainText:
-              Total[index].type_quizz == "S"
-                  ? "SURVEY"
-                  : Total[index].type_quizz == "2"
-                  ? "QUIZ"
-                  : "QUIZ presentation",
+          Total[index].type_quizz == "S"
+              ? "SURVEY"
+              : Total[index].type_quizz == "2"
+              ? "QUIZ"
+              : "QUIZ presentation",
           page: Quizzes(ques: Total[index]),
           subText: Total[index].title,
         ),
@@ -204,7 +172,7 @@ class _QuizChoiceState extends State<QuizChoice> {
       body: Column(
         children: [
           SizedBox(
-            height: screenHeight * 0.6,
+            height: screenHeight * 0.7,
             child: Padding(
               padding: EdgeInsets.only(
                 left: screenWidth * 0.05,

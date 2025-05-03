@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/appbar.dart';
 import '../results.dart';
 
 class QuizStats extends StatefulWidget {
@@ -14,39 +16,131 @@ class QuizStats extends StatefulWidget {
 
 class _QuizStatsState extends State<QuizStats> {
 
+  List<Map<String, dynamic>> quizData = [];
 
-  Future<List<Map<String, dynamic>>> fetchQuizData() async {
-    final response = await http.get(Uri.parse('http://'));// TODO
+  void loadStudentIdAndQuiz() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? studentId = prefs.getString('studentId');
 
-    if (response.statusCode == 200) { // Parse the JSON response
-      List<dynamic> data = jsonDecode(response.body);
-      return data.map((item) => item as Map<String, dynamic>).toList();
+    if (studentId != null) {
+      print('Student ID: $studentId');
+      quizData = await loadAllQuizStats(studentId); // await the async call
+
     } else {
-      throw Exception('Failed to load quiz data');
+      print("❌ No student ID found!");
     }
   }
 
-  //Mock data function
-  Future<List<Map<String, dynamic>>> getMockQuizStats() async {
-    await Future.delayed(Duration(seconds: 1)); // Simulate network delay
-    return [
-      {
-        "date": "23/02/2025",
-        "quizNumber": "07",
-        "progress": 0.68,
-      },
-      {
-        "date": "15/02/2025",
-        "quizNumber": "06",
-        "progress": 0.95,
-      },
-      {
-        "date": "02/02/2025",
-        "quizNumber": "05",
-        "progress": 0.40,
-      },
-    ];
+  Future<List<Map<String, dynamic>>> fetchStudentQuizStats() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? studentId = prefs.getString('studentId');
+
+    if (studentId != null) {
+      print('Student ID: $studentId');
+      return await loadAllQuizStats(studentId); // returns the stats
+    } else {
+      throw Exception("❌ No student ID found!");
+    }
   }
+
+
+  Future<void> triggerQuizStatUpdate(int quizId) async {
+    final response = await http.get(Uri.parse(path +'/statistics/quiz/$quizId'));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to trigger stats for quiz $quizId');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchQuizStatsByDate(int quizId) async {
+    final response = await http.get(
+      Uri.parse(path +'/statistics/stats/with-date/$quizId'),
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body);
+      return data.map((item) => item as Map<String, dynamic>).toList();
+    } else {
+      throw Exception('Failed to fetch quiz stats');
+    }
+  }
+
+  // Future<List<int>> fetchSubmittedQuizIds(String studentId) async {
+  //   print('🔹 Faking submitted quiz IDs for student: $studentId');
+  //   await Future.delayed(Duration(milliseconds: 500)); // Simulate network delay
+  //   return [6, 7]; // Example quiz IDs
+  // }
+
+  // Future<List<int>> fetchSubmittedQuizIds(String studentId) async {
+  //   final response = await http.get(Uri.parse(path + '/quizzes/submitted/quizzes/$studentId'));
+  //
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> data = json.decode(response.body);
+  //     return data.map<int>((quiz) => quiz['id'] as int).toList();
+  //   } else {
+  //     throw Exception('Failed to load submitted quiz IDs');
+  //   }
+  // }
+  Future<List<int>> fetchSubmittedQuizIds(String studentId) async {
+    final encodedId = Uri.encodeComponent(studentId); // encodes '24/0006' to '24%2F0006'
+    final url = Uri.parse(path + '/quizzes/submitted/quizzes/?student_id=$encodedId');
+
+    try {
+      final response = await http.get(url);
+
+      print('Status: ${response.statusCode}');
+      print('Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(response.body);
+        final ids = jsonData.map<int>((quiz) => quiz['id'] as int).toList();
+        return ids;
+      } else {
+        throw Exception('Failed to load submitted quiz ids');
+      }
+    } catch (e) {
+      print('❌ Error fetching submitted quizzes: $e');
+      throw e;
+    }
+  }
+
+
+  Future<List<Map<String, dynamic>>> loadAllQuizStats(String studentId) async {
+    List<int> quizIds = await fetchSubmittedQuizIds(studentId);
+
+    List<Map<String, dynamic>> allStats = [];
+
+    for (int id in quizIds) {
+      await triggerQuizStatUpdate(id); // Optional: you can remove this if unneeded
+      List<Map<String, dynamic>> stats = await fetchQuizStatsByDate(id);
+      allStats.addAll(stats); // Merge stats per quiz into one list
+    }
+
+    return allStats;
+  }
+
+
+
+  //Mock data function
+  // Future<List<Map<String, dynamic>>> getMockQuizStats() async {
+  //   await Future.delayed(Duration(seconds: 1)); // Simulate network delay
+  //   return [
+  //     {
+  //       "date": "23/02/2025",
+  //       "quizNumber": "07",
+  //       "progress": 0.68,
+  //     },
+  //     {
+  //       "date": "15/02/2025",
+  //       "quizNumber": "06",
+  //       "progress": 0.95,
+  //     },
+  //     {
+  //       "date": "02/02/2025",
+  //       "quizNumber": "05",
+  //       "progress": 0.40,
+  //     },
+  //   ];
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +150,7 @@ class _QuizStatsState extends State<QuizStats> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: getMockQuizStats(), // TODO :  Call the actual fetchQuizData method
+        future: fetchStudentQuizStats(), // TODO :  Call the actual fetchQuizData method
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Show a loading spinner while data is being fetched
@@ -131,7 +225,7 @@ class _QuizStatsState extends State<QuizStats> {
                 ...snapshot.data!.map((quizData) {
                   return _buildQuizCard(
                     quizData['date'],
-                    quizData['quizNumber'],
+                    quizData['quizNumber'].toString(),
                     quizData['progress'],
                   );
                 }).toList(),

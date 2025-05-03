@@ -6,8 +6,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/appbar.dart';
+
 class SurveyStats extends StatefulWidget {
-  const SurveyStats({super.key});
+  const SurveyStats({super.key, this.surveyId});
+
+  final int? surveyId;
 
   @override
   State<SurveyStats> createState() => _SurveyStatsState();
@@ -17,161 +21,186 @@ class _SurveyStatsState extends State<SurveyStats> {
   late Future<List<Map<String, dynamic>>> surveyData;
 
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   loadStudentIdAndSurvey();
+  //
+  // }
+  //
+  //
+  // void loadStudentIdAndSurvey() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String? studentId = prefs.getString('studentId');
+  //   if (studentId != null) {
+  //     print('Student ID: $studentId');
+  //     surveyData = loadLatestSurvey(studentId);
+  //   } else {
+  //     print("❌ No student ID found!");
+  //   }
+  // }
+  //
+  //
+  //
+  // Future<List<int>> fetchSubmittedSurveysOnly(String studentId) async {
+  //   print('Fetching submitted surveys for studentId: $studentId');
+  //   final encodedId = Uri.encodeComponent(studentId); // encodes '24/0006' to '24%2F0006'
+  //   final url = Uri.parse(path + '/quizzes/submitted/surveys/?student_id=$encodedId');
+  //
+  //   try {
+  //     final response = await http.get(url);
+  //
+  //     print('Status: ${response.statusCode}');
+  //     print('Body: ${response.body}');
+  //
+  //     if (response.statusCode == 200) {
+  //       List<dynamic> data = jsonDecode(response.body);
+  //
+  //       // Extract only the IDs from the list
+  //       List<int> submittedSurveyIds = data.map<int>((survey) => survey['id'] as int).toList();
+  //
+  //       print('Submitted survey IDs: $submittedSurveyIds');
+  //       return submittedSurveyIds;
+  //     } else {
+  //       print('❌ Failed to load submitted surveys');
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     print('❌ Error fetching submitted surveys: $e');
+  //     return [];
+  //   }
+  // }
+  //
+  //
+  //
+  // bool isLoading = true; // This will track whether the data is loading
+  //
+  // //loading the last survey
+  // Future<List<Map<String, dynamic>>> loadLatestSurvey(String studentId) async {
+  //   setState(() {
+  //     isLoading = true; // Set to true when starting to load data
+  //   });
+  //
+  //   try {
+  //     List<dynamic> submittedIds = await fetchSubmittedSurveysOnly(studentId);
+  //
+  //     if (submittedIds.isEmpty) {
+  //       setState(() {
+  //         isLoading = false; // Done loading and no data found
+  //       });
+  //       return []; // No quizzes submitted yet
+  //     }
+  //
+  //     int latestId = submittedIds.last; // Assuming the last one is the most recent
+  //     List<Map<String, dynamic>> surveyData = await fetchSurveyData(latestId);
+  //
+  //     setState(() {
+  //       isLoading = false; // Done loading
+  //     });
+  //
+  //     return surveyData; // Return the survey data
+  //   } catch (error) {
+  //     setState(() {
+  //       isLoading = false; // Done loading even if there was an error
+  //     });
+  //
+  //     // Log or handle the error, depending on your needs
+  //     print("Error loading survey data: $error");
+  //
+  //     // Optionally return an empty list or an error message in the UI
+  //     return []; // You can choose to return an empty list or rethrow the error
+  //   }
+  // }
+  //
+
+  bool isLoading = false; // Track loading state
+
   @override
   void initState() {
     super.initState();
-    loadStudentIdAndSurvey();
-
+    _loadSurveyData(); //load survey data since we got the surveyId from homepage
   }
 
-
-  void loadStudentIdAndSurvey() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? studentId = prefs.getString('studentId');
-    if (studentId != null) {
-      print('Student ID: $studentId');
-      surveyData = loadLatestSurvey(studentId);
-    } else {
-      print("❌ No student ID found!");
-    }
-  }
-
-
-  //get all the submitted quizzes
-  Future<List<Map<String, dynamic>>> fetchSubmittedQuizzes(String studentId) async {
-    final response = await http.get(
-      Uri.parse('http://192.168.10.146:8000/quizzes/submitted/$studentId'),
-    );
-
-    if (response.statusCode == 200) {
-      List<dynamic> quizIds = json.decode(response.body);
-      List<Map<String, dynamic>> submittedQuizzes = [];
-
-      for (var id in quizIds) {
-        final quizData = await fetchSurveyData(id);
-        submittedQuizzes.add({
-          'surveyId': id,
-          'questions': quizData, //List<Map<String, dynamic>>
-        });
-
-      }
-
-      return submittedQuizzes;
-    } else {
-      throw Exception('Failed to fetch submitted quizzes');
-    }
-  }
-
-  //A fake function to text since i do not have submit option
-  // Future<List<dynamic>> fetchSubmittedQuizzesOnly(String studentId) async {
-  //   print('Fetching quizzes for studentId: $studentId');
-  //
-  //   // Mock data or real API call
-  //   // For now, we return an empty list or mock data for testing
-  //   List<dynamic> submittedQuizzes = [1, 2, 3];  // Example of mock IDs
-  //
-  //   // Log the data being returned
-  //   print('Submitted quizzes: $submittedQuizzes');
-  //
-  //   return submittedQuizzes; // Should return the actual list of survey IDs
-  // }
-
-  // get the submitted quizzes
-  Future<List<dynamic>> fetchSubmittedQuizzesOnly(String studentId) async {
-    final response = await http.get(
-      Uri.parse('http://192.168.10.146:8000/quizzes/submitted/$studentId'),
-    );
-
-    if (response.statusCode == 200) {
-      return json.decode(response.body); // list of survey IDs
-    } else {
-      throw Exception('Failed to fetch submitted survey IDs');
-    }
-  }
-
-
-  bool isLoading = true; // This will track whether the data is loading
-
-  //loading the last survey
-  Future<List<Map<String, dynamic>>> loadLatestSurvey(String studentId) async {
+  Future<void> _loadSurveyData() async {
     setState(() {
-      isLoading = true; // Set to true when starting to load data
+      isLoading = true;
     });
-
-    try {
-      List<dynamic> submittedIds = await fetchSubmittedQuizzesOnly(studentId);
-
-      if (submittedIds.isEmpty) {
-        setState(() {
-          isLoading = false; // Done loading and no data found
-        });
-        return []; // No quizzes submitted yet
+    if (widget.surveyId != null) {
+      surveyData = fetchSurveyData(widget.surveyId!);
+    } else {
+      // case of survey id being null
+      final prefs = await SharedPreferences.getInstance();
+      String? studentId = prefs.getString('studentId');
+      if (studentId != null) {
+        print("No specific surveyId, might load latest for student: $studentId");
+        surveyData = Future.value([]);
+      } else {
+        surveyData = Future.error("No survey ID or student ID found");
       }
-
-      int latestId = submittedIds.last; // Assuming the last one is the most recent
-      List<Map<String, dynamic>> surveyData = await fetchSurveyData(latestId);
-
-      setState(() {
-        isLoading = false; // Done loading
-      });
-
-      return surveyData; // Return the survey data
-    } catch (error) {
-      setState(() {
-        isLoading = false; // Done loading even if there was an error
-      });
-
-      // Log or handle the error, depending on your needs
-      print("Error loading survey data: $error");
-
-      // Optionally return an empty list or an error message in the UI
-      return []; // You can choose to return an empty list or rethrow the error
     }
+    setState(() {
+      isLoading = false;
+    });
   }
-
-
-  //
-  // A fake once since i do no have the option to submit my answers
-  // Future<List<Map<String, dynamic>>> fetchSurveyData(int surveyId) async {
-  //   // For testing purposes, use the following hardcoded data instead of fetching from the API
-  //   return [
-  //     {
-  //       'question_id': 'what does html stands for?',
-  //       'choices': [
-  //         {'choice_id': 'Hyper-Text Marketing Language', 'count': 5},
-  //         {'choice_id': 'Hyper Text Markup Language', 'count': 10},
-  //       ],
-  //     },
-  //   ];
-  // }
 
   //correct one :expected to return smth like this function above
   Future<List<Map<String, dynamic>>> fetchSurveyData(int surveyId) async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.10.146:8000/statistics/surveys/$surveyId'));
-
+      final response = await http.get(Uri.parse(path + '/statistics/surveys/$surveyId'));
+      print('Response for survey ID $surveyId: ${response.body}');
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
-
         return data.map((question) {
+          final questionText = question['question'];
+          final choicesData = question['choices'];
           return {
-            'question': question['question_id'], // This is actually the question text
+            'question': question['question'],
             'choices': List<Map<String, dynamic>>.from(
                 question['choices'].map((choice) => {
-                  'choice': choice['choice_id'],
+                  'choice': choice['choice'],
                   'count': choice['count'],
-                })
-            )
+                })),
           };
         }).toList();
       } else {
-        throw Exception('Failed to load survey data: ${response.statusCode} - ${response.body}');
+        throw Exception('Failed to load survey data for ID $surveyId: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      print("Error fetching survey data: $e");
+      print("Error fetching survey data for ID $surveyId: $e");
       rethrow;
     }
   }
+
+  //correct one :expected to return smth like this function above
+  // Future<List<Map<String, dynamic>>> fetchSurveyData(int surveyId) async {
+  //   try {
+  //     final response = await http.get(Uri.parse(path + '/statistics/surveys/$surveyId'));
+  //     print( response.body);
+  //     if (response.statusCode == 200) {
+  //       List<dynamic> data = json.decode(response.body);
+  //
+  //       return data.map((question) {
+  //         final questionText = question['question'];
+  //         final choicesData = question['choices'];
+  //
+  //         return {
+  //           'question': question['question'], // This is actually the question text
+  //           'choices': List<Map<String, dynamic>>.from(
+  //               question['choices'].map((choice) => {
+  //                 'choice': choice['choice'],
+  //                 'count': choice['count'],
+  //               })
+  //           )
+  //         };
+  //       }).toList();
+  //     } else {
+  //       throw Exception('Failed to load survey data: ${response.statusCode} - ${response.body}');
+  //     }
+  //   } catch (e) {
+  //     print("Error fetching survey data: $e");
+  //     rethrow;
+  //   }
+  // }
 
   int selectedSection = -1; // No section selected initially
 
@@ -309,7 +338,7 @@ class _SurveyStatsState extends State<SurveyStats> {
                         final question = data[index];
                         final choices = question['choices'] as List<Map<String, dynamic>>;
                         final counts = choices.map((c) => c['count'] as int).toList();
-                        final labels = choices.map((c) => c['choice_id'] as String).toList();
+                        final labels = choices.map((c) => c['choice']?.toString() ?? 'Unknown').toList();
 
                         final totalVotes = counts.reduce((a, b) => a + b);
                         final majorityIndex = counts.indexOf(counts.reduce((a, b) => a > b ? a : b));

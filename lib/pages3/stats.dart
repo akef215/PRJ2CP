@@ -1,4 +1,3 @@
-import 'package:esi_quiz/pages3/statsPages/modules_stats.dart';
 import 'package:esi_quiz/pages3/statsPages/progress_stats.dart';
 import 'package:esi_quiz/pages3/statsPages/quiz_stats.dart';
 import 'package:esi_quiz/pages3/statsPages/survey_stats.dart';
@@ -6,25 +5,28 @@ import 'package:esi_quiz/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 
 class Statistics extends StatefulWidget {
-  const Statistics({super.key});
+  const Statistics({super.key, this.surveyId}); // Receive the surveyId
+
+  final int? surveyId;
 
   @override
   State<Statistics> createState() => _StatisticsState();
 }
 
-
-
-
 class _StatisticsState extends State<Statistics> {
+  int _currentIndex = 0;
 
-  int _currentIndex = 0; // Start with -1 for the custom stats page or 0 for "survey" as default
+  @override
+  void initState() {
+    super.initState();
+    if (widget.surveyId != null) {
+      _currentIndex = 0; //show survey tab if we have surveyId
+    } else {
+      _currentIndex = 1; //show directly quiz tab  if not
+    }
+  }
 
-  final List<Widget> _pages = [
-    //Center(child: Text("Survey Page", style: TextStyle(fontSize: 24))),
-    SurveyStats(),
-    QuizStats(),
-    ProgressStats(),
-  ];
+  //  final List<Widget> _pages = [];
 
   Widget buildTabItem(int index, String text) {
     return GestureDetector(
@@ -34,22 +36,17 @@ class _StatisticsState extends State<Statistics> {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: _currentIndex == index ? Color(0xffB2DBFF).withOpacity(0.6) : Colors.transparent,
+            color: _currentIndex == index
+                ? Color(0xffB2DBFF).withOpacity(0.6)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(18),
-            // boxShadow: _currentIndex == index //Some shadow
-            //     ? [
-            //   BoxShadow(
-            //     color: Color(0xff21334E).withOpacity(0.2),
-            //     blurRadius: 5,
-            //     offset: Offset(0, 3),
-            //   ),
-            // ]
-            //     : [],
           ),
           child: Text(
             text,
             style: TextStyle(
-              color: _currentIndex == index ? Color(0xff21334E) : Color(0xff21334E),
+              color: _currentIndex == index
+                  ? Color(0xff21334E)
+                  : Color(0xff21334E),
               fontFamily: "MontserratThin",
               fontWeight: FontWeight.w900,
               fontSize: 14,
@@ -65,15 +62,22 @@ class _StatisticsState extends State<Statistics> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
+    // Initialize _pages inside the build method:
+    final List<Widget> _pages = [
+      SurveyStats(surveyId: widget.surveyId), // Pass the surveyId
+      QuizStats(),
+      ProgressStats(),
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: Custom_appBar().buildAppBar(context, "Statsitics", false),
-
+      appBar: Custom_appBar().buildAppBar(context, "Statistics", false),
       body: Column(
         children: [
-          Container(//TAB ROW
+          Container(
+            //TAB ROW
             color: Colors.white,
-            padding: EdgeInsets.only(top: screenHeight * 0.08, bottom: 5), // Add padding if needed
+            padding: EdgeInsets.only(top: screenHeight * 0.06, bottom: 5), // Add padding if needed
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -83,15 +87,15 @@ class _StatisticsState extends State<Statistics> {
               ],
             ),
           ),
-
-          Divider(//LINE DIVIDER
+          Divider(
+            //LINE DIVIDER
             color: Color(0xff21334E),
             thickness: 0.7,
             height: 1,
           ),
-
-
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Expanded(
             child: _currentIndex == -1
                 ? Center(
@@ -110,9 +114,8 @@ class _StatisticsState extends State<Statistics> {
                       right: 10,
                       left: 45,
                       bottom: 65,
-                      child: Image.asset('images/statpic.png', width: 500, height: 500)
-                  ),
-
+                      child: Image.asset('images/statpic.png',
+                          width: 500, height: 500)),
                   /*-----------------BACK ARROW----------------------*/
                   Positioned(
                     bottom: 15,
@@ -125,17 +128,18 @@ class _StatisticsState extends State<Statistics> {
                         children: [
                           SizedBox(
                               height: 37,
-                              width: 37 ,
-                              child: Image.asset("images/left-arrow (1).png" ,fit: BoxFit.contain,)
-                          ),
-
+                              width: 37,
+                              child: Image.asset(
+                                "images/left-arrow (1).png",
+                                fit: BoxFit.contain,
+                              )),
                           SizedBox(width: 7),
                           Text(
                             'Back',
                             style: TextStyle(
                               fontFamily: "MontserratSemi",
-                              color : Colors.grey[400] ,
-                              fontSize: 18 ,
+                              color: Colors.grey[400],
+                              fontSize: 18,
                             ),
                           ),
                         ],
@@ -147,10 +151,8 @@ class _StatisticsState extends State<Statistics> {
             )
                 : _pages[_currentIndex],
           ),
-
         ],
       ),
-
     );
   }
 }
@@ -164,7 +166,7 @@ class DiagonalClipper extends CustomClipper<Path> {
     path.lineTo(0, 0);
 
     // Move across the top, but stop a bit before the top-right corner
-    path.lineTo(size.width , 0);
+    path.lineTo(size.width, 0);
 
     // Start the cut lower (e.g., 20% down from the top-right edge)
     path.lineTo(size.width, size.height * 0.16);
@@ -186,8 +188,3 @@ class DiagonalClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
-
-
-
-
-

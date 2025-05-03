@@ -9,7 +9,8 @@ import '../pages2/help.dart';
 import '../pages2/profile.dart';
 import '../pages3/quizPages/QuizzesStructure.dart';
 
-String path = 'http://192.168.136.146:8000';
+
+String path = 'http://192.168.236.146:8000';
 
 Future<Map<String, dynamic>> fetchQuizzes() async {
   try {
@@ -27,7 +28,8 @@ Future<Map<String, dynamic>> fetchQuizzes() async {
       }
 
       return {
-        'Quizzes': (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
+        'Quizzes':
+        (data as List).map((q) => Quizzesstructure.fromJson(q)).toList(),
       };
     } else {
       print("Error: Received status code ${response.statusCode}");
@@ -38,7 +40,6 @@ Future<Map<String, dynamic>> fetchQuizzes() async {
     rethrow; // Rethrow the error so it can be handled by the calling code
   }
 }
-
 
 Future<Map<String, dynamic>> fetchSurveys() async {
   print("something again?");
@@ -87,38 +88,38 @@ Future<List<Map<String, dynamic>>> fetchNotifications() async {
     // Add quizzes as notifications if available
     for (var quiz in quizzes) {
       notifications.add({
-        'title': quiz.title,  // Access title of Quizzesstructure
-        'date': quiz.date,    // Access date of Quizzesstructure
-        'type': 'quiz',       // Set type as 'quiz'
+        'title': quiz.title, // Access title of Quizzesstructure
+        'date': quiz.date, // Access date of Quizzesstructure
+        'type': 'quiz', // Set type as 'quiz'
       });
     }
 
     // Add surveys as notifications if available
     for (var survey in surveys) {
       notifications.add({
-        'title': survey.title,  // Access title of Quizzesstructure (assuming surveys have similar structure)
-        'date': survey.date,    // Access date of Quizzesstructure
-        'type': 'survey',       // Set type as 'survey'
+        'title':
+        survey
+            .title, // Access title of Quizzesstructure (assuming surveys have similar structure)
+        'date': survey.date, // Access date of Quizzesstructure
+        'type': 'survey', // Set type as 'survey'
       });
     }
 
     // Return the notifications (which may be empty if neither is available)
     return notifications;
-
   } catch (e) {
     print('Error fetching notifications: $e');
-    return [];  // Return an empty list in case of an error
+    return []; // Return an empty list in case of an error
   }
 }
-
 
 class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
   // building appBar Function
   AppBar buildAppBar(
-    BuildContext context,
-    String pageName,
-    bool LightBackground,
-  ) {
+      BuildContext context,
+      String pageName,
+      bool LightBackground,
+      ) {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -174,111 +175,111 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
 
               itemBuilder:
                   (context) => [
-                    PopupMenuItem(
-                      value: 'Home',
-                      height: 60,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Image.asset(
-                              'images/home.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Text(
-                            "Home Page",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xff21334E),
-                              fontFamily: "MontserratSemi",
-                            ),
-                          ),
-                        ],
+                PopupMenuItem(
+                  value: 'Home',
+                  height: 60,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: Image.asset(
+                          'images/home.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                    ),
-                    PopupMenuItem(
-                      value: 'profile',
-                      height: 60,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Image.asset(
-                              'images/people.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Text(
-                            "Profile",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xff21334E),
-                              fontFamily: "MontserratSemi",
-                            ),
-                          ),
-                        ],
+                      SizedBox(width: 15),
+                      Text(
+                        "Home Page",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff21334E),
+                          fontFamily: "MontserratSemi",
+                        ),
                       ),
-                    ),
-                    PopupMenuItem(
-                      value: 'agenda',
-                      height: 60,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Image.asset(
-                              'images/time.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Text(
-                            "Agenda",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xff21334E),
-                              fontFamily: "MontserratSemi",
-                            ),
-                          ),
-                        ],
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'profile',
+                  height: 60,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: Image.asset(
+                          'images/people.png',
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                    ),
-                    PopupMenuItem(
-                      value: 'Help',
-                      height: 60,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 30,
-                            height: 30,
-                            child: Image.asset(
-                              'images/question.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          SizedBox(width: 15),
-                          Text(
-                            "Help Page",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xff21334E),
-                              fontFamily: "MontserratSemi",
-                            ),
-                          ),
-                        ],
+                      SizedBox(width: 15),
+                      Text(
+                        "Profile",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff21334E),
+                          fontFamily: "MontserratSemi",
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'agenda',
+                  height: 60,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: Image.asset(
+                          'images/time.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Text(
+                        "Agenda",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff21334E),
+                          fontFamily: "MontserratSemi",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'Help',
+                  height: 60,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: Image.asset(
+                          'images/question.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Text(
+                        "Help Page",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff21334E),
+                          fontFamily: "MontserratSemi",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
 
@@ -288,7 +289,7 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
             style: TextStyle(
               fontFamily: "MontserratSemi",
               color: LightBackground ? Color(0xff21334E) : Colors.white,
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -311,47 +312,52 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
               constraints: BoxConstraints.tightFor(width: 250),
               itemBuilder:
                   (context) => [
-                    PopupMenuItem(
-                      enabled: false, // Disable selection
-                      child: FutureBuilder<List<Map<String, dynamic>>>(
-                        future: fetchNotifications(), // Fetch notifications dynamically
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
-                          } else if (snapshot.hasError) {
-                            return Center(child: Text('Failed to load notifications'));
-                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                            return Center(child: Text('No new notifications'));
-                          } else {
-                            return SizedBox(
-                              height: 200, // Limit height to make it scrollable
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  // children: List.generate(
-                                  //   snapshot.data!.length,
-                                  //       (index) => _buildNotificationItem(
-                                  //     snapshot.data![index]['title'],
-                                  //     snapshot.data![index]['date'], // Show date
-                                  //   ),
-                                  // ),
-                                  children: List.generate(
-                                    snapshot.data!.length,
-                                        (index) => _buildNotificationItem(
-                                      snapshot.data![index]['title'],
-                                      snapshot.data![index]['date'], // Show date instead of timestamp
-                                      snapshot.data![index]['type'], // Add type to be displayed
-                                    ),
-                                  ),
-
+                PopupMenuItem(
+                  enabled: false, // Disable selection
+                  child: FutureBuilder<List<Map<String, dynamic>>>(
+                    future:
+                    fetchNotifications(), // Fetch notifications dynamically
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Failed to load notifications'),
+                        );
+                      } else if (!snapshot.hasData ||
+                          snapshot.data!.isEmpty) {
+                        return Center(child: Text('No new notifications'));
+                      } else {
+                        return SizedBox(
+                          height: 200, // Limit height to make it scrollable
+                          child: SingleChildScrollView(
+                            child: Column(
+                              // children: List.generate(
+                              //   snapshot.data!.length,
+                              //       (index) => _buildNotificationItem(
+                              //     snapshot.data![index]['title'],
+                              //     snapshot.data![index]['date'], // Show date
+                              //   ),
+                              // ),
+                              children: List.generate(
+                                snapshot.data!.length,
+                                    (index) => _buildNotificationItem(
+                                  snapshot.data![index]['title'],
+                                  snapshot
+                                      .data![index]['date'], // Show date instead of timestamp
+                                  snapshot
+                                      .data![index]['type'], // Add type to be displayed
                                 ),
                               ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-
-                  ],
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -369,7 +375,11 @@ class Custom_appBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-PopupMenuItem<int> _buildNotificationItem(String title, String time, String type) {
+PopupMenuItem<int> _buildNotificationItem(
+    String title,
+    String time,
+    String type,
+    ) {
   return PopupMenuItem(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -388,7 +398,10 @@ PopupMenuItem<int> _buildNotificationItem(String title, String time, String type
         SizedBox(height: 4),
         Text(
           'A new $type !', // Displaying the type (quizz/survey)
-          style: TextStyle(color: Colors.blueAccent[100], fontSize: 12), // Adjust style as needed
+          style: TextStyle(
+            color: Colors.blueAccent[100],
+            fontSize: 12,
+          ), // Adjust style as needed
         ),
         Divider(), // Adds a line between notifications
       ],

@@ -6,7 +6,7 @@ class SurveyQuestion {
 
   factory SurveyQuestion.fromJson(Map<String, dynamic> json) {
     return SurveyQuestion(
-      questionId: json['question_id'],
+      questionId: json['question'],
       choices: (json['choices'] as List)
           .map((choice) => SurveyChoice.fromJson(choice))
           .toList(),
@@ -22,7 +22,7 @@ class SurveyChoice {
 
   factory SurveyChoice.fromJson(Map<String, dynamic> json) {
     return SurveyChoice(
-      choiceId: json['choice_id'],
+      choiceId: json['choice'],
       count: json['count'],
     );
   }

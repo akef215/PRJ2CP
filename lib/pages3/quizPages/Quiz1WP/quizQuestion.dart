@@ -53,6 +53,11 @@ class QuizQuestion {
 
   QuizQuestion({required this.statement, required this.choices});
 
+  Map<String, dynamic> toJson() => {
+    'statement': statement,
+    'choices': choices.map((c) => c.toJson()).toList(),
+  };
+
   factory QuizQuestion.fromJson(Map<String, dynamic> json) {
     var choicesList = (json['choices'] as List)
         .map((choice) => Choice.fromJson(choice))
@@ -72,6 +77,12 @@ class Choice {
 
   Choice({required this.choiceId, required this.answer, required this.points});
 
+  Map<String, dynamic> toJson() => {
+    'choiceId': choiceId,
+    'answer': answer,
+    'points': points,
+  };
+
   factory Choice.fromJson(Map<String, dynamic> json) {
     return Choice(
       choiceId: json['choiceId'],
@@ -80,4 +91,6 @@ class Choice {
     );
   }
 }
+
+
 

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:esi_quiz/pages3/quizPages/quizChoice.dart';
 import 'package:esi_quiz/widgets/appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../pages3/feedbacks.dart';
 import '../pages3/quizzes.dart';
 import '../pages3/results.dart';
@@ -17,34 +21,176 @@ class HomePage extends StatefulWidget {
 final FocusNode _focusNode = FocusNode();
 
 class _HomePageState extends State<HomePage> {
+  List<Map<String, dynamic>> filteredItems = [];
   TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> submittedItemsForSearch = [];
+  FocusNode _focusNode = FocusNode();
 
-  //TODO : THESE WILL BE FETCHED FROM BACKEND ?
-  List<Map<String, String>> allQuizzes = [
-    {"title": "Quiz 1", "date": "2025-01-01"},
-    {"title": "Quiz 2", "date": "2025-02-01"},
-    {"title": "Survey 1", "date": "2025-03-01"},
-    {"title": "Quiz 3", "date": "2025-04-01"},
-    // Add more quizzes/surveys
-  ];
 
-  List<Map<String, String>> filteredQuizzes = [];
+  String? _studentId;
+  int? _latestSurveyId;
+  bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    filteredQuizzes = allQuizzes; // Initially, show all quizzes
+    _loadStudentIdAndLatestSurveyId();
+    _loadSubmittedItems() ;
   }
 
-  void _filterQuizzes(String query) {
+  Future<void> _loadSubmittedItems() async {
+    final prefs = await SharedPreferences.getInstance();
+    _studentId = prefs.getString('studentId');
+    if (_studentId != null) {
+      try {
+        final quizResponse = await http.get(Uri.parse('$path/quizzes/submitted/quizzes/?student_id=${Uri.encodeComponent(_studentId!)}'));
+        final surveyResponse = await http.get(Uri.parse('$path/quizzes/submitted/surveys/?student_id=${Uri.encodeComponent(_studentId!)}'));
+        List<Map<String, dynamic>> items = [];
+        print('--- Quiz Response ---');
+        print('Status Code: ${quizResponse.statusCode}');
+        print('Body: ${quizResponse.body}');
+        print('--- Survey Response ---');
+        print('Status Code: ${surveyResponse.statusCode}');
+        print('Body: ${surveyResponse.body}');
+
+        if (quizResponse.statusCode == 200 && surveyResponse.statusCode == 200) {
+          final List<dynamic> quizData = jsonDecode(quizResponse.body);
+          final List<dynamic> surveyData = jsonDecode(surveyResponse.body);
+
+          List<Map<String, dynamic>> items = [];
+
+          for (var quiz in quizData) {
+            items.add({
+              'id': quiz['id'],
+              'title': quiz['title'],
+              'date': quiz['date'],
+              'module_code': quiz['module_code'],
+              'type': 'quiz',
+              'type_quizz': quiz['type_quizz'],
+            });
+          }
+
+          for (var survey in surveyData) {
+            items.add({
+              'id': survey['id'],
+              'title': survey['title'],
+              'date': survey['date'],
+              'module_code': survey['module_code'],
+              'type': 'survey',
+              'type_quizz': survey['type_quizz'], // Let's also include the raw type from the backend
+            });
+          }
+
+          setState(() {
+            submittedItemsForSearch = items;
+            filteredItems = [...submittedItemsForSearch]; // Initialize filtered list
+            _isLoading = false;
+          });
+        } else {
+          print('Failed to load submitted items. Quiz status: ${quizResponse.statusCode}, Survey status: ${surveyResponse.statusCode}');
+          setState(() {
+            _isLoading = false;
+            // Optionally show an error message
+          });
+        }
+      } catch (e) {
+        print('Error loading submitted items: $e');
+        setState(() {
+          _isLoading = false;
+          // Optionally show an error message
+        });
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+        // Optionally show a "No student ID" message
+      });
+    }
+  }
+
+  //Get the latest survey id from student id
+  Future<void> _loadStudentIdAndLatestSurveyId() async {
+    final prefs = await SharedPreferences.getInstance();
+    _studentId = prefs.getString('studentId');
+    if (_studentId != null) {
+      print('Student ID: $_studentId');
+      await _fetchLatestSurveyId(_studentId!);
+    } else {
+      setState(() {
+        _errorMessage = "No student ID found!";
+        _isLoading = false;
+      });
+      print("❌ No student ID found!");
+    }
+  }
+
+
+  //function to get all the submitted surveys
+  Future<List<int>> fetchSubmittedSurveysOnly(String studentId) async {
+    print('Fetching submitted surveys for studentId: $studentId');
+    final encodedId = Uri.encodeComponent(studentId); // encodes '24/0006' to '24%2F0006'
+    final url = Uri.parse(path + '/quizzes/submitted/surveys/?student_id=$encodedId');
+
+    try {
+      final response = await http.get(url);
+
+      print('Status: ${response.statusCode}');
+      print('Body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+
+        // Extract only the IDs from the list
+        List<int> submittedSurveyIds = data.map<int>((survey) => survey['id'] as int).toList();
+
+        print('Submitted survey IDs: $submittedSurveyIds');
+        return submittedSurveyIds;
+      } else {
+        print('❌ Failed to load submitted surveys');
+        return [];
+      }
+    } catch (e) {
+      print('❌ Error fetching submitted surveys: $e');
+      return [];
+    }
+  }
+
+
+  //loading the ID of the last survey
+  Future<void> _fetchLatestSurveyId(String studentId) async {
     setState(() {
-      filteredQuizzes =
-          allQuizzes
-              .where(
-                (quiz) =>
-                    quiz['title']!.toLowerCase().contains(query.toLowerCase()),
-              )
-              .toList();
+      _isLoading = true;
+    });
+    try {
+      List<int> submittedIds = await fetchSubmittedSurveysOnly(studentId);
+      if (submittedIds.isNotEmpty) {
+        setState(() {
+          _latestSurveyId = submittedIds.last;
+          print('$_latestSurveyId');
+        });
+      }
+    } catch (error) {
+      setState(() {
+        _errorMessage = "Error loading latest survey ID: $error";
+      });
+      print("Error loading latest survey ID: $error");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _filterItems(String query) {
+    print('Search Query: $query');
+    print('Submitted Items before filter: $submittedItemsForSearch');
+    setState(() {
+      filteredItems = submittedItemsForSearch
+          .where((item) =>
+          item['type']!.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      print('Filtered Items after filter: $filteredItems');
     });
   }
 
@@ -58,7 +204,7 @@ class _HomePageState extends State<HomePage> {
         if (_searchController.text.isNotEmpty || _focusNode.hasFocus) {
           setState(() {
             _searchController.clear();
-            filteredQuizzes = allQuizzes;
+            filteredItems = submittedItemsForSearch;
             _focusNode.unfocus(); // Remove focus from the search field
           });
           return false; // Prevent default back navigation
@@ -102,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: TextField(
                   controller: _searchController,
-                  onChanged: _filterQuizzes,
+                  onChanged: _filterItems,
                   focusNode: _focusNode,
                   decoration: InputDecoration(
                     prefixIcon: Padding(
@@ -263,7 +409,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Statistics(),
+                              builder: (context) => Statistics(surveyId: _latestSurveyId),
                             ),
                           );
                         },
@@ -289,20 +435,28 @@ class _HomePageState extends State<HomePage> {
                 // We show filtered quizzes
                 Expanded(
                   child: ListView.builder(
-                    itemCount: filteredQuizzes.length,
+                    itemCount: filteredItems.length,
                     itemBuilder: (context, index) {
-                      var quiz = filteredQuizzes[index];
-                      return quizBox(
+                      var item = filteredItems[index];
+                      return quizBox( // Use your quizBox widget
                         context: context,
-                        title: quiz['title']!,
-                        date: quiz['date']!,
+                        item: item, // Pass the entire item map
                         onCheckStats: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Statistics(),
-                            ),
-                          );
+                          if (item['type_quizz'] == 'S') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Statistics(surveyId: item['id']),
+                              ),
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Statistics(surveyId: null),
+                              ),
+                            );
+                          }
                         },
                       );
                     },
