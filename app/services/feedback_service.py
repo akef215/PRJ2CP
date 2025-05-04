@@ -1,13 +1,22 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.models.feedback import Feedback
+from app.models.groupe import Groupe
+
 
 # Function to create anonymous feedback
 async def create_feedback(description: str, groupe: str, db: AsyncSession):
+    # Récupère l'objet Groupe depuis la base
+    result = await db.execute(select(Groupe).where(Groupe.id == groupe))
+    groupe_obj = result.scalar_one_or_none()
+
+    if not groupe_obj:
+        raise ValueError("Groupe introuvable")
+
+    # Crée le feedback avec l'objet, pas la string
     feedback = Feedback(
         description=description,
-        groupe=groupe,
-      
+        groupe=groupe_obj,
     )
     db.add(feedback)
     await db.commit()
