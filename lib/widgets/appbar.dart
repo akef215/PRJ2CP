@@ -10,7 +10,7 @@ import '../pages2/profile.dart';
 import '../pages3/quizPages/QuizzesStructure.dart';
 
 
-String path = 'http://192.168.236.146:8000';
+String path = 'http://192.168.6.146:8000';
 
 Future<Map<String, dynamic>> fetchQuizzes() async {
   try {
